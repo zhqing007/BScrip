@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<hosts>
-  <host key="10.116.2.21" />
-  <host key="10.116.2.20" />
-  <host key="10.4.5" />
-  <host key="1" Name="主页" />
-  <host key="2" Name="总调" />
-</hosts>
