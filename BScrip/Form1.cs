@@ -15,7 +15,13 @@ namespace BScrip {
         public Configuration cfa;
         public Form1() {
             InitializeComponent();
-            cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            XMLHelper xhelper = new XMLHelper("HostList.xml");
+            XmlNodeList hosts = xhelper.GetXmlNodeListByXpath("hosts//host");
+            foreach (XmlNode n in hosts) {
+                XMLHosts.Items.Add(n.Attributes["key"].Value);
+            }
+
+            //cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         }
 
         private void button1_Click(object sender, EventArgs e) {
@@ -51,7 +57,7 @@ namespace BScrip {
         }
 
         private void readxml_Click(object sender, EventArgs e) {
-            XMLHelper x = new XMLHelper("net.xml");
+            XMLHelper x = new XMLHelper("HostList.xml");
             XmlNodeList tt = x.GetXmlNodeListByXpath("hosts//host");
             foreach (XmlNode n in tt) {
                 MessageBox.Show(n.Attributes["key"].Value);
@@ -60,14 +66,19 @@ namespace BScrip {
 
         private void create_Click(object sender, EventArgs e) {
             XMLHelper x = new XMLHelper();
-            x.CreateXmlDocument("net.xml", "hosts");
+            x.CreateXmlDocument("HostList.xml", "hosts");
         }
 
         private void writeXml_Click(object sender, EventArgs e) {
-            XMLHelper x = new XMLHelper("net.xml");
+            XMLHelper x = new XMLHelper("HostList.xml");
             x.CreateOrGetXmlNodeByXPath("hosts", "host", textBox1.Text);
             x.CreateOrUpdateXmlAttributeByXPath("hosts", "host", textBox1.Text, "Name", textBox2.Text);
             MessageBox.Show("Done!");
+        }
+
+        private void button3_Click(object sender, EventArgs e) {
+            HostInfo a = new HostInfo();
+            a.ShowDialog();
         }
     }
 }
