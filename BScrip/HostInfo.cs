@@ -81,5 +81,9 @@ namespace BScrip {
             if (mo == 0) telnetBox.Checked = true;
             else sshBox.Checked = true;
         }
+
+        public void SetIPBoxMode(bool editable) {
+            IPBox.ReadOnly = editable;
+        }
     }
 }

@@ -77,6 +77,18 @@ namespace BScrip {
             return xmlNode;
         }
 
+        public void RemoveXmlNodeByXPath(string xpath, string xmlNodeName, string keyValue) {
+            XmlNode xmlNode = xmlDoc.SelectSingleNode(xpath);
+            foreach (XmlNode node in xmlNode.ChildNodes) {
+                if (node.Name.ToLower() == xmlNodeName.ToLower() &&
+                    node.Attributes["key"].Value.ToLower() == keyValue.ToLower()) {
+                        xmlNode.RemoveChild(node);
+                        Save();
+                        return;
+                }
+            }
+        }
+
         ///<summary>
         /// 依据匹配XPath表达式的第一个节点来创建或更新它的属性(如果属性存在则更新,不存在则创建)
         ///</summary>
