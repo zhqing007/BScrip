@@ -15,7 +15,13 @@ namespace BScrip {
         public Configuration cfa;
         public Form1() {
             InitializeComponent();
-            XMLHelper xhelper = new XMLHelper("HostList.xml");
+            XMLHelper xhelper = new XMLHelper();
+            if (!System.IO.File.Exists("HostList.xml")) {
+                xhelper.CreateXmlDocument("HostList.xml", "hosts");
+                return;                
+            }
+
+            xhelper.XmlName = "HostList.xml";
             XmlNodeList hosts = xhelper.GetXmlNodeListByXpath("hosts//host");
             foreach (XmlNode n in hosts) {
                 XMLHosts.Items.Add(n.Attributes["key"].Value);
@@ -24,19 +30,19 @@ namespace BScrip {
             //cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         }
 
-        private void button1_Click(object sender, EventArgs e) {
-            cfa.AppSettings.Settings.Add("key", "Name");
-            cfa.AppSettings.Settings.Add("key1", "Name1");
-            cfa.Save();
-        }
+        //private void button1_Click(object sender, EventArgs e) {
+        //    cfa.AppSettings.Settings.Add("key", "Name");
+        //    cfa.AppSettings.Settings.Add("key1", "Name1");
+        //    cfa.Save();
+        //}
 
-        private void read_Click(object sender, EventArgs e) {
-            String str = ConfigurationManager.AppSettings["Key"];
-            MessageBox.Show(str);
-            MessageBox.Show(cfa.AppSettings.Settings.Count.ToString());
-        }
+        //private void read_Click(object sender, EventArgs e) {
+        //    String str = ConfigurationManager.AppSettings["Key"];
+        //    MessageBox.Show(str);
+        //    MessageBox.Show(cfa.AppSettings.Settings.Count.ToString());
+        //}
 
-        private void button2_Click(object sender, EventArgs e) {
+        private void Execute_Click(object sender, EventArgs e) {
             Process p = new Process();
 
             p.StartInfo.FileName = "wscript.exe";           //确定程序名
@@ -56,29 +62,48 @@ namespace BScrip {
 
         }
 
-        private void readxml_Click(object sender, EventArgs e) {
-            XMLHelper x = new XMLHelper("HostList.xml");
-            XmlNodeList tt = x.GetXmlNodeListByXpath("hosts//host");
-            foreach (XmlNode n in tt) {
-                MessageBox.Show(n.Attributes["key"].Value);
-            }
+        //private void readxml_Click(object sender, EventArgs e) {
+        //    XMLHelper x = new XMLHelper("HostList.xml");
+        //    XmlNodeList tt = x.GetXmlNodeListByXpath("hosts//host");
+        //    foreach (XmlNode n in tt) {
+        //        MessageBox.Show(n.Attributes["key"].Value);
+        //    }
+        //}
+
+        //private void create_Click(object sender, EventArgs e) {
+        //    XMLHelper x = new XMLHelper();
+        //    x.CreateXmlDocument("HostList.xml", "hosts");
+        //}
+
+        private void add_Click(object sender, EventArgs e) {
+            HostInfo host = new HostInfo();
+            host.ShowDialog();
+            if (host.DialogResult.Equals(DialogResult.Cancel)) return;
+
+            XMLHelper nh = new XMLHelper("HostList.xml");
+            nh.CreateOrGetXmlNodeByXPath("hosts", "host", host.GetIP());
+            nh.CreateOrUpdateXmlAttributeByXPath("hosts", "host", host.GetIP(), "Mode", host.GetLoginMode().ToString());
+            nh.CreateOrUpdateXmlAttributeByXPath("hosts", "host", host.GetIP(), "Name",
+                EncodeAndDecode.EncodeBase64(host.GetName()));
+            nh.CreateOrUpdateXmlAttributeByXPath("hosts", "host", host.GetIP(), "PW", 
+                EncodeAndDecode.EncodeBase64(host.GetPW()));
+            nh.CreateOrUpdateXmlAttributeByXPath("hosts", "host", host.GetIP(), "SPW", 
+                EncodeAndDecode.EncodeBase64(host.GetSPW()));
+
+            XMLHosts.Items.Add(host.GetIP());
         }
 
-        private void create_Click(object sender, EventArgs e) {
-            XMLHelper x = new XMLHelper();
-            x.CreateXmlDocument("HostList.xml", "hosts");
-        }
-
-        private void writeXml_Click(object sender, EventArgs e) {
-            XMLHelper x = new XMLHelper("HostList.xml");
-            x.CreateOrGetXmlNodeByXPath("hosts", "host", textBox1.Text);
-            x.CreateOrUpdateXmlAttributeByXPath("hosts", "host", textBox1.Text, "Name", textBox2.Text);
-            MessageBox.Show("Done!");
-        }
-
-        private void button3_Click(object sender, EventArgs e) {
-            HostInfo a = new HostInfo();
-            a.ShowDialog();
+        private void XMLHosts_DoubleClick(object sender, EventArgs e) {
+            ListBox hostlist = (ListBox)sender;
+            HostInfo host = new HostInfo();
+            host.SetIP(hostlist.SelectedItem.ToString());
+            XMLHelper nh = new XMLHelper("HostList.xml");
+            XmlNode node = nh.CreateOrGetXmlNodeByXPath("hosts", "host", hostlist.SelectedItem.ToString());
+            host.SetName(EncodeAndDecode.DecodeBase64(node.Attributes["Name"].Value));
+            host.SetPW(EncodeAndDecode.DecodeBase64(node.Attributes["PW"].Value));
+            host.SetSPW(EncodeAndDecode.DecodeBase64(node.Attributes["SPW"].Value));
+            host.SetLoginMode(Convert.ToInt16(node.Attributes["Mode"].Value));
+            host.ShowDialog();
         }
     }
 }

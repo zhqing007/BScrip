@@ -27,8 +27,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.telnetBox = new System.Windows.Forms.RadioButton();
+            this.sshBox = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.IPBox = new System.Windows.Forms.TextBox();
             this.NameBox = new System.Windows.Forms.TextBox();
@@ -42,105 +42,118 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(109, 106);
+            this.label1.Location = new System.Drawing.Point(82, 85);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(31, 15);
+            this.label1.Size = new System.Drawing.Size(23, 12);
             this.label1.TabIndex = 0;
             this.label1.Text = "IP:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(93, 147);
+            this.label2.Location = new System.Drawing.Point(70, 118);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(47, 15);
+            this.label2.Size = new System.Drawing.Size(35, 12);
             this.label2.TabIndex = 1;
             this.label2.Text = "Name:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(61, 192);
+            this.label3.Location = new System.Drawing.Point(46, 154);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(79, 15);
+            this.label3.Size = new System.Drawing.Size(59, 12);
             this.label3.TabIndex = 2;
             this.label3.Text = "Password:";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(21, 236);
+            this.label4.Location = new System.Drawing.Point(16, 189);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(119, 15);
+            this.label4.Size = new System.Drawing.Size(89, 12);
             this.label4.TabIndex = 3;
             this.label4.Text = "SuperPassword:";
             // 
-            // radioButton1
+            // telnetBox
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(16, 24);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(76, 19);
-            this.radioButton1.TabIndex = 4;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Telnet";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.telnetBox.AutoSize = true;
+            this.telnetBox.Location = new System.Drawing.Point(12, 19);
+            this.telnetBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.telnetBox.Name = "telnetBox";
+            this.telnetBox.Size = new System.Drawing.Size(59, 16);
+            this.telnetBox.TabIndex = 4;
+            this.telnetBox.TabStop = true;
+            this.telnetBox.Text = "Telnet";
+            this.telnetBox.UseVisualStyleBackColor = true;
             // 
-            // radioButton2
+            // sshBox
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(208, 24);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(52, 19);
-            this.radioButton2.TabIndex = 5;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "SSH";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.sshBox.AutoSize = true;
+            this.sshBox.Location = new System.Drawing.Point(156, 19);
+            this.sshBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.sshBox.Name = "sshBox";
+            this.sshBox.Size = new System.Drawing.Size(41, 16);
+            this.sshBox.TabIndex = 5;
+            this.sshBox.TabStop = true;
+            this.sshBox.Text = "SSH";
+            this.sshBox.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.radioButton2);
-            this.groupBox1.Controls.Add(this.radioButton1);
-            this.groupBox1.Location = new System.Drawing.Point(24, 12);
+            this.groupBox1.Controls.Add(this.sshBox);
+            this.groupBox1.Controls.Add(this.telnetBox);
+            this.groupBox1.Location = new System.Drawing.Point(18, 10);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(325, 58);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Size = new System.Drawing.Size(244, 46);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "登录类型";
             // 
             // IPBox
             // 
-            this.IPBox.Location = new System.Drawing.Point(162, 96);
+            this.IPBox.Location = new System.Drawing.Point(122, 77);
+            this.IPBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.IPBox.Name = "IPBox";
-            this.IPBox.Size = new System.Drawing.Size(176, 25);
+            this.IPBox.Size = new System.Drawing.Size(133, 21);
             this.IPBox.TabIndex = 7;
             // 
             // NameBox
             // 
-            this.NameBox.Location = new System.Drawing.Point(162, 137);
+            this.NameBox.Location = new System.Drawing.Point(122, 110);
+            this.NameBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.NameBox.Name = "NameBox";
-            this.NameBox.Size = new System.Drawing.Size(176, 25);
+            this.NameBox.Size = new System.Drawing.Size(133, 21);
             this.NameBox.TabIndex = 8;
             // 
             // PWBox
             // 
-            this.PWBox.Location = new System.Drawing.Point(162, 182);
+            this.PWBox.Location = new System.Drawing.Point(122, 146);
+            this.PWBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.PWBox.Name = "PWBox";
-            this.PWBox.Size = new System.Drawing.Size(176, 25);
+            this.PWBox.Size = new System.Drawing.Size(133, 21);
             this.PWBox.TabIndex = 9;
             // 
             // SPWBox
             // 
-            this.SPWBox.Location = new System.Drawing.Point(162, 226);
+            this.SPWBox.Location = new System.Drawing.Point(122, 181);
+            this.SPWBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.SPWBox.Name = "SPWBox";
-            this.SPWBox.Size = new System.Drawing.Size(176, 25);
+            this.SPWBox.Size = new System.Drawing.Size(133, 21);
             this.SPWBox.TabIndex = 10;
             // 
             // InfoOK
             // 
-            this.InfoOK.Location = new System.Drawing.Point(64, 285);
+            this.InfoOK.Location = new System.Drawing.Point(48, 228);
+            this.InfoOK.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.InfoOK.Name = "InfoOK";
-            this.InfoOK.Size = new System.Drawing.Size(75, 23);
+            this.InfoOK.Size = new System.Drawing.Size(81, 30);
             this.InfoOK.TabIndex = 11;
             this.InfoOK.Text = "确定";
             this.InfoOK.UseVisualStyleBackColor = true;
@@ -148,9 +161,10 @@
             // 
             // InfoCancle
             // 
-            this.InfoCancle.Location = new System.Drawing.Point(232, 285);
+            this.InfoCancle.Location = new System.Drawing.Point(174, 228);
+            this.InfoCancle.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.InfoCancle.Name = "InfoCancle";
-            this.InfoCancle.Size = new System.Drawing.Size(75, 23);
+            this.InfoCancle.Size = new System.Drawing.Size(81, 30);
             this.InfoCancle.TabIndex = 12;
             this.InfoCancle.Text = "取消";
             this.InfoCancle.UseVisualStyleBackColor = true;
@@ -158,9 +172,9 @@
             // 
             // HostInfo
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(378, 354);
+            this.ClientSize = new System.Drawing.Size(296, 295);
             this.Controls.Add(this.InfoCancle);
             this.Controls.Add(this.InfoOK);
             this.Controls.Add(this.SPWBox);
@@ -172,6 +186,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "HostInfo";
             this.Text = "HostInfo";
             this.groupBox1.ResumeLayout(false);
@@ -187,8 +202,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton telnetBox;
+        private System.Windows.Forms.RadioButton sshBox;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox IPBox;
         private System.Windows.Forms.TextBox NameBox;

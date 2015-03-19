@@ -53,5 +53,33 @@ namespace BScrip {
         public String GetSPW() {
             return SPWBox.Text;
         }
+
+        public Int16 GetLoginMode() {
+            //0:telnet登录；1：ssh登录。
+            if (telnetBox.Checked) return 0;
+            return 1;
+        }
+
+        public void SetIP(string ip) {
+            IPBox.Text = ip;
+        }
+
+        public void SetName(string name) {
+            NameBox.Text = name;
+        }
+
+        public void SetPW(string PW) {
+            PWBox.Text = PW;
+        }
+
+        public void SetSPW(string SPW) {
+            SPWBox.Text = SPW;
+        }
+
+        public void SetLoginMode(int mo) {
+            //0:telnet登录；1：ssh登录。
+            if (mo == 0) telnetBox.Checked = true;
+            else sshBox.Checked = true;
+        }
     }
 }
