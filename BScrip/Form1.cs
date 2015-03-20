@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Configuration;
 using System.Diagnostics;
 using System.Xml;
+using System.IO;
 
 namespace BScrip {
     public partial class Form1 : Form {
@@ -49,22 +50,61 @@ namespace BScrip {
         //}
 
         private void Execute_Click(object sender, EventArgs e) {
-            Process p = new Process();
+            Telnet tel_con = new Telnet("10.116.0.14", 23, 50);
 
-            p.StartInfo.FileName = "wscript.exe";           //确定程序名
-            p.StartInfo.Arguments = "cmd";    //确定程式命令行  
-            p.StartInfo.UseShellExecute = false;        //Shell的使用  
-            p.StartInfo.RedirectStandardInput = true;   //重定向输入  
-            p.StartInfo.RedirectStandardOutput = true; //重定向输出  
-            p.StartInfo.RedirectStandardError = true;   //重定向输出错误  
-            p.StartInfo.CreateNoWindow = true;          //设置置不显示窗口
-            p.Start();
+            if (tel_con.Connect() == false) {
+                Console.WriteLine("连接失败");
+                return;
+            }
+            Console.WriteLine(tel_con.SessionLog);
 
-            p.StandardInput.WriteLine("telnet");       //也可以用这种方式输入入要行的命令  
+            //等待指定字符返回后才执行下一命令
+            tel_con.WaitFor("Username:");
+            tel_con.Send("petrochina");
+            tel_con.WaitFor("Password:");
+            tel_con.Send("Petrochina@123");
+            tel_con.WaitFor(">");
+            tel_con.Send("sys");
+            tel_con.WaitFor("]");
+            tel_con.Send("user-interface vty 0 4");
+            tel_con.WaitFor("]");
+            tel_con.Send("screen-length 0");
+            tel_con.WaitFor("]");
+            tel_con.Send("dis curr");
+            tel_con.WaitFor("]");
+            tel_con.Send("undo screen-length");
+            tel_con.WaitFor("]");
+            tel_con.Send("qu");
+            tel_con.WaitFor("]");
+            tel_con.Send("qu");
+            tel_con.WaitFor(">");
+            tel_con.Send("qu");
 
-            //p.StandardInput.WriteLine("exit");        //要得加上Exit要不然下一行程式 
+            Console.WriteLine(tel_con.SessionLog);
+            StreamWriter sw = File.CreateText(@"log.txt");
+            sw.Write(tel_con.SessionLog);
+            MessageBox.Show("Done!");
+
+
+            //Process p = new Process();
+
+            //p.StartInfo.FileName = "wscript.exe";           //确定程序名
+            //p.StartInfo.FileName = "telnet.exe";
+            //p.StartInfo.Arguments = "-f D:\\WorkStation\\BScrip\\BScrip\\bin\\Debug\\abc.txt 10.116.176.254";    //确定程式命令行  
+            //p.StartInfo.UseShellExecute = false;        //Shell的使用  
+            //p.StartInfo.RedirectStandardInput = true;   //重定向输入  
+            //p.StartInfo.RedirectStandardOutput = true; //重定向输出  
+            //p.StartInfo.RedirectStandardError = true;   //重定向输出错误  
+            //p.StartInfo.CreateNoWindow = true;          //设置置不显示窗口
+            //p.Start();
+
+            //p.StandardInput.WriteLine("mesadmin");       //也可以用这种方式输入入要行的命令  
+            //p.StandardInput.WriteLine("mesWR172");
+            //p.StandardInput.WriteLine("show ?");
+            //p.StandardInput.WriteLine("                       ");
+            //p.StandardInput.WriteLine("qu");        //要得加上Exit要不然下一行程式 
             //MessageBox.Show(p.StandardError.ReadToEnd());
-            MessageBox.Show(p.StandardOutput.ReadToEnd());
+            //MessageBox.Show(p.StandardOutput.ReadToEnd());
 
         }
 
