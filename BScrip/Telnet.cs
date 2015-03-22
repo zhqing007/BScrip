@@ -456,13 +456,12 @@ namespace BScrip {
         public int WaitFor(string DataToWaitFor) {
             long lngStart = DateTime.Now.AddSeconds(this.timeout).Ticks;
             long lngCurTime = 0;
-
             while (strWorkingData.ToLower().IndexOf(DataToWaitFor.ToLower()) == -1) {
                 lngCurTime = DateTime.Now.Ticks;
                 if (lngCurTime > lngStart) {
                     throw new Exception("Timed Out waiting for : " + DataToWaitFor);
                 }
-                Thread.Sleep(1);
+                Thread.Sleep(5);
             }
             strWorkingData = "";
             return 0;

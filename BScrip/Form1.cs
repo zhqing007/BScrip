@@ -10,6 +10,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Xml;
 using System.IO;
+using Tamir.SharpSsh;
 
 namespace BScrip {
     public partial class Form1 : Form {
@@ -50,39 +51,53 @@ namespace BScrip {
         //}
 
         private void Execute_Click(object sender, EventArgs e) {
-            Telnet tel_con = new Telnet("10.116.0.14", 23, 50);
+            RemoteLoginer loginer = new RemoteLoginerTel("127.0.0.1", "", "", "");
 
-            if (tel_con.Connect() == false) {
+            if (loginer.Connect() == false) {
                 Console.WriteLine("连接失败");
                 return;
             }
-            Console.WriteLine(tel_con.SessionLog);
 
             //等待指定字符返回后才执行下一命令
-            tel_con.WaitFor("Username:");
-            tel_con.Send("petrochina");
-            tel_con.WaitFor("Password:");
-            tel_con.Send("Petrochina@123");
-            tel_con.WaitFor(">");
-            tel_con.Send("sys");
-            tel_con.WaitFor("]");
-            tel_con.Send("user-interface vty 0 4");
-            tel_con.WaitFor("]");
-            tel_con.Send("screen-length 0");
-            tel_con.WaitFor("]");
-            tel_con.Send("dis curr");
-            tel_con.WaitFor("]");
-            tel_con.Send("undo screen-length");
-            tel_con.WaitFor("]");
-            tel_con.Send("qu");
-            tel_con.WaitFor("]");
-            tel_con.Send("qu");
-            tel_con.WaitFor(">");
-            tel_con.Send("qu");
+            //tel_con.WaitFor("Username:");
+            //tel_con.Send("petrochina");
+            //tel_con.WaitFor("Password:");
+            //tel_con.Send("Petrochina@123");
+            //tel_con.WaitFor(">");
+            //tel_con.Send("sys");
+            //tel_con.WaitFor("]");
+            //tel_con.Send("user-interface vty 0 4");
+            //tel_con.WaitFor("]");
+            //tel_con.Send("screen-length 0");
+            //tel_con.WaitFor("]");
+            //tel_con.Send("dis curr");
+            //tel_con.WaitFor("]");
+            //tel_con.Send("undo screen-length");
+            //tel_con.WaitFor("]");
+            //tel_con.Send("qu");
+            //tel_con.WaitFor("]");
+            //tel_con.Send("qu");
+            //tel_con.WaitFor(">");
+            //tel_con.Send("qu");
 
-            Console.WriteLine(tel_con.SessionLog);
+
+            loginer.Send("\r");
+            loginer.Send("\r");
+            loginer.Send("\r");
+            loginer.WaitFor(">");
+            loginer.Send("terminal length 0");
+            loginer.WaitFor(">");
+            loginer.Send("en");
+            loginer.WaitFor("#");
+            loginer.Send("show run");
+            loginer.WaitFor("#");
+            loginer.Send("exit");
+            loginer.Send("exit");
+
+            Console.WriteLine(loginer.SessionLog);
             StreamWriter sw = File.CreateText(@"log.txt");
-            sw.Write(tel_con.SessionLog);
+            sw.Write(loginer.SessionLog);
+            sw.Close();
             MessageBox.Show("Done!");
 
 
