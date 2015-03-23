@@ -51,54 +51,20 @@ namespace BScrip {
         //}
 
         private void Execute_Click(object sender, EventArgs e) {
-            RemoteLoginer loginer = new RemoteLoginerTel("127.0.0.1", "", "", "");
-
-            if (loginer.Connect() == false) {
-                Console.WriteLine("连接失败");
-                return;
+            try {
+                RemoteLoginer loginer = null;
+                //loginer = new RemoteLoginerTel("10.116.0.14", "petrochina", "Petrochina@123", null);
+                loginer = new RemoteLoginerSSH("10.116.0.14", "petrochina", "Petrochina@123", null);
+                loginer.Connect();
+                StreamWriter sw = File.CreateText(@"log.txt");
+                sw.Write(loginer.GetConfiguration());
+                sw.Close();
+                loginer.Close();
+                MessageBox.Show("Done!");
             }
-
-            //等待指定字符返回后才执行下一命令
-            //tel_con.WaitFor("Username:");
-            //tel_con.Send("petrochina");
-            //tel_con.WaitFor("Password:");
-            //tel_con.Send("Petrochina@123");
-            //tel_con.WaitFor(">");
-            //tel_con.Send("sys");
-            //tel_con.WaitFor("]");
-            //tel_con.Send("user-interface vty 0 4");
-            //tel_con.WaitFor("]");
-            //tel_con.Send("screen-length 0");
-            //tel_con.WaitFor("]");
-            //tel_con.Send("dis curr");
-            //tel_con.WaitFor("]");
-            //tel_con.Send("undo screen-length");
-            //tel_con.WaitFor("]");
-            //tel_con.Send("qu");
-            //tel_con.WaitFor("]");
-            //tel_con.Send("qu");
-            //tel_con.WaitFor(">");
-            //tel_con.Send("qu");
-
-
-            loginer.Send("\r");
-            loginer.Send("\r");
-            loginer.Send("\r");
-            loginer.WaitFor(">");
-            loginer.Send("terminal length 0");
-            loginer.WaitFor(">");
-            loginer.Send("en");
-            loginer.WaitFor("#");
-            loginer.Send("show run");
-            loginer.WaitFor("#");
-            loginer.Send("exit");
-            loginer.Send("exit");
-
-            Console.WriteLine(loginer.SessionLog);
-            StreamWriter sw = File.CreateText(@"log.txt");
-            sw.Write(loginer.SessionLog);
-            sw.Close();
-            MessageBox.Show("Done!");
+            catch (Exception exc) {
+                Console.WriteLine("连接失败:" + exc.ToString());
+            }
 
 
             //Process p = new Process();

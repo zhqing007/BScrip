@@ -82,6 +82,7 @@ namespace BScrip {
             address = Address;
             port = Port;
             timeout = CommandTimeout;
+            m_strResp = "";
         }
 
         /// <summary>        
@@ -170,7 +171,8 @@ namespace BScrip {
                             strFullLog += mOutText;
                         }
                         //接收完数据,处理完字符串数据等一系列事物之后,开始回发数据          
-                        RespondToOptions();
+                        //if(m_ListOptions.Count > 0)
+                            RespondToOptions();
                     }
                     catch (Exception ex) {
                         throw new Exception("接收数据的时候出错了! " + ex.Message);
