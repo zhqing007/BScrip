@@ -152,8 +152,9 @@ namespace BScrip {
             ssh_con.Read(back, 0, 1024);
             StringBuilder logBuilder = new StringBuilder();
             string backstr =  Encoding.ASCII.GetString(back);
-            while (!backstr.ToLower().Contains("]")) {
+            while (!backstr.Contains("]")) {
                 logBuilder.Append(backstr);
+                Array.Clear(back, 0, back.Length);
                 ssh_con.Read(back, 0, 1024);
                 backstr = Encoding.ASCII.GetString(back);
             }

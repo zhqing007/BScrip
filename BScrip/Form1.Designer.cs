@@ -37,22 +37,24 @@
             this.del = new System.Windows.Forms.Button();
             this.selectAllXml = new System.Windows.Forms.Button();
             this.selectAllHost = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // executeButton
             // 
-            this.executeButton.Location = new System.Drawing.Point(495, 246);
+            this.executeButton.Location = new System.Drawing.Point(561, 460);
             this.executeButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.executeButton.Name = "executeButton";
-            this.executeButton.Size = new System.Drawing.Size(80, 30);
+            this.executeButton.Size = new System.Drawing.Size(143, 30);
             this.executeButton.TabIndex = 2;
-            this.executeButton.Text = "Execute";
+            this.executeButton.Text = "备份配置";
             this.executeButton.UseVisualStyleBackColor = true;
             this.executeButton.Click += new System.EventHandler(this.Execute_Click);
             // 
             // add
             // 
-            this.add.Location = new System.Drawing.Point(49, 242);
+            this.add.Location = new System.Drawing.Point(132, 460);
             this.add.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.add.Name = "add";
             this.add.Size = new System.Drawing.Size(80, 30);
@@ -65,11 +67,11 @@
             // 
             this.XMLHosts.FormattingEnabled = true;
             this.XMLHosts.ItemHeight = 15;
-            this.XMLHosts.Location = new System.Drawing.Point(49, 22);
+            this.XMLHosts.Location = new System.Drawing.Point(49, 52);
             this.XMLHosts.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.XMLHosts.Name = "XMLHosts";
             this.XMLHosts.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.XMLHosts.Size = new System.Drawing.Size(246, 199);
+            this.XMLHosts.Size = new System.Drawing.Size(259, 394);
             this.XMLHosts.TabIndex = 9;
             this.XMLHosts.DoubleClick += new System.EventHandler(this.XMLHosts_DoubleClick);
             // 
@@ -77,19 +79,19 @@
             // 
             this.DownHosts.FormattingEnabled = true;
             this.DownHosts.ItemHeight = 15;
-            this.DownHosts.Location = new System.Drawing.Point(445, 22);
+            this.DownHosts.Location = new System.Drawing.Point(445, 52);
             this.DownHosts.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.DownHosts.Name = "DownHosts";
             this.DownHosts.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.DownHosts.Size = new System.Drawing.Size(259, 199);
+            this.DownHosts.Size = new System.Drawing.Size(259, 394);
             this.DownHosts.TabIndex = 10;
             // 
             // moveRightButton
             // 
-            this.moveRightButton.Location = new System.Drawing.Point(325, 78);
+            this.moveRightButton.Location = new System.Drawing.Point(356, 131);
             this.moveRightButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.moveRightButton.Name = "moveRightButton";
-            this.moveRightButton.Size = new System.Drawing.Size(75, 22);
+            this.moveRightButton.Size = new System.Drawing.Size(41, 42);
             this.moveRightButton.TabIndex = 11;
             this.moveRightButton.Text = ">>";
             this.moveRightButton.UseVisualStyleBackColor = true;
@@ -97,10 +99,10 @@
             // 
             // moveLeftButton
             // 
-            this.moveLeftButton.Location = new System.Drawing.Point(325, 153);
+            this.moveLeftButton.Location = new System.Drawing.Point(356, 306);
             this.moveLeftButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.moveLeftButton.Name = "moveLeftButton";
-            this.moveLeftButton.Size = new System.Drawing.Size(75, 22);
+            this.moveLeftButton.Size = new System.Drawing.Size(41, 42);
             this.moveLeftButton.TabIndex = 12;
             this.moveLeftButton.Text = "<<";
             this.moveLeftButton.UseVisualStyleBackColor = true;
@@ -108,7 +110,7 @@
             // 
             // del
             // 
-            this.del.Location = new System.Drawing.Point(135, 242);
+            this.del.Location = new System.Drawing.Point(215, 460);
             this.del.Name = "del";
             this.del.Size = new System.Drawing.Size(80, 30);
             this.del.TabIndex = 13;
@@ -118,7 +120,7 @@
             // 
             // selectAllXml
             // 
-            this.selectAllXml.Location = new System.Drawing.Point(221, 242);
+            this.selectAllXml.Location = new System.Drawing.Point(49, 460);
             this.selectAllXml.Name = "selectAllXml";
             this.selectAllXml.Size = new System.Drawing.Size(80, 30);
             this.selectAllXml.TabIndex = 14;
@@ -128,7 +130,7 @@
             // 
             // selectAllHost
             // 
-            this.selectAllHost.Location = new System.Drawing.Point(624, 246);
+            this.selectAllHost.Location = new System.Drawing.Point(445, 460);
             this.selectAllHost.Name = "selectAllHost";
             this.selectAllHost.Size = new System.Drawing.Size(80, 30);
             this.selectAllHost.TabIndex = 15;
@@ -136,11 +138,31 @@
             this.selectAllHost.UseVisualStyleBackColor = true;
             this.selectAllHost.Click += new System.EventHandler(this.selectAllHost_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(46, 24);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(97, 15);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "所有交换机：";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(442, 24);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(172, 15);
+            this.label2.TabIndex = 17;
+            this.label2.Text = "需要备份配置的交换机：";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(795, 524);
+            this.ClientSize = new System.Drawing.Size(763, 524);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.selectAllHost);
             this.Controls.Add(this.selectAllXml);
             this.Controls.Add(this.del);
@@ -152,8 +174,9 @@
             this.Controls.Add(this.executeButton);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "交换机配置备份";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -168,6 +191,8 @@
         private System.Windows.Forms.Button del;
         private System.Windows.Forms.Button selectAllXml;
         private System.Windows.Forms.Button selectAllHost;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }
 

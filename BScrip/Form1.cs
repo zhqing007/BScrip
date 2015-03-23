@@ -53,14 +53,27 @@ namespace BScrip {
         private void Execute_Click(object sender, EventArgs e) {
             try {
                 RemoteLoginer loginer = null;
-                //loginer = new RemoteLoginerTel("10.116.0.14", "petrochina", "Petrochina@123", null);
-                loginer = new RemoteLoginerSSH("10.116.0.14", "petrochina", "Petrochina@123", null);
-                loginer.Connect();
-                StreamWriter sw = File.CreateText(@"log.txt");
-                sw.Write(loginer.GetConfiguration());
-                sw.Close();
-                loginer.Close();
-                MessageBox.Show("Done!");
+                foreach (object item in DownHosts.SelectedItems) {
+                    XmlNode node =  xhelper.CreateOrGetXmlNodeByXPath("hosts", "host", item.ToString());
+                    if(node.Attributes["Mode"].ToString().Equals("0"))
+                        loginer = new RemoteLoginerTel(node.Attributes["key"].Value
+                            ,node.Attributes["Name"].Value
+                            ,EncodeAndDecode.DecodeBase64(node.Attributes["PW"].Value)
+                            ,EncodeAndDecode.DecodeBase64(node.Attributes["SPW"].Value));
+                    else
+                        loginer = new RemoteLoginerSSH(node.Attributes["key"].Value,
+                            node.Attributes["Name"].Value,
+                            EncodeAndDecode.DecodeBase64(node.Attributes["PW"].Value),
+                            EncodeAndDecode.DecodeBase64(node.Attributes["SPW"].Value));
+                    loginer.Connect();
+                    StringBuilder fileN = new StringBuilder(item.ToString().Replace('.', '_'));
+                    fileN.Append('_').Append(DateTime.Now.ToString("yyyyMMddHHmm")).Append(".log") ;
+                    StreamWriter sw = File.CreateText(fileN.ToString());
+                    sw.Write(loginer.GetConfiguration());
+                    sw.Close();
+                    loginer.Close();
+                    MessageBox.Show("导出配置完成！");
+                }
             }
             catch (Exception exc) {
                 Console.WriteLine("连接失败:" + exc.ToString());
@@ -148,8 +161,13 @@ namespace BScrip {
 
         private void moveRightButton_Click(object sender, EventArgs e) {
             if (XMLHosts.SelectedItems.Count == 0) return;
-            foreach (object hostip in XMLHosts.SelectedItems)
+            bool befind = false;
+            foreach (object hostip in XMLHosts.SelectedItems) {
+                foreach (object downip in DownHosts.Items)
+                    if (downip.Equals(hostip)) { befind = true; break; };
+                if (befind) continue;
                 DownHosts.Items.Add(hostip);
+            }
         }
 
         private void moveLeftButton_Click(object sender, EventArgs e) {
