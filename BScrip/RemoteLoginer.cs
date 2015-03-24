@@ -111,6 +111,8 @@ namespace BScrip {
 
         public override bool Connect() {
             ssh_con = new SshStream(ip, name, pw);
+            ssh_con.RemoveTerminalEmulationCharacters = true;
+            ssh_con.ReadResponse();
             isConnected = true;
             return true;
         }
@@ -121,16 +123,24 @@ namespace BScrip {
 
         public override void WaitFor(string com) {
             if(com == null || com.Length == 0) throw new NullReferenceException();
+            try {
+                //byte[] back = new byte[1024];
+                //ssh_con.Read(back, 0, 1024);
+                //string backstr = Encoding.ASCII.GetString(back);
 
-            byte[] back = new byte[1024];
-            ssh_con.Read(back, 0, 1024);
-            string backstr = Encoding.ASCII.GetString(back);
-            string com_l = com.ToLower();
-            while (!backstr.ToLower().Contains(com)) {
-                Thread.Sleep(5);
-                ssh_con.Read(back, 0, 1024);
-                backstr = Encoding.ASCII.GetString(back);
-                
+                string backstr = ssh_con.ReadResponse();
+                string com_l = com.ToLower();
+                while (!backstr.ToLower().Contains(com)) {
+                    Thread.Sleep(5);
+                    backstr = ssh_con.ReadResponse();
+                    //ssh_con.Read(back, 0, 1024);
+                    //backstr = Encoding.ASCII.GetString(back);
+
+                }
+            }
+            catch( Exception exc) {
+                Console.WriteLine(exc.StackTrace);
+                return;
             }
         }
 
@@ -148,15 +158,11 @@ namespace BScrip {
             Send("screen-length 0");
             WaitFor("]");
             Send("dis curr");
-            byte[] back = new byte[1024];
-            ssh_con.Read(back, 0, 1024);
             StringBuilder logBuilder = new StringBuilder();
-            string backstr =  Encoding.ASCII.GetString(back);
-            while (!backstr.Contains("]")) {
+            string backstr = ssh_con.ReadResponse();
+            while (!backstr.Contains("return")) {
                 logBuilder.Append(backstr);
-                Array.Clear(back, 0, back.Length);
-                ssh_con.Read(back, 0, 1024);
-                backstr = Encoding.ASCII.GetString(back);
+                backstr = ssh_con.ReadResponse();
             }
             logBuilder.Append(backstr);
             Send("undo screen-length");
