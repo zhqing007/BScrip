@@ -123,7 +123,8 @@ namespace BScrip {
                 Socket sock = (Socket)ar.AsyncState;
 
                 //EndReceive方法为结束挂起的异步读取         
-                int nBytesRec = sock.EndReceive(ar);
+                int nBytesRec = sock.EndReceive(ar);                
+
                 //如果有接收到数据的话            
                 if (nBytesRec > 0) {
                     //声明一个字符串,用来存储解析过的字符串                
@@ -163,6 +164,8 @@ namespace BScrip {
                         //==== 夏春涛 扩充 20110531 ==============================================
                         mOutText = ConvertToGB2312(mOutText);
                         strWorkingDataX = mOutText;
+                        Console.WriteLine("收到数据：");
+                        Console.WriteLine(mOutText);
                         //===================================================================
                         //解析命令后返回 显示信息(即除掉了控制信息)                        
                         if (mOutText != "") {
@@ -467,6 +470,24 @@ namespace BScrip {
             }
             strWorkingData = "";
             return 0;
+        }
+
+        public string MultiWait(List<string> keys) {
+            long lngStart = DateTime.Now.AddSeconds(this.timeout).Ticks;
+            long lngCurTime = 0;
+            while (true) {
+                lngCurTime = DateTime.Now.Ticks;
+                foreach(string key in keys){
+                    if (strWorkingData.ToLower().IndexOf(key.ToLower()) != -1) {
+                        strWorkingData = "";
+                        return key;
+                    }
+                }
+                if (lngCurTime > lngStart) {
+                    throw new Exception("Timed Out waiting for the list of string!");
+                }
+                Thread.Sleep(5);
+            }
         }
 
         public void Send(string message) {

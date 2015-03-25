@@ -54,16 +54,31 @@ namespace BScrip {
 
         public override bool Connect() {
             tel_con.Connect();
-            tel_con.WaitFor("Username:");
-            tel_con.Send(name);
-            tel_con.WaitFor("Password:");
-            tel_con.Send(pw);
-            tel_con.WaitFor(">");
-            if (spw != null) {
-                tel_con.Send("su");
+            List<string> keys = new List<string>();
+            keys.Add("Username:");
+            keys.Add(">");
+            keys.Add("]");
+            string k = tel_con.MultiWait(keys);
+            if (k.Equals("Username:")) {
+                tel_con.Send(name);
                 tel_con.WaitFor("Password:");
-                tel_con.Send(spw);
+                tel_con.Send(pw);
                 tel_con.WaitFor(">");
+                k = ">";
+            }
+            if (k.Equals(">")) {
+                if (spw != null && spw.Length > 0) {
+                    tel_con.Send("su");
+                    List<string> sukeys = new List<string>();
+                    sukeys.Add("Password:");
+                    sukeys.Add(">");
+                    if (tel_con.MultiWait(sukeys) == "Password:") {
+                        tel_con.Send(spw);
+                        tel_con.WaitFor(">");
+                    }
+                }
+                tel_con.Send("sys");
+                tel_con.WaitFor("]");
             }
             isConnected = true;
             return true;
@@ -79,8 +94,6 @@ namespace BScrip {
 
         public override string GetConfiguration() {
             if (!isConnected) return null;
-            tel_con.Send("sys");
-            tel_con.WaitFor("]");
             tel_con.Send("user-interface vty 0 4");
             tel_con.WaitFor("]");
             tel_con.Send("screen-length 0");

@@ -35,6 +35,10 @@ namespace BScrip {
             xmlDoc.Save(xmlName);
         }
 
+        public void Reload() {
+            xmlDoc.Load(xmlName);
+        }
+
         /// 选择匹配XPath表达式的节点列表XmlNodeList.
         public XmlNodeList GetXmlNodeListByXpath(string xpath) {
             return xmlDoc.SelectNodes(xpath);

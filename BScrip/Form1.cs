@@ -55,7 +55,7 @@ namespace BScrip {
                 RemoteLoginer loginer = null;
                 foreach (object item in DownHosts.Items) {
                     XmlNode node =  xhelper.CreateOrGetXmlNodeByXPath("hosts", "host", item.ToString());
-                    if (node.Attributes["Mode"].ToString().Equals("0"))
+                    if (node.Attributes["Mode"].Value.Equals("0"))
                         loginer = new RemoteLoginerTel(node.Attributes["key"].Value
                             , EncodeAndDecode.DecodeBase64(node.Attributes["Name"].Value)
                             , EncodeAndDecode.DecodeBase64(node.Attributes["PW"].Value)
@@ -124,6 +124,7 @@ namespace BScrip {
                 EncodeAndDecode.EncodeBase64(info.GetPW()));
             xhelper.CreateOrUpdateXmlAttributeByXPath("hosts", "host", info.GetIP(), "SPW",
                 EncodeAndDecode.EncodeBase64(info.GetSPW()));
+            xhelper.Reload();
         }
 
         private void add_Click(object sender, EventArgs e) {
