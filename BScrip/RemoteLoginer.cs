@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Tamir.SharpSsh;
 using System.Threading;
+using MinimalisticTelnet;
 
 namespace BScrip {
     public abstract class RemoteLoginer {
@@ -45,73 +46,74 @@ namespace BScrip {
     }
 
     public class RemoteLoginerTel : RemoteLoginer {
-        private Telnet tel_con;
+        //private Telnet tel_con;
+        private TelnetConnection tel_con;
 
         public RemoteLoginerTel(string _ip, string _name, string _pw, string _spw)
-            : base(_ip, _name, _pw, _spw) {
-                tel_con = new Telnet(_ip, 23, 30);
+            : base(_ip, _name, _pw, _spw) {                
         }
 
         public override bool Connect() {
-            tel_con.Connect();
-            List<string> keys = new List<string>();
-            keys.Add("Username:");
-            keys.Add(">");
-            keys.Add("]");
-            string k = tel_con.MultiWait(keys);
-            if (k.Equals("Username:")) {
-                tel_con.Send(name);
-                tel_con.WaitFor("Password:");
-                tel_con.Send(pw);
-                tel_con.WaitFor(">");
-                k = ">";
+            tel_con = new TelnetConnection(ip, 23);
+            string r = tel_con.Read();
+            if (r.TrimEnd().EndsWith("Username:")) {
+                tel_con.WriteLine(name);
+                r = tel_con.Read();
+                if (!r.TrimEnd().EndsWith("Password:")) return false;
+                tel_con.WriteLine(pw);
+                r = tel_con.Read();
             }
-            if (k.Equals(">")) {
+
+            if (r.TrimEnd().EndsWith(">")) {
                 if (spw != null && spw.Length > 0) {
-                    tel_con.Send("su");
-                    List<string> sukeys = new List<string>();
-                    sukeys.Add("Password:");
-                    sukeys.Add(">");
-                    if (tel_con.MultiWait(sukeys) == "Password:") {
-                        tel_con.Send(spw);
-                        tel_con.WaitFor(">");
+                    tel_con.WriteLine("su");
+                    r = tel_con.Read();
+                    if (r.TrimEnd().EndsWith("Password:")) {
+                        tel_con.WriteLine(spw);
+                        r = tel_con.Read();
+                        if (!r.TrimEnd().EndsWith(">")) return false;
                     }
                 }
-                tel_con.Send("sys");
-                tel_con.WaitFor("]");
+                tel_con.WriteLine("sys");
+                r = tel_con.Read();
+
             }
+            if (!r.TrimEnd().EndsWith("]")) return false;
             isConnected = true;
             return true;
         }
 
         public override void Send(string com) {
-            tel_con.Send(com);
+            tel_con.WriteLine(com);
         }
 
         public override void WaitFor(string com) {
-            tel_con.WaitFor(com);
+            if(!tel_con.Read().TrimEnd().EndsWith(com))
+                throw new Exception("Failed WaitFor: " + com);
         }
 
         public override string GetConfiguration() {
             if (!isConnected) return null;
-            tel_con.Send("user-interface vty 0 4");
-            tel_con.WaitFor("]");
-            tel_con.Send("screen-length 0");
-            tel_con.WaitFor("]");
-            tel_con.Send("dis curr");
-            tel_con.WaitFor("]");
-            tel_con.Send("undo screen-length");
-            tel_con.WaitFor("]");
-            tel_con.Send("qu");
-            tel_con.WaitFor("]");
-            tel_con.Send("qu");
-            tel_con.WaitFor(">");
-            return tel_con.SessionLog;
+            tel_con.WriteLine("user-interface vty 0 4");
+            WaitFor("]");
+            tel_con.WriteLine("screen-length 0");
+            WaitFor("]");
+            tel_con.WriteLine("dis curr");
+            string sessionLog = tel_con.Read().TrimEnd();
+            if (!sessionLog.EndsWith("]"))
+                throw new Exception("Failed get configuration");
+            tel_con.WriteLine("undo screen-length");
+            WaitFor("]");
+            tel_con.WriteLine("qu");
+            WaitFor("]");
+            return sessionLog;
         }
 
         public override void Close() {
             if (!isConnected) return ;
-            tel_con.Send("qu");
+            tel_con.WriteLine("qu");
+            WaitFor(">");
+            tel_con.WriteLine("qu");
             isConnected = false;
         }
     }

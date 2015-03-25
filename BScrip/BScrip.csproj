@@ -67,6 +67,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteLoginer.cs" />
     <Compile Include="Telnet.cs" />
+    <Compile Include="TelnetInterface.cs" />
     <Compile Include="XMLHelper.cs" />
     <Compile Include="XmlHelper_S.cs" />
     <EmbeddedResource Include="Form1.resx">
