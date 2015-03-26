@@ -18,6 +18,7 @@ namespace BScrip {
         private XMLHelper xhelper;
         public Form1() {
             InitializeComponent();
+
             xhelper = new XMLHelper();
             if (!System.IO.File.Exists("HostList.xml")) {
                 xhelper.CreateXmlDocument("HostList.xml", "hosts");
