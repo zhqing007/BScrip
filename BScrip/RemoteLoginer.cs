@@ -54,7 +54,7 @@ namespace BScrip {
         }
 
         public override bool Connect() {
-            tel_con = new TelnetConnection(ip, 23);
+            tel_con = new TelnetConnection(ip, 23, 150);
             string r = tel_con.Read();
             if (r.TrimEnd().EndsWith("Username:")) {
                 tel_con.WriteLine(name);
@@ -88,22 +88,30 @@ namespace BScrip {
         }
 
         public override void WaitFor(string com) {
-            if(!tel_con.Read().TrimEnd().EndsWith(com))
-                throw new Exception("Failed WaitFor: " + com);
+            for (int i = 0; i < 5; ++i) {
+                if (tel_con.Read().IndexOf(com) >= 0)
+                    return;
+            }
+            throw new Exception("Failed WaitFor: " + com);
         }
 
         public override string GetConfiguration() {
-            if (!isConnected) return null;
+            if (!isConnected) throw new Exception("Failed Connecte");
             tel_con.WriteLine("user-interface vty 0 4");
-            WaitFor("]");
+            WaitFor("vty0-4]");
             tel_con.WriteLine("screen-length 0");
-            WaitFor("]");
+            WaitFor("vty0-4]");
             tel_con.WriteLine("dis curr");
             string sessionLog = tel_con.Read().TrimEnd();
-            if (!sessionLog.EndsWith("]"))
-                throw new Exception("Failed get configuration");
+            int i;
+            for (i = 0; i < 3; ++i) {
+                if (sessionLog.IndexOf("return") >= 0) break;
+                sessionLog += tel_con.Read().TrimEnd();
+            }
+            if (i == 3) throw new Exception("Failed get configuration");
+            
             tel_con.WriteLine("undo screen-length");
-            WaitFor("]");
+            WaitFor("vty0-4]");
             tel_con.WriteLine("qu");
             WaitFor("]");
             return sessionLog;

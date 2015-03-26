@@ -31,9 +31,10 @@ namespace MinimalisticTelnet
 
         int TimeOutMs = 100;
 
-        public TelnetConnection(string Hostname, int Port)
+        public TelnetConnection(string Hostname, int Port, int TimeOut)
         {
             tcpSocket = new TcpClient(Hostname, Port);
+            TimeOutMs = TimeOut;
 
         }
 
@@ -66,6 +67,7 @@ namespace MinimalisticTelnet
             if (!tcpSocket.Connected) return;
             byte[] buf = System.Text.ASCIIEncoding.ASCII.GetBytes(cmd.Replace("\0xFF","\0xFF\0xFF"));
             tcpSocket.GetStream().Write(buf, 0, buf.Length);
+            System.Threading.Thread.Sleep(TimeOutMs);
         }
 
         public string Read()

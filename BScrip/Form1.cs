@@ -38,18 +38,6 @@ namespace BScrip {
             }
         }
 
-        //private void button1_Click(object sender, EventArgs e) {
-        //    cfa.AppSettings.Settings.Add("key", "Name");
-        //    cfa.AppSettings.Settings.Add("key1", "Name1");
-        //    cfa.Save();
-        //}
-
-        //private void read_Click(object sender, EventArgs e) {
-        //    String str = ConfigurationManager.AppSettings["Key"];
-        //    MessageBox.Show(str);
-        //    MessageBox.Show(cfa.AppSettings.Settings.Count.ToString());
-        //}
-
         private void Execute_Click(object sender, EventArgs e) {
             try {
                 RemoteLoginer loginer = null;
@@ -66,17 +54,18 @@ namespace BScrip {
                             , EncodeAndDecode.DecodeBase64(node.Attributes["PW"].Value)
                             , EncodeAndDecode.DecodeBase64(node.Attributes["SPW"].Value));
                     loginer.Connect();
+                    string strConfiguration = loginer.GetConfiguration();
                     StringBuilder fileN = new StringBuilder(item.ToString().Replace('.', '_'));
                     fileN.Append('_').Append(DateTime.Now.ToString("yyyyMMddHHmm")).Append(".log") ;
                     StreamWriter sw = File.CreateText(fileN.ToString());
-                    sw.Write(loginer.GetConfiguration());
+                    sw.Write(strConfiguration);
                     sw.Close();
                     loginer.Close();
                     MessageBox.Show("导出配置完成！");
                 }
             }
             catch (Exception exc) {
-                Console.WriteLine("连接失败:" + exc.ToString());
+                MessageBox.Show("连接失败:" + exc.ToString());
             }
 
 
@@ -101,19 +90,6 @@ namespace BScrip {
             //MessageBox.Show(p.StandardOutput.ReadToEnd());
 
         }
-
-        //private void readxml_Click(object sender, EventArgs e) {
-        //    XMLHelper x = new XMLHelper("HostList.xml");
-        //    XmlNodeList tt = x.GetXmlNodeListByXpath("hosts//host");
-        //    foreach (XmlNode n in tt) {
-        //        MessageBox.Show(n.Attributes["key"].Value);
-        //    }
-        //}
-
-        //private void create_Click(object sender, EventArgs e) {
-        //    XMLHelper x = new XMLHelper();
-        //    x.CreateXmlDocument("HostList.xml", "hosts");
-        //}
 
         private void SaveHost(HostInfo info) {
             xhelper.CreateOrGetXmlNodeByXPath("hosts", "host", info.GetIP());
