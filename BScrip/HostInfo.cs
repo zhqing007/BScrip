@@ -14,58 +14,74 @@ namespace BScrip {
         }
 
         private void InfoOK_Click(object sender, EventArgs e) {
+            if(Check())
+                this.DialogResult = DialogResult.OK;
+        }
+
+        private bool Check() {
+            if (NameBox.Text.Trim().Length == 0) {
+                MessageBox.Show("没有填主机名！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
             string regex = @"^(2[0-4]\d|25[0-5]|[01]?\d?\d)\." +
                     @"(2[0-4]\d|25[0-5]|[01]?\d?\d)\." +
                     @"(2[0-4]\d|25[0-5]|[01]?\d?\d)\." +
                     @"(2[0-4]\d|25[0-5]|[01]?\d?\d)$";
-            if (!System.Text.RegularExpressions.Regex.IsMatch(GetIP(), regex)) {
-                MessageBox.Show("IP格式不对啊！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+            if (!System.Text.RegularExpressions.Regex.IsMatch(IPBox.Text.Trim(), regex)) {
+                MessageBox.Show("IP格式不对！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
-            if (GetName().Length == 0) {
-                MessageBox.Show("没有填登录名啊！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+            if (LoginNameBox.Text.Trim().Length == 0) {
+                MessageBox.Show("没有填登录名！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
-            if (GetPW().Length == 0) {
-                MessageBox.Show("没有填密码啊！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+            if (PWBox.Text.Length == 0) {
+                MessageBox.Show("没有填密码！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
-
-            this.DialogResult = DialogResult.OK;
+            return true;
         }
 
         private void InfoCancle_Click(object sender, EventArgs e) {
             this.DialogResult = DialogResult.Cancel;
         }
 
-        public String GetIP() {
-            return IPBox.Text.Trim();
-        }
+        //public String GetHostName() {
+        //    return NameBox.Text.Trim();
+        //}
 
-        public String GetName() {
-            return NameBox.Text.Trim();
-        }
+        //public String GetIP() {
+        //    return IPBox.Text.Trim();
+        //}
 
-        public String GetPW() {
-            return PWBox.Text;
-        }
+        //public String GetLoginName() {
+        //    return LoginNameBox.Text.Trim();
+        //}
 
-        public String GetSPW() {
-            return SPWBox.Text;
-        }
+        //public String GetPW() {
+        //    return PWBox.Text;
+        //}
 
-        public Int16 GetLoginMode() {
-            //0:telnet登录；1：ssh登录。
-            if (telnetBox.Checked) return 0;
-            return 1;
+        //public String GetSPW() {
+        //    return SPWBox.Text;
+        //}
+
+        //public Int16 GetLoginMode() {
+        //    //0:telnet登录；1：ssh登录。
+        //    if (telnetBox.Checked) return 0;
+        //    return 1;
+        //}
+
+        public void SetHostName(string hname) {
+            NameBox.Text = hname;
         }
 
         public void SetIP(string ip) {
             IPBox.Text = ip;
         }
 
-        public void SetName(string name) {
-            NameBox.Text = name;
+        public void SetLoginName(string name) {
+            LoginNameBox.Text = name;
         }
 
         public void SetPW(string PW) {
@@ -83,7 +99,26 @@ namespace BScrip {
         }
 
         public void SetIPBoxMode(bool editable) {
-            IPBox.ReadOnly = editable;
+            NameBox.ReadOnly = editable;
+        }
+
+        private void IPBox_TextChanged(object sender, EventArgs e) {
+            string name = NameBox.Text.Trim();
+            if (name.Length == 0 || name.Substring(0, name.Length - 1) == IPBox.Text)
+                NameBox.Text = IPBox.Text;
+        }
+
+        public Host GetHost() {
+            if (Check()) {
+                Host h = new Host(NameBox.Text.Trim());
+                h.ipaddress = IPBox.Text.Trim();
+                h.loginmode = telnetBox.Checked ? 0 : 1;
+                h.loginname = LoginNameBox.Text.Trim();
+                h.password = PWBox.Text;
+                h.superpw = SPWBox.Text;
+                return h;
+            }
+            return null;
         }
     }
 }

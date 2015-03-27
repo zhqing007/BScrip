@@ -15,49 +15,75 @@ using Tamir.SharpSsh;
 namespace BScrip {
     public partial class Form1 : Form {
         //public Configuration cfa;
-        private XMLHelper xhelper;
+        //private XMLHelper xhelper;
         public Form1() {
             InitializeComponent();
 
-            xhelper = new XMLHelper();
-            if (!System.IO.File.Exists("HostList.xml")) {
-                xhelper.CreateXmlDocument("HostList.xml", "hosts");
-                return;
-            }
+            //xhelper = new XMLHelper();
+            //if (!System.IO.File.Exists("HostList.xml")) {
+            //    xhelper.CreateXmlDocument("HostList.xml", "hosts");
+            //    return;
+            //}
 
-            xhelper.XmlName = "HostList.xml";
-            LoadXmlToListBox();
+            //xhelper.XmlName = "HostList.xml";
+
+
+            HostView.Columns.Add("主机名", 100, HorizontalAlignment.Left);
+            HostView.Columns.Add("IP地址", 80, HorizontalAlignment.Left);
+            HostView.Columns.Add("M", 20, HorizontalAlignment.Left);
+            LoadHostToListBox();
+            LoadHostToListView();
 
             //cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         }
 
-        private void LoadXmlToListBox() {
-            XMLHosts.Items.Clear();
-            XmlNodeList hosts = xhelper.GetXmlNodeListByXpath("hosts//host");
-            foreach (XmlNode n in hosts) {
-                XMLHosts.Items.Add(n.Attributes["key"].Value);
+        private void LoadHostToListView() {
+            HostView.Items.Clear();
+            List<Host> hosts = Host.GetAllHosts();
+            foreach (Host n in hosts) {
+                ListViewItem lvi = new ListViewItem();
+                lvi.Text = n.hostname;
+                lvi.SubItems.Add(n.ipaddress);
+                if (n.loginmode == 0)
+                    lvi.SubItems.Add("T");
+                else
+                    lvi.SubItems.Add("S");
+                this.HostView.Items.Add(lvi);
             }
         }
+
+        private void LoadHostToListBox() {
+            HostList.Items.Clear();
+            List<Host> hosts = Host.GetAllHosts();
+            foreach (Host n in hosts) {
+                HostList.Items.Add(n.ipaddress);
+            }
+        }
+
+        //private void LoadXmlToListBox() {
+        //    HostList.Items.Clear();
+        //    XmlNodeList hosts = xhelper.GetXmlNodeListByXpath("hosts//host");
+        //    foreach (XmlNode n in hosts) {
+        //        HostList.Items.Add(n.Attributes["key"].Value);
+        //    }
+        //}
 
         private void Execute_Click(object sender, EventArgs e) {
             try {
                 RemoteLoginer loginer = null;
                 foreach (object item in DownHosts.Items) {
-                    XmlNode node =  xhelper.CreateOrGetXmlNodeByXPath("hosts", "host", item.ToString());
-                    if (node.Attributes["Mode"].Value.Equals("0"))
-                        loginer = new RemoteLoginerTel(node.Attributes["key"].Value
-                            , EncodeAndDecode.DecodeBase64(node.Attributes["Name"].Value)
-                            , EncodeAndDecode.DecodeBase64(node.Attributes["PW"].Value)
-                            , EncodeAndDecode.DecodeBase64(node.Attributes["SPW"].Value));
+                    Host h = new Host(item.ToString());
+                    h.GetFromName();
+                    if (h.loginmode == 0)
+                        loginer = new RemoteLoginerTel(h.ipaddress, h.loginname, h.password, h.superpw);
                     else
-                        loginer = new RemoteLoginerSSH(node.Attributes["key"].Value
-                            , EncodeAndDecode.DecodeBase64(node.Attributes["Name"].Value)
-                            , EncodeAndDecode.DecodeBase64(node.Attributes["PW"].Value)
-                            , EncodeAndDecode.DecodeBase64(node.Attributes["SPW"].Value));
+                        loginer = new RemoteLoginerSSH(h.ipaddress, h.loginname, h.password, h.superpw);
                     loginer.Connect();
                     string strConfiguration = loginer.GetConfiguration();
                     StringBuilder fileN = new StringBuilder(item.ToString().Replace('.', '_'));
-                    fileN.Append('_').Append(DateTime.Now.ToString("yyyyMMddHHmm")).Append(".log") ;
+                    if(!Directory.Exists(fileN.ToString()))
+                        Directory.CreateDirectory(fileN.ToString());
+                    fileN.Append('\\').Append(DateTime.Now.ToString("yyyyMMddHHmm")).Append(".log") ;
                     StreamWriter sw = File.CreateText(fileN.ToString());
                     sw.Write(strConfiguration);
                     sw.Close();
@@ -92,59 +118,64 @@ namespace BScrip {
 
         }
 
-        private void SaveHost(HostInfo info) {
-            xhelper.CreateOrGetXmlNodeByXPath("hosts", "host", info.GetIP());
-            xhelper.CreateOrUpdateXmlAttributeByXPath("hosts", "host", info.GetIP(), "Mode", info.GetLoginMode().ToString());
-            xhelper.CreateOrUpdateXmlAttributeByXPath("hosts", "host", info.GetIP(), "Name",
-                EncodeAndDecode.EncodeBase64(info.GetName()));
-            xhelper.CreateOrUpdateXmlAttributeByXPath("hosts", "host", info.GetIP(), "PW",
-                EncodeAndDecode.EncodeBase64(info.GetPW()));
-            xhelper.CreateOrUpdateXmlAttributeByXPath("hosts", "host", info.GetIP(), "SPW",
-                EncodeAndDecode.EncodeBase64(info.GetSPW()));
-            xhelper.Reload();
+        private void SaveHost_(HostInfo info) {
+            //xhelper.CreateOrGetXmlNodeByXPath("hosts", "host", info.GetIP());
+            //xhelper.CreateOrUpdateXmlAttributeByXPath("hosts", "host", info.GetIP(), "Mode", info.GetLoginMode().ToString());
+            //xhelper.CreateOrUpdateXmlAttributeByXPath("hosts", "host", info.GetIP(), "Name",
+            //    EncodeAndDecode.EncodeBase64(info.GetLoginName()));
+            //xhelper.CreateOrUpdateXmlAttributeByXPath("hosts", "host", info.GetIP(), "PW",
+            //    EncodeAndDecode.EncodeBase64(info.GetPW()));
+            //xhelper.CreateOrUpdateXmlAttributeByXPath("hosts", "host", info.GetIP(), "SPW",
+            //    EncodeAndDecode.EncodeBase64(info.GetSPW()));
+            //xhelper.Reload();
+
+
         }
 
         private void add_Click(object sender, EventArgs e) {
             HostInfo host = new HostInfo();
             host.ShowDialog();
             if (host.DialogResult.Equals(DialogResult.Cancel)) return;
-            SaveHost(host);
-            XMLHosts.Items.Add(host.GetIP());
+            Host h = host.GetHost();
+            h.Save();
+            HostList.Items.Add(h.ipaddress);
         }
 
-
-
-        private void XMLHosts_DoubleClick(object sender, EventArgs e) {
+        private void HostList_DoubleClick(object sender, EventArgs e) {
+            Host h = new Host(HostList.SelectedItem.ToString());
+            h.GetFromName();
             HostInfo hostDia = new HostInfo();
             hostDia.SetIPBoxMode(true);
-            hostDia.SetIP(XMLHosts.SelectedItem.ToString());
-            XmlNode node = xhelper.CreateOrGetXmlNodeByXPath("hosts", "host", XMLHosts.SelectedItem.ToString());
-            hostDia.SetName(EncodeAndDecode.DecodeBase64(node.Attributes["Name"].Value));
-            hostDia.SetPW(EncodeAndDecode.DecodeBase64(node.Attributes["PW"].Value));
-            hostDia.SetSPW(EncodeAndDecode.DecodeBase64(node.Attributes["SPW"].Value));
-            hostDia.SetLoginMode(Convert.ToInt16(node.Attributes["Mode"].Value));
+            hostDia.SetIP(h.ipaddress); 
+            hostDia.SetLoginName(h.loginname);
+            hostDia.SetPW(h.password);
+            hostDia.SetSPW(h.superpw);
+            hostDia.SetLoginMode(h.loginmode);
             hostDia.ShowDialog();
             if (hostDia.DialogResult == DialogResult.OK)
-                SaveHost(hostDia);
+                hostDia.GetHost().Update();
         }
 
         private void del_Click(object sender, EventArgs e) {
-            if (XMLHosts.SelectedItems.Count == 0) return;
+            if (HostList.SelectedItems.Count == 0) return;
             if (MessageBox.Show("确认删除所选项么?", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 == DialogResult.No) return;
-            foreach(object hostip in XMLHosts.SelectedItems)
-                xhelper.RemoveXmlNodeByXPath("hosts", "host", hostip.ToString());
-            LoadXmlToListBox();
+            foreach (object hostn in HostList.SelectedItems) {
+                Host h = new Host(hostn.ToString());
+                h.Del();
+            }
+
+            LoadHostToListBox();
         }
 
         private void moveRightButton_Click(object sender, EventArgs e) {
-            if (XMLHosts.SelectedItems.Count == 0) return;
+            if (HostList.SelectedItems.Count == 0) return;
             bool befind = false;
-            foreach (object hostip in XMLHosts.SelectedItems) {
+            foreach (object hostn in HostList.SelectedItems) {
                 foreach (object downip in DownHosts.Items)
-                    if (downip.Equals(hostip)) { befind = true; break; };
+                    if (downip.Equals(hostn)) { befind = true; break; };
                 if (befind) continue;
-                DownHosts.Items.Add(hostip);
+                DownHosts.Items.Add(hostn);
             }
         }
 
@@ -159,12 +190,38 @@ namespace BScrip {
                 li.SelectedIndex = i;
         }
 
-        private void selectAllXml_Click(object sender, EventArgs e) {
-            SelectAllItems(XMLHosts);
+        private void selectAllHostList_Click(object sender, EventArgs e) {
+            SelectAllItems(HostList);
         }
 
         private void selectAllHost_Click(object sender, EventArgs e) {
             SelectAllItems(DownHosts);
+        }
+
+        private void HostView_DoubleClick(object sender, EventArgs e) {
+            Host h = new Host(HostView.SelectedItems[0].Text);
+            h.GetFromName();
+            HostInfo hostDia = new HostInfo();            
+            hostDia.SetIPBoxMode(true);
+
+            hostDia.SetHostName(h.hostname);
+            hostDia.SetIP(h.ipaddress);
+            hostDia.SetLoginName(h.loginname);
+            hostDia.SetPW(h.password);
+            hostDia.SetSPW(h.superpw);
+            hostDia.SetLoginMode(h.loginmode);
+
+            hostDia.ShowDialog();
+            if (hostDia.DialogResult == DialogResult.OK) {
+                Host sh = hostDia.GetHost();
+                if (sh.Update()) {
+                    HostView.SelectedItems[0].SubItems[1].Text = sh.ipaddress;
+                    if (sh.loginmode == 0)
+                        HostView.SelectedItems[0].SubItems[2].Text = "T";
+                    else
+                        HostView.SelectedItems[0].SubItems[2].Text = "S";
+                }
+            }
         }
     }
 }
