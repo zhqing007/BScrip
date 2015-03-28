@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Configuration;
@@ -29,9 +28,8 @@ namespace BScrip {
 
 
             HostView.Columns.Add("主机名", 100, HorizontalAlignment.Left);
-            HostView.Columns.Add("IP地址", 80, HorizontalAlignment.Left);
+            HostView.Columns.Add("IP地址", 120, HorizontalAlignment.Left);
             HostView.Columns.Add("M", 20, HorizontalAlignment.Left);
-            LoadHostToListBox();
             LoadHostToListView();
 
             //cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -41,23 +39,20 @@ namespace BScrip {
             HostView.Items.Clear();
             List<Host> hosts = Host.GetAllHosts();
             foreach (Host n in hosts) {
-                ListViewItem lvi = new ListViewItem();
-                lvi.Text = n.hostname;
-                lvi.SubItems.Add(n.ipaddress);
-                if (n.loginmode == 0)
-                    lvi.SubItems.Add("T");
-                else
-                    lvi.SubItems.Add("S");
-                this.HostView.Items.Add(lvi);
+                AddHostToView(n);
             }
         }
 
-        private void LoadHostToListBox() {
-            HostList.Items.Clear();
-            List<Host> hosts = Host.GetAllHosts();
-            foreach (Host n in hosts) {
-                HostList.Items.Add(n.ipaddress);
-            }
+        private void AddHostToView(Host h) {
+            ListViewItem lvi = new ListViewItem();
+            lvi.Tag = h;
+            lvi.Text = h.hostname;
+            lvi.SubItems.Add(h.ipaddress);
+            if (h.loginmode == 0)
+                lvi.SubItems.Add("T");
+            else
+                lvi.SubItems.Add("S");
+            this.HostView.Items.Add(lvi);
         }
 
         //private void LoadXmlToListBox() {
@@ -138,44 +133,29 @@ namespace BScrip {
             if (host.DialogResult.Equals(DialogResult.Cancel)) return;
             Host h = host.GetHost();
             h.Save();
-            HostList.Items.Add(h.ipaddress);
-        }
-
-        private void HostList_DoubleClick(object sender, EventArgs e) {
-            Host h = new Host(HostList.SelectedItem.ToString());
-            h.GetFromName();
-            HostInfo hostDia = new HostInfo();
-            hostDia.SetIPBoxMode(true);
-            hostDia.SetIP(h.ipaddress); 
-            hostDia.SetLoginName(h.loginname);
-            hostDia.SetPW(h.password);
-            hostDia.SetSPW(h.superpw);
-            hostDia.SetLoginMode(h.loginmode);
-            hostDia.ShowDialog();
-            if (hostDia.DialogResult == DialogResult.OK)
-                hostDia.GetHost().Update();
+            AddHostToView(h);
         }
 
         private void del_Click(object sender, EventArgs e) {
-            if (HostList.SelectedItems.Count == 0) return;
+            if (HostView.SelectedItems.Count == 0) return;
             if (MessageBox.Show("确认删除所选项么?", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 == DialogResult.No) return;
-            foreach (object hostn in HostList.SelectedItems) {
-                Host h = new Host(hostn.ToString());
+            foreach (ListViewItem hostn in HostView.SelectedItems) {
+                Host h = hostn.Tag as Host;
                 h.Del();
             }
-
-            LoadHostToListBox();
+            LoadHostToListView();
         }
 
         private void moveRightButton_Click(object sender, EventArgs e) {
-            if (HostList.SelectedItems.Count == 0) return;
+            if (HostView.SelectedItems.Count == 0) return;
             bool befind = false;
-            foreach (object hostn in HostList.SelectedItems) {
-                foreach (object downip in DownHosts.Items)
-                    if (downip.Equals(hostn)) { befind = true; break; };
+            foreach (ListViewItem hostn in HostView.SelectedItems) {
+                Host h = hostn.Tag as Host;
+                foreach (object downh in DownHosts.Items)
+                    if ((downh as Host).hostname.Equals(h.hostname)) { befind = true; break; };
                 if (befind) continue;
-                DownHosts.Items.Add(hostn);
+                DownHosts.Items.Add(h);
             }
         }
 
@@ -185,23 +165,29 @@ namespace BScrip {
                 DownHosts.Items.Remove(DownHosts.SelectedItems[p]);
         }
 
-        private void SelectAllItems(ListBox li) {
+        private void SelectAllItems_View(ListView li) {
+            foreach (ListViewItem i in li.Items) {
+                i.Selected = true;
+            }
+            li.Focus();
+        }
+
+        private void SelectAllItems_Box(ListBox li) {
             for (int i = 0; i < li.Items.Count; ++i)
                 li.SelectedIndex = i;
         }
 
         private void selectAllHostList_Click(object sender, EventArgs e) {
-            SelectAllItems(HostList);
+            SelectAllItems_View(HostView);
         }
 
         private void selectAllHost_Click(object sender, EventArgs e) {
-            SelectAllItems(DownHosts);
+            SelectAllItems_Box(DownHosts);
         }
 
         private void HostView_DoubleClick(object sender, EventArgs e) {
-            Host h = new Host(HostView.SelectedItems[0].Text);
-            h.GetFromName();
-            HostInfo hostDia = new HostInfo();            
+            Host h = HostView.SelectedItems[0].Tag as Host;
+            HostInfo hostDia = new HostInfo();
             hostDia.SetIPBoxMode(true);
 
             hostDia.SetHostName(h.hostname);

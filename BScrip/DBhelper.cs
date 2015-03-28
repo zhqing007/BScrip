@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Data.SQLite;
 using System.Data;
@@ -11,7 +10,7 @@ namespace BScrip {
         private static SQLiteCommand sqlcmd;
 
         static DBhelper() {
-            sqlconn = new SQLiteConnection("Data Source=BScrip.db;Password=zhqing");
+            sqlconn = new SQLiteConnection("Data Source=..\\..\\BScrip.db;Password=zhqing");
             sqlconn.Open();
             sqlcmd = sqlconn.CreateCommand();
         }
@@ -93,7 +92,7 @@ namespace BScrip {
 
         public bool Save() {
             if (hostname == null || hostname.Trim().Length == 0) return false;
-            if (GetFromName() != null) return false;
+            if (GetFromName() == false) return false;
 
             SQLiteParameter[] p = {new SQLiteParameter("@ip", ipaddress),
                                       new SQLiteParameter("@hn", hostname),
@@ -104,7 +103,7 @@ namespace BScrip {
 
             DBhelper.ExecuteSQL("insert into hosts" +
                         "(ipaddress, name, loginname, loginmode, password, superpw) " +
-                        "values(@ip, @hn, @ln, @mode, @pw, @spw)", p.ToArray());
+                        "values(@ip, @hn, @ln, @mode, @pw, @spw)", p);
             return true;
         }
 
@@ -122,13 +121,17 @@ namespace BScrip {
 
             DBhelper.ExecuteSQL("update hosts " +
                         "set ipaddress=@ip, loginname=@ln, loginmode=@mode, password=@pw, " +
-                        "superpw=@spw where name=@hn", p.ToArray());
+                        "superpw=@spw where name=@hn", p);
             return true;
         }
 
         public void Del() {
             if (hostname == null || hostname.Trim().Length == 0) return;
             DBhelper.ExecuteSQL("delete from hosts where name='" + hostname.Trim() + "'");
+        }
+
+        public override string ToString() {
+            return this.hostname;
         }
     }
 }
