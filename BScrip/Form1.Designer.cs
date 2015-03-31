@@ -45,6 +45,7 @@ namespace BScrip
             this.FunctionTab = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.FunctionTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -189,6 +190,7 @@ namespace BScrip
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.DownHosts);
             this.tabPage1.Controls.Add(this.moveRightButton);
@@ -207,10 +209,20 @@ namespace BScrip
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(337, 365);
+            this.tabPage2.Size = new System.Drawing.Size(487, 452);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(386, 415);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 18;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
@@ -252,6 +264,7 @@ namespace BScrip
         private TabControl FunctionTab;
         private TabPage tabPage1;
         private TabPage tabPage2;
+        private Button button1;
     }
 }
 

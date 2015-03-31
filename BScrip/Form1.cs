@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Xml;
 using System.IO;
 using Tamir.SharpSsh;
+using System.Threading;
 
 namespace BScrip {
     public partial class Form1 : Form {
@@ -64,31 +65,23 @@ namespace BScrip {
         //}
 
         private void Execute_Click(object sender, EventArgs e) {
-            try {
-                RemoteLoginer loginer = null;
-                foreach (object item in DownHosts.Items) {
-                    Host h = new Host(item.ToString());
-                    h.GetFromName();
-                    if (h.loginmode == 0)
-                        loginer = new RemoteLoginerTel(h.ipaddress, h.loginname, h.password, h.superpw);
-                    else
-                        loginer = new RemoteLoginerSSH(h.ipaddress, h.loginname, h.password, h.superpw);
-                    loginer.Connect();
-                    string strConfiguration = loginer.GetConfiguration();
-                    StringBuilder fileN = new StringBuilder(item.ToString().Replace('.', '_'));
-                    if(!Directory.Exists(fileN.ToString()))
-                        Directory.CreateDirectory(fileN.ToString());
-                    fileN.Append('\\').Append(DateTime.Now.ToString("yyyyMMddHHmm")).Append(".log") ;
-                    StreamWriter sw = File.CreateText(fileN.ToString());
-                    sw.Write(strConfiguration);
-                    sw.Close();
-                    loginer.Close();
-                    MessageBox.Show("导出配置完成！");
-                }
+            if (DownHosts.Items.Count <= 0) {
+                MessageBox.Show("没有要备份的主机！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
-            catch (Exception exc) {
-                MessageBox.Show("连接失败:" + exc.ToString());
+                
+            List<Host> hostlist = new List<Host>();
+            foreach (object item in DownHosts.Items) {
+                hostlist.Add(item as Host);
             }
+
+            AutoResetEvent logevent = new AutoResetEvent(false);
+            LogForm logd = new LogForm(logevent);
+            GetConfThread confth = new GetConfThread(logd, logevent, hostlist);
+            Thread logThread = new Thread(new ThreadStart(confth.GetConf));
+            logThread.Start();
+            logd.Show();
+
 
 
             //Process p = new Process();
@@ -209,5 +202,70 @@ namespace BScrip {
                 }
             }
         }
+
+        private void button1_Click(object sender, EventArgs e) {
+            AutoResetEvent logevent = new AutoResetEvent(false);
+            LogForm logd = new LogForm(logevent);
+            GetConfThread confth = new GetConfThread(logd, logevent, null);
+            Thread logThread = new Thread(new ThreadStart(confth.GetConf));
+            logThread.Start();
+            logd.Show();
+        }
     }
+
+    public class GetConfThread {
+        private List<Host> hosts;
+        private AutoResetEvent myResetEvent;
+        private LogForm logF;
+
+        public GetConfThread(LogForm logfo, AutoResetEvent loge, List<Host> hostl) {
+            logF = logfo;
+            myResetEvent = loge;
+            hosts = hostl;
+        }
+
+        public void GetConf() {
+            myResetEvent.WaitOne();
+            try {
+                RemoteLoginer loginer = null;
+                foreach (Host item in hosts) {
+                    if (item.loginmode == 0) {
+                        loginer = new RemoteLoginerTel(item.ipaddress, item.loginname, item.password, item.superpw);
+                        logF.AddLog(item.hostname + ":" + "Telnet登录");
+                    }
+                    else {
+                        loginer = new RemoteLoginerSSH(item.ipaddress, item.loginname, item.password, item.superpw);
+                        logF.AddLog(item.hostname + ":" + "SSH登录");
+                    }
+                    if(loginer.Connect())
+                        logF.AddLog(item.hostname + ":" + "登录成功");
+                    else{
+                        logF.AddLog(item.hostname + ":" + "登录失败");
+                        continue;
+                    }
+                    string strConfiguration = loginer.GetConfiguration();
+                    if(strConfiguration != null && strConfiguration.Trim().Length > 0)
+                        logF.AddLog(item.hostname + ":" + "导出配置成功");
+                    else{
+                        logF.AddLog(item.hostname + ":" + "导出配置失败");
+                        continue;
+                    }
+                    StringBuilder fileN = new StringBuilder(item.ToString().Replace('.', '_'));
+                    if (!Directory.Exists(fileN.ToString()))
+                        Directory.CreateDirectory(fileN.ToString());
+                    fileN.Append('\\').Append(DateTime.Now.ToString("yyyyMMddHHmm")).Append(".log");
+                    StreamWriter sw = File.CreateText(fileN.ToString());
+                    logF.AddLog(item.hostname + ":" + "导出文件 " + fileN);
+                    sw.Write(strConfiguration);
+                    sw.Close();
+                    loginer.Close();
+                    logF.AddLog(item.hostname + ":" + "文件写入完成");
+                }
+            }
+            catch (Exception exc) {
+                logF.AddLog("导出配置出现异常：" + exc.StackTrace);
+            }
+        }
+    }
+
 }

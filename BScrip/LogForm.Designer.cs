@@ -23,49 +23,64 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.logTextBox = new System.Windows.Forms.TextBox();
+            this.LogFSaveB = new System.Windows.Forms.Button();
+            this.LogFCloseB = new System.Windows.Forms.Button();
+            this.LogFCopyB = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // textBox1
+            // logTextBox
             // 
-            this.textBox1.BackColor = System.Drawing.SystemColors.Window;
-            this.textBox1.Location = new System.Drawing.Point(12, 12);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(446, 310);
-            this.textBox1.TabIndex = 0;
+            this.logTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.logTextBox.Location = new System.Drawing.Point(12, 12);
+            this.logTextBox.Multiline = true;
+            this.logTextBox.Name = "logTextBox";
+            this.logTextBox.ReadOnly = true;
+            this.logTextBox.Size = new System.Drawing.Size(446, 333);
+            this.logTextBox.TabIndex = 0;
             // 
-            // button1
+            // LogFSaveB
             // 
-            this.button1.Location = new System.Drawing.Point(257, 351);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.LogFSaveB.Location = new System.Drawing.Point(166, 351);
+            this.LogFSaveB.Name = "LogFSaveB";
+            this.LogFSaveB.Size = new System.Drawing.Size(81, 34);
+            this.LogFSaveB.TabIndex = 1;
+            this.LogFSaveB.Text = "保存...";
+            this.LogFSaveB.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // LogFCloseB
             // 
-            this.button2.Location = new System.Drawing.Point(370, 351);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
+            this.LogFCloseB.Location = new System.Drawing.Point(363, 351);
+            this.LogFCloseB.Name = "LogFCloseB";
+            this.LogFCloseB.Size = new System.Drawing.Size(81, 34);
+            this.LogFCloseB.TabIndex = 2;
+            this.LogFCloseB.Text = "关闭";
+            this.LogFCloseB.UseVisualStyleBackColor = true;
+            this.LogFCloseB.Click += new System.EventHandler(this.LogFCloseB_Click);
+            // 
+            // LogFCopyB
+            // 
+            this.LogFCopyB.Location = new System.Drawing.Point(266, 351);
+            this.LogFCopyB.Name = "LogFCopyB";
+            this.LogFCopyB.Size = new System.Drawing.Size(81, 34);
+            this.LogFCopyB.TabIndex = 3;
+            this.LogFCopyB.Text = "复制";
+            this.LogFCopyB.UseVisualStyleBackColor = true;
             // 
             // LogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(470, 397);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox1);
+            this.ControlBox = false;
+            this.Controls.Add(this.LogFCopyB);
+            this.Controls.Add(this.LogFCloseB);
+            this.Controls.Add(this.LogFSaveB);
+            this.Controls.Add(this.logTextBox);
             this.Name = "LogForm";
-            this.Text = "LogForm";
+            this.ShowInTaskbar = false;
+            this.Text = "正在导出";
+            this.Load += new System.EventHandler(this.LogForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -73,8 +88,9 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox logTextBox;
+        private System.Windows.Forms.Button LogFSaveB;
+        private System.Windows.Forms.Button LogFCloseB;
+        private System.Windows.Forms.Button LogFCopyB;
     }
 }
