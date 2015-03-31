@@ -30,7 +30,7 @@ namespace BScrip
         /// </summary>
         private void InitializeComponent()
         {
-            this.executeButton = new System.Windows.Forms.Button();
+            this.getConfB_Local = new System.Windows.Forms.Button();
             this.add = new System.Windows.Forms.Button();
             this.DownHosts = new System.Windows.Forms.ListBox();
             this.moveRightButton = new System.Windows.Forms.Button();
@@ -44,22 +44,22 @@ namespace BScrip
             this.ToolStrip = new System.Windows.Forms.ToolStrip();
             this.FunctionTab = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.getConfB_remote = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.button1 = new System.Windows.Forms.Button();
             this.FunctionTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // executeButton
+            // getConfB_Local
             // 
-            this.executeButton.Location = new System.Drawing.Point(198, 411);
-            this.executeButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.executeButton.Name = "executeButton";
-            this.executeButton.Size = new System.Drawing.Size(143, 30);
-            this.executeButton.TabIndex = 2;
-            this.executeButton.Text = "备份配置";
-            this.executeButton.UseVisualStyleBackColor = true;
-            this.executeButton.Click += new System.EventHandler(this.Execute_Click);
+            this.getConfB_Local.Location = new System.Drawing.Point(217, 411);
+            this.getConfB_Local.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.getConfB_Local.Name = "getConfB_Local";
+            this.getConfB_Local.Size = new System.Drawing.Size(98, 30);
+            this.getConfB_Local.TabIndex = 2;
+            this.getConfB_Local.Text = "备份到本地";
+            this.getConfB_Local.UseVisualStyleBackColor = true;
+            this.getConfB_Local.Click += new System.EventHandler(this.getConfB_Local_Click);
             // 
             // add
             // 
@@ -132,7 +132,7 @@ namespace BScrip
             this.selectAllHost.Location = new System.Drawing.Point(94, 411);
             this.selectAllHost.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.selectAllHost.Name = "selectAllHost";
-            this.selectAllHost.Size = new System.Drawing.Size(80, 30);
+            this.selectAllHost.Size = new System.Drawing.Size(98, 30);
             this.selectAllHost.TabIndex = 15;
             this.selectAllHost.Text = "全选";
             this.selectAllHost.UseVisualStyleBackColor = true;
@@ -190,13 +190,13 @@ namespace BScrip
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage1.Controls.Add(this.button1);
+            this.tabPage1.Controls.Add(this.getConfB_remote);
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.DownHosts);
             this.tabPage1.Controls.Add(this.moveRightButton);
             this.tabPage1.Controls.Add(this.moveLeftButton);
             this.tabPage1.Controls.Add(this.selectAllHost);
-            this.tabPage1.Controls.Add(this.executeButton);
+            this.tabPage1.Controls.Add(this.getConfB_Local);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -204,25 +204,25 @@ namespace BScrip
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "配置备份";
             // 
+            // getConfB_remote
+            // 
+            this.getConfB_remote.Location = new System.Drawing.Point(340, 411);
+            this.getConfB_remote.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.getConfB_remote.Name = "getConfB_remote";
+            this.getConfB_remote.Size = new System.Drawing.Size(98, 30);
+            this.getConfB_remote.TabIndex = 18;
+            this.getConfB_remote.Text = "备份到远程";
+            this.getConfB_remote.UseVisualStyleBackColor = true;
+            // 
             // tabPage2
             // 
+            this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(487, 452);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(386, 415);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 18;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.tabPage2.Text = "定时备份";
             // 
             // Form1
             // 
@@ -249,7 +249,7 @@ namespace BScrip
 
         #endregion
 
-        private System.Windows.Forms.Button executeButton;
+        private System.Windows.Forms.Button getConfB_Local;
         private System.Windows.Forms.Button add;
         private System.Windows.Forms.ListBox DownHosts;
         private System.Windows.Forms.Button moveRightButton;
@@ -264,7 +264,7 @@ namespace BScrip
         private TabControl FunctionTab;
         private TabPage tabPage1;
         private TabPage tabPage2;
-        private Button button1;
+        private Button getConfB_remote;
     }
 }
 

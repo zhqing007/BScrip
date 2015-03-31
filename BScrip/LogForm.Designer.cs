@@ -47,6 +47,7 @@
             this.LogFSaveB.TabIndex = 1;
             this.LogFSaveB.Text = "保存...";
             this.LogFSaveB.UseVisualStyleBackColor = true;
+            this.LogFSaveB.Click += new System.EventHandler(this.LogFSaveB_Click);
             // 
             // LogFCloseB
             // 
@@ -66,6 +67,7 @@
             this.LogFCopyB.TabIndex = 3;
             this.LogFCopyB.Text = "复制";
             this.LogFCopyB.UseVisualStyleBackColor = true;
+            this.LogFCopyB.Click += new System.EventHandler(this.LogFCopyB_Click);
             // 
             // LogForm
             // 

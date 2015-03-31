@@ -64,7 +64,7 @@ namespace BScrip {
         //    }
         //}
 
-        private void Execute_Click(object sender, EventArgs e) {
+        private void getConfB_Local_Click(object sender, EventArgs e) {
             if (DownHosts.Items.Count <= 0) {
                 MessageBox.Show("没有要备份的主机！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -77,10 +77,11 @@ namespace BScrip {
 
             AutoResetEvent logevent = new AutoResetEvent(false);
             LogForm logd = new LogForm(logevent);
+            logd.ReDoButtons(false);
             GetConfThread confth = new GetConfThread(logd, logevent, hostlist);
             Thread logThread = new Thread(new ThreadStart(confth.GetConf));
             logThread.Start();
-            logd.Show();
+            logd.ShowDialog();
 
 
 
@@ -116,8 +117,6 @@ namespace BScrip {
             //xhelper.CreateOrUpdateXmlAttributeByXPath("hosts", "host", info.GetIP(), "SPW",
             //    EncodeAndDecode.EncodeBase64(info.GetSPW()));
             //xhelper.Reload();
-
-
         }
 
         private void add_Click(object sender, EventArgs e) {
@@ -202,15 +201,6 @@ namespace BScrip {
                 }
             }
         }
-
-        private void button1_Click(object sender, EventArgs e) {
-            AutoResetEvent logevent = new AutoResetEvent(false);
-            LogForm logd = new LogForm(logevent);
-            GetConfThread confth = new GetConfThread(logd, logevent, null);
-            Thread logThread = new Thread(new ThreadStart(confth.GetConf));
-            logThread.Start();
-            logd.Show();
-        }
     }
 
     public class GetConfThread {
@@ -261,11 +251,12 @@ namespace BScrip {
                     loginer.Close();
                     logF.AddLog(item.hostname + ":" + "文件写入完成");
                 }
+                logF.ReDoButtons(true);
             }
             catch (Exception exc) {
                 logF.AddLog("导出配置出现异常：" + exc.StackTrace);
+                logF.ReDoButtons(true);
             }
         }
     }
-
 }
