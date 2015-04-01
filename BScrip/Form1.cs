@@ -240,9 +240,11 @@ namespace BScrip {
                         logF.AddLog(item.hostname + ":" + "导出配置失败");
                         continue;
                     }
-                    StringBuilder fileN = new StringBuilder(item.ToString().Replace('.', '_'));
+                    StringBuilder fileN = new StringBuilder(item.hostname);
+                    fileN.Append('_').Append(item.ipaddress.Replace('.', '_'));
                     if (!Directory.Exists(fileN.ToString()))
                         Directory.CreateDirectory(fileN.ToString());
+                    fileN = new StringBuilder(Path.GetFullPath(fileN.ToString()));
                     fileN.Append('\\').Append(DateTime.Now.ToString("yyyyMMddHHmm")).Append(".log");
                     StreamWriter sw = File.CreateText(fileN.ToString());
                     logF.AddLog(item.hostname + ":" + "导出文件 " + fileN);
@@ -250,6 +252,7 @@ namespace BScrip {
                     sw.Close();
                     loginer.Close();
                     logF.AddLog(item.hostname + ":" + "文件写入完成");
+                    logF.AddLog("==================================");
                 }
                 logF.ReDoButtons(true);
             }
