@@ -16,6 +16,8 @@ namespace BScrip {
     public partial class Form1 : Form {
         //public Configuration cfa;
         //private XMLHelper xhelper;
+        private System.Threading.Timer timersTimer;
+
         public Form1() {
             InitializeComponent();
 
@@ -26,8 +28,7 @@ namespace BScrip {
             //}
 
             //xhelper.XmlName = "HostList.xml";
-
-
+            Control.CheckForIllegalCrossThreadCalls = false;
             HostView.Columns.Add("主机名", 100, HorizontalAlignment.Left);
             HostView.Columns.Add("IP地址", 120, HorizontalAlignment.Left);
             HostView.Columns.Add("M", 20, HorizontalAlignment.Left);
@@ -201,7 +202,40 @@ namespace BScrip {
                 }
             }
         }
+
+        private void timerLocBu_Click(object sender, EventArgs e) {
+            Test ta = new Test();
+            ta.aa = "now:";
+            timersTimer = new System.Threading.Timer(new TimerCallback(ta.fun), timerLogTBox, 5000, 1000);
+            //timersTimer.
+            //timersTimer.Elapsed += new System.Timers.ElapsedEventHandler(ta.fun);
+            //timersTimer.Start();
+        }
+
+        private void timerRemBu_Click(object sender, EventArgs e) {
+            timersTimer.Dispose();
+        }
     }
+
+    public class Test {
+        public string aa;
+        private static object locker = new object();
+        private static int threadcount = 0;
+
+        public void fun(object sender) {
+            lock (locker) {
+                if (threadcount > 0) return;
+                ++threadcount;
+            }
+            (sender as TextBox).Text += 
+                aa + DateTime.Now.ToLongTimeString() + System.Environment.NewLine;
+            System.Threading.Thread.Sleep(3000);
+            lock (locker) {
+                --threadcount;
+            }
+        }
+    }
+
 
     public class GetConfThread {
         private List<Host> hosts;
