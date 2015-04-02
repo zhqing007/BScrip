@@ -13,12 +13,12 @@ using Tamir.SharpSsh;
 using System.Threading;
 
 namespace BScrip {
-    public partial class Form1 : Form {
+    public partial class BackUpConfForm : Form {
         //public Configuration cfa;
         //private XMLHelper xhelper;
         private System.Threading.Timer timersTimer;
 
-        public Form1() {
+        public BackUpConfForm() {
             InitializeComponent();
 
             //xhelper = new XMLHelper();
@@ -28,34 +28,13 @@ namespace BScrip {
             //}
 
             //xhelper.XmlName = "HostList.xml";
-            Control.CheckForIllegalCrossThreadCalls = false;
-            HostView.Columns.Add("主机名", 100, HorizontalAlignment.Left);
-            HostView.Columns.Add("IP地址", 120, HorizontalAlignment.Left);
-            HostView.Columns.Add("M", 20, HorizontalAlignment.Left);
-            LoadHostToListView();
+            
 
             //cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         }
 
-        private void LoadHostToListView() {
-            HostView.Items.Clear();
-            List<Host> hosts = Host.GetAllHosts();
-            foreach (Host n in hosts) {
-                AddHostToView(n);
-            }
-        }
+       
 
-        private void AddHostToView(Host h) {
-            ListViewItem lvi = new ListViewItem();
-            lvi.Tag = h;
-            lvi.Text = h.hostname;
-            lvi.SubItems.Add(h.ipaddress);
-            if (h.loginmode == 0)
-                lvi.SubItems.Add("T");
-            else
-                lvi.SubItems.Add("S");
-            this.HostView.Items.Add(lvi);
-        }
 
         //private void LoadXmlToListBox() {
         //    HostList.Items.Clear();
@@ -120,31 +99,16 @@ namespace BScrip {
             //xhelper.Reload();
         }
 
-        private void add_Click(object sender, EventArgs e) {
-            HostInfo host = new HostInfo();
-            host.ShowDialog();
-            if (host.DialogResult.Equals(DialogResult.Cancel)) return;
-            Host h = host.GetHost();
-            h.Save();
-            AddHostToView(h);
-        }
 
-        private void del_Click(object sender, EventArgs e) {
-            if (HostView.SelectedItems.Count == 0) return;
-            if (MessageBox.Show("确认删除所选项么?", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                == DialogResult.No) return;
-            foreach (ListViewItem hostn in HostView.SelectedItems) {
-                Host h = hostn.Tag as Host;
-                h.Del();
-            }
-            LoadHostToListView();
-        }
+
+
 
         private void moveRightButton_Click(object sender, EventArgs e) {
-            if (HostView.SelectedItems.Count == 0) return;
+            List<Host> selectedhosts = HostsForm.allhostsform.GetSelectHosts();
+            if (selectedhosts.Count == 0) return;
             bool befind = false;
-            foreach (ListViewItem hostn in HostView.SelectedItems) {
-                Host h = hostn.Tag as Host;
+            foreach (Host h in selectedhosts) {
+                befind = false;
                 foreach (object downh in DownHosts.Items)
                     if ((downh as Host).hostname.Equals(h.hostname)) { befind = true; break; };
                 if (befind) continue;
@@ -158,49 +122,15 @@ namespace BScrip {
                 DownHosts.Items.Remove(DownHosts.SelectedItems[p]);
         }
 
-        private void SelectAllItems_View(ListView li) {
-            foreach (ListViewItem i in li.Items) {
-                i.Selected = true;
-            }
-            li.Focus();
-        }
+       
 
         private void SelectAllItems_Box(ListBox li) {
             for (int i = 0; i < li.Items.Count; ++i)
                 li.SelectedIndex = i;
         }
 
-        private void selectAllHostList_Click(object sender, EventArgs e) {
-            SelectAllItems_View(HostView);
-        }
-
         private void selectAllHost_Click(object sender, EventArgs e) {
             SelectAllItems_Box(DownHosts);
-        }
-
-        private void HostView_DoubleClick(object sender, EventArgs e) {
-            Host h = HostView.SelectedItems[0].Tag as Host;
-            HostInfo hostDia = new HostInfo();
-            hostDia.SetIPBoxMode(true);
-
-            hostDia.SetHostName(h.hostname);
-            hostDia.SetIP(h.ipaddress);
-            hostDia.SetLoginName(h.loginname);
-            hostDia.SetPW(h.password);
-            hostDia.SetSPW(h.superpw);
-            hostDia.SetLoginMode(h.loginmode);
-
-            hostDia.ShowDialog();
-            if (hostDia.DialogResult == DialogResult.OK) {
-                Host sh = hostDia.GetHost();
-                if (sh.Update()) {
-                    HostView.SelectedItems[0].SubItems[1].Text = sh.ipaddress;
-                    if (sh.loginmode == 0)
-                        HostView.SelectedItems[0].SubItems[2].Text = "T";
-                    else
-                        HostView.SelectedItems[0].SubItems[2].Text = "S";
-                }
-            }
         }
 
         private void timerLocBu_Click(object sender, EventArgs e) {

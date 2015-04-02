@@ -68,19 +68,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DBhelper.cs" />
-    <Compile Include="EncodeAndDecode.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="BScripMDIParent.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="BScripMDIParent.Designer.cs">
+      <DependentUpon>BScripMDIParent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DBhelper.cs" />
+    <Compile Include="EncodeAndDecode.cs" />
+    <Compile Include="BackUpConfForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BackUpConfForm.Designer.cs">
+      <DependentUpon>BackUpConfForm.cs</DependentUpon>
     </Compile>
     <Compile Include="HostInfo.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="HostInfo.Designer.cs">
       <DependentUpon>HostInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HostsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HostsForm.Designer.cs">
+      <DependentUpon>HostsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="LogForm.cs">
       <SubType>Form</SubType>
@@ -94,11 +106,17 @@
     <Compile Include="TelnetInterface.cs" />
     <Compile Include="XMLHelper.cs" />
     <Compile Include="XmlHelper_S.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="BScripMDIParent.resx">
+      <DependentUpon>BScripMDIParent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BackUpConfForm.resx">
+      <DependentUpon>BackUpConfForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="HostInfo.resx">
       <DependentUpon>HostInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HostsForm.resx">
+      <DependentUpon>HostsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LogForm.resx">
       <DependentUpon>LogForm.cs</DependentUpon>
