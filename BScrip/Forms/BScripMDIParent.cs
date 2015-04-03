@@ -92,5 +92,11 @@ namespace BScrip {
             newMDIChild.MdiParent = this;
             newMDIChild.Show();
         }
+
+        private void timerBackUp_Click(object sender, EventArgs e) {
+            TimerBackUpForm newMDIChild = new TimerBackUpForm();
+            newMDIChild.MdiParent = this;
+            newMDIChild.Show();
+        }
     }
 }

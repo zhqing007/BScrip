@@ -92,13 +92,13 @@ namespace BScrip {
         }
 
         private void HostsForm_Resize(object sender, EventArgs e) {
-            HostView.Height = Parent.Height - 70;
+            HostView.Height = Height - 70;
             selectAllHosts.Location =
-                new Point(selectAllHosts.Location.X, Parent.Height - 65);
+                new Point(selectAllHosts.Location.X, Height - 65);
             add.Location =
-                new Point(add.Location.X, Parent.Height - 65);
+                new Point(add.Location.X, Height - 65);
             del.Location =
-                new Point(del.Location.X, Parent.Height - 65);
+                new Point(del.Location.X, Height - 65);
         }
 
         public List<Host> GetSelectHosts() {

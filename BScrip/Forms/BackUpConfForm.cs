@@ -136,7 +136,7 @@ namespace BScrip {
         private void timerLocBu_Click(object sender, EventArgs e) {
             Test ta = new Test();
             ta.aa = "now:";
-            timersTimer = new System.Threading.Timer(new TimerCallback(ta.fun), timerLogTBox, 5000, 1000);
+            //timersTimer = new System.Threading.Timer(new TimerCallback(ta.fun), timerLogTBox, 5000, 1000);
             //timersTimer.
             //timersTimer.Elapsed += new System.Timers.ElapsedEventHandler(ta.fun);
             //timersTimer.Start();
@@ -144,6 +144,10 @@ namespace BScrip {
 
         private void timerRemBu_Click(object sender, EventArgs e) {
             timersTimer.Dispose();
+        }
+
+        private void getConfB_remote_Click(object sender, EventArgs e) {
+
         }
     }
 

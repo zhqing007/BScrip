@@ -68,57 +68,63 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BScripMDIParent.cs">
+    <Compile Include="Forms\BScripMDIParent.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BScripMDIParent.Designer.cs">
+    <Compile Include="Forms\BScripMDIParent.Designer.cs">
       <DependentUpon>BScripMDIParent.cs</DependentUpon>
     </Compile>
     <Compile Include="DBhelper.cs" />
     <Compile Include="EncodeAndDecode.cs" />
-    <Compile Include="BackUpConfForm.cs">
+    <Compile Include="Forms\BackUpConfForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BackUpConfForm.Designer.cs">
+    <Compile Include="Forms\BackUpConfForm.Designer.cs">
       <DependentUpon>BackUpConfForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="HostInfo.cs">
+    <Compile Include="Forms\HostInfo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HostInfo.Designer.cs">
+    <Compile Include="Forms\HostInfo.Designer.cs">
       <DependentUpon>HostInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="HostsForm.cs">
+    <Compile Include="Forms\HostsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HostsForm.Designer.cs">
+    <Compile Include="Forms\HostsForm.Designer.cs">
       <DependentUpon>HostsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="LogForm.cs">
+    <Compile Include="Forms\LogForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LogForm.Designer.cs">
+    <Compile Include="Forms\LogForm.Designer.cs">
       <DependentUpon>LogForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteLoginer.cs" />
     <Compile Include="TelnetInterface.cs" />
+    <Compile Include="Forms\TimerBackUpForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TimerBackUpForm.Designer.cs">
+      <DependentUpon>TimerBackUpForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="XMLHelper.cs" />
     <Compile Include="XmlHelper_S.cs" />
-    <EmbeddedResource Include="BScripMDIParent.resx">
+    <EmbeddedResource Include="Forms\BScripMDIParent.resx">
       <DependentUpon>BScripMDIParent.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BackUpConfForm.resx">
+    <EmbeddedResource Include="Forms\BackUpConfForm.resx">
       <DependentUpon>BackUpConfForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="HostInfo.resx">
+    <EmbeddedResource Include="Forms\HostInfo.resx">
       <DependentUpon>HostInfo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="HostsForm.resx">
+    <EmbeddedResource Include="Forms\HostsForm.resx">
       <DependentUpon>HostsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LogForm.resx">
+    <EmbeddedResource Include="Forms\LogForm.resx">
       <DependentUpon>LogForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -131,6 +137,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Forms\TimerBackUpForm.resx">
+      <DependentUpon>TimerBackUpForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
