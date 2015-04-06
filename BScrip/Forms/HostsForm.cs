@@ -23,27 +23,32 @@ namespace BScrip {
         private void LoadHostToListView() {
             HostView.Items.Clear();
             List<Host> hosts = Host.GetAllHosts();
-            foreach (Host n in hosts) {
-                AddHostToView(n);
+            AddHostToView(hosts);
+        }
+
+        private void AddHostToView(List<Host> lh) {
+            StaticFun.AddHostListToListViewTag(lh, HostView);
+            Host th;
+            foreach (ListViewItem downh in HostView.Items) {
+                if (downh.Text.Length > 0) continue;
+                th = downh.Tag as Host;
+                downh.Text = th.hostname;
+                downh.SubItems.Add(th.ipaddress);
+                if (th.loginmode == 0)
+                    downh.SubItems.Add("T");
+                else
+                    downh.SubItems.Add("S");
             }
         }
 
         private void AddHostToView(Host h) {
-            ListViewItem lvi = new ListViewItem();
-            lvi.Tag = h;
-            lvi.Text = h.hostname;
-            lvi.SubItems.Add(h.ipaddress);
-            if (h.loginmode == 0)
-                lvi.SubItems.Add("T");
-            else
-                lvi.SubItems.Add("S");
-            this.HostView.Items.Add(lvi);
+            List<Host> lh = new List<Host>();
+            lh.Add(h);
+            AddHostToView(lh);
         }
 
         private void selectAllHosts_Click(object sender, EventArgs e) {
-            foreach (ListViewItem h in HostView.Items)
-                h.Selected = true;
-            HostView.Focus();
+            StaticFun.SelectAll_ListView(HostView);
         }
 
         private void add_Click(object sender, EventArgs e) {
@@ -87,6 +92,7 @@ namespace BScrip {
                         HostView.SelectedItems[0].SubItems[2].Text = "T";
                     else
                         HostView.SelectedItems[0].SubItems[2].Text = "S";
+                    HostView.SelectedItems[0].Tag = sh;
                 }
             }
         }
@@ -96,7 +102,8 @@ namespace BScrip {
             selectAllHosts.Location =
                 new Point(selectAllHosts.Location.X, Height - 65);
             add.Location =
-                new Point(add.Location.X, Height - 65);
+                new Point((del.Location.X + selectAllHosts.Location.X + selectAllHosts.Width- add.Width) / 2
+                    , Height - 65);
             del.Location =
                 new Point(del.Location.X, Height - 65);
         }

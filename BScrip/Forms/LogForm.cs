@@ -29,11 +29,6 @@ namespace BScrip {
             logevent.Set();
         }
 
-        public void AddLog(string txt) {
-            logTextBox.Text += txt;
-            logTextBox.Text += System.Environment.NewLine;
-        }
-
         private void LogFCloseB_Click(object sender, EventArgs e) {
             this.Close();
         }
@@ -54,6 +49,10 @@ namespace BScrip {
                 sw.Write(logTextBox.Text);
                 sw.Close();
             }
+        }
+
+        public TextBox GetLogBox() {
+            return logTextBox;
         }
     }
 }

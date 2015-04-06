@@ -16,11 +16,13 @@ namespace BScrip {
     public partial class BackUpConfForm : Form {
         //public Configuration cfa;
         //private XMLHelper xhelper;
-        private System.Threading.Timer timersTimer;
 
         public BackUpConfForm() {
             InitializeComponent();
-
+            DownHosts.Columns.Add("主机名", 100, HorizontalAlignment.Left);
+            DownHosts.Columns.Add("IP地址", 120, HorizontalAlignment.Left);
+            DownHosts.Columns.Add("登录名", 120, HorizontalAlignment.Left);
+            DownHosts.Columns.Add("登录方式", 80, HorizontalAlignment.Left);
             //xhelper = new XMLHelper();
             //if (!System.IO.File.Exists("HostList.xml")) {
             //    xhelper.CreateXmlDocument("HostList.xml", "hosts");
@@ -52,17 +54,17 @@ namespace BScrip {
                 
             List<Host> hostlist = new List<Host>();
             foreach (object item in DownHosts.Items) {
-                hostlist.Add(item as Host);
+                hostlist.Add((item as ListViewItem).Tag as Host);
             }
 
             AutoResetEvent logevent = new AutoResetEvent(false);
             LogForm logd = new LogForm(logevent);
             logd.ReDoButtons(false);
-            GetConfThread confth = new GetConfThread(logd, logevent, hostlist);
-            Thread logThread = new Thread(new ThreadStart(confth.GetConf));
+            GetConfThread confth = new GetConfThread(logd, logd.GetLogBox(), logevent, hostlist);
+            Thread logThread = new Thread(new ThreadStart(confth.GetConfInThread));
             logThread.Start();
             logd.ShowDialog();
-
+        }
 
 
             //Process p = new Process();
@@ -85,9 +87,9 @@ namespace BScrip {
             //MessageBox.Show(p.StandardError.ReadToEnd());
             //MessageBox.Show(p.StandardOutput.ReadToEnd());
 
-        }
+        
 
-        private void SaveHost_(HostInfo info) {
+        //private void SaveHost_(HostInfo info) {
             //xhelper.CreateOrGetXmlNodeByXPath("hosts", "host", info.GetIP());
             //xhelper.CreateOrUpdateXmlAttributeByXPath("hosts", "host", info.GetIP(), "Mode", info.GetLoginMode().ToString());
             //xhelper.CreateOrUpdateXmlAttributeByXPath("hosts", "host", info.GetIP(), "Name",
@@ -97,22 +99,22 @@ namespace BScrip {
             //xhelper.CreateOrUpdateXmlAttributeByXPath("hosts", "host", info.GetIP(), "SPW",
             //    EncodeAndDecode.EncodeBase64(info.GetSPW()));
             //xhelper.Reload();
-        }
-
-
-
-
+        //}
 
         private void moveRightButton_Click(object sender, EventArgs e) {
-            List<Host> selectedhosts = HostsForm.allhostsform.GetSelectHosts();
-            if (selectedhosts.Count == 0) return;
-            bool befind = false;
-            foreach (Host h in selectedhosts) {
-                befind = false;
-                foreach (object downh in DownHosts.Items)
-                    if ((downh as Host).hostname.Equals(h.hostname)) { befind = true; break; };
-                if (befind) continue;
-                DownHosts.Items.Add(h);
+            if(!StaticFun.AddHostListToListViewTag(HostsForm.allhostsform.GetSelectHosts(), DownHosts))
+                return;
+            Host th;
+            foreach (ListViewItem downh in DownHosts.Items) {
+                if (downh.Text.Length > 0) continue;
+                th = downh.Tag as Host;
+                downh.Text = th.hostname;
+                downh.SubItems.Add(th.ipaddress);
+                downh.SubItems.Add(th.loginname);
+                if (th.loginmode == 0)
+                    downh.SubItems.Add("Telnet");
+                else
+                    downh.SubItems.Add("SSH2");
             }
         }
 
@@ -122,90 +124,66 @@ namespace BScrip {
                 DownHosts.Items.Remove(DownHosts.SelectedItems[p]);
         }
 
-       
-
-        private void SelectAllItems_Box(ListBox li) {
-            for (int i = 0; i < li.Items.Count; ++i)
-                li.SelectedIndex = i;
-        }
-
         private void selectAllHost_Click(object sender, EventArgs e) {
-            SelectAllItems_Box(DownHosts);
-        }
-
-        private void timerLocBu_Click(object sender, EventArgs e) {
-            Test ta = new Test();
-            ta.aa = "now:";
-            //timersTimer = new System.Threading.Timer(new TimerCallback(ta.fun), timerLogTBox, 5000, 1000);
-            //timersTimer.
-            //timersTimer.Elapsed += new System.Timers.ElapsedEventHandler(ta.fun);
-            //timersTimer.Start();
-        }
-
-        private void timerRemBu_Click(object sender, EventArgs e) {
-            timersTimer.Dispose();
+            StaticFun.SelectAll_ListView(DownHosts);
         }
 
         private void getConfB_remote_Click(object sender, EventArgs e) {
 
         }
+
     }
-
-    public class Test {
-        public string aa;
-        private static object locker = new object();
-        private static int threadcount = 0;
-
-        public void fun(object sender) {
-            lock (locker) {
-                if (threadcount > 0) return;
-                ++threadcount;
-            }
-            (sender as TextBox).Text += 
-                aa + DateTime.Now.ToLongTimeString() + System.Environment.NewLine;
-            System.Threading.Thread.Sleep(3000);
-            lock (locker) {
-                --threadcount;
-            }
-        }
-    }
-
 
     public class GetConfThread {
         private List<Host> hosts;
         private AutoResetEvent myResetEvent;
+        private TextBox tbox;
         private LogForm logF;
 
-        public GetConfThread(LogForm logfo, AutoResetEvent loge, List<Host> hostl) {
+        public GetConfThread(LogForm logfo, TextBox logbox, AutoResetEvent loge, List<Host> hostl) {
             logF = logfo;
+            tbox = logbox;
             myResetEvent = loge;
             hosts = hostl;
         }
 
-        public void GetConf() {
-            myResetEvent.WaitOne();
-            try {
-                RemoteLoginer loginer = null;
-                foreach (Host item in hosts) {
+        public GetConfThread(TextBox logbox, List<Host> hostl) {
+            tbox = logbox;
+            hosts = hostl;
+        }
+
+        private void Addstr(Host item, string str) {
+            StringBuilder strb = new StringBuilder(tbox.Text);
+            strb.Append(DateTime.Now.GetDateTimeFormats('g')[0].ToString());
+            if(item != null)
+                strb.Append(item.hostname).Append(':');
+            strb.Append(str).Append(System.Environment.NewLine);
+            tbox.Text = strb.ToString();
+        }
+
+        public void GetConfNoThread() {
+            RemoteLoginer loginer = null;
+            foreach (Host item in hosts) {
+                try {
                     if (item.loginmode == 0) {
                         loginer = new RemoteLoginerTel(item.ipaddress, item.loginname, item.password, item.superpw);
-                        logF.AddLog(item.hostname + ":" + "Telnet登录");
+                        Addstr(item, "Telnet登录");
                     }
                     else {
                         loginer = new RemoteLoginerSSH(item.ipaddress, item.loginname, item.password, item.superpw);
-                        logF.AddLog(item.hostname + ":" + "SSH登录");
+                        Addstr(item, "SSH2登录");
                     }
-                    if(loginer.Connect())
-                        logF.AddLog(item.hostname + ":" + "登录成功");
-                    else{
-                        logF.AddLog(item.hostname + ":" + "登录失败");
+                    if (loginer.Connect())
+                        Addstr(item, "登录成功");
+                    else {
+                        Addstr(item, "登录失败");
                         continue;
                     }
                     string strConfiguration = loginer.GetConfiguration();
-                    if(strConfiguration != null && strConfiguration.Trim().Length > 0)
-                        logF.AddLog(item.hostname + ":" + "导出配置成功");
-                    else{
-                        logF.AddLog(item.hostname + ":" + "导出配置失败");
+                    if (strConfiguration != null && strConfiguration.Trim().Length > 0)
+                        Addstr(item, "导出配置成功");
+                    else {
+                        Addstr(item, "导出配置失败");
                         continue;
                     }
                     StringBuilder fileN = new StringBuilder(item.hostname);
@@ -215,19 +193,23 @@ namespace BScrip {
                     fileN = new StringBuilder(Path.GetFullPath(fileN.ToString()));
                     fileN.Append('\\').Append(DateTime.Now.ToString("yyyyMMddHHmm")).Append(".log");
                     StreamWriter sw = File.CreateText(fileN.ToString());
-                    logF.AddLog(item.hostname + ":" + "导出文件 " + fileN);
+                    Addstr(item, "导出文件 " + fileN);
                     sw.Write(strConfiguration);
                     sw.Close();
                     loginer.Close();
-                    logF.AddLog(item.hostname + ":" + "文件写入完成");
-                    logF.AddLog("==================================");
+                    Addstr(item, "文件写入完成\n******");
                 }
-                logF.ReDoButtons(true);
-            }
-            catch (Exception exc) {
-                logF.AddLog("导出配置出现异常：" + exc.StackTrace);
-                logF.ReDoButtons(true);
+                catch (Exception exc) {
+                    Addstr(item, "导出配置出现异常：" + exc.StackTrace);
+                }
             }
         }
+
+        public void GetConfInThread() {
+            myResetEvent.WaitOne();
+            GetConfNoThread();
+            logF.ReDoButtons(true);
+        }
     }
+ 
 }

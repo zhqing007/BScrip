@@ -10,13 +10,16 @@ using System.Windows.Forms;
 namespace BScrip {
     public partial class BScripMDIParent : Form {
         private int childFormNumber = 0;
+        private BackUpConfForm backUpMDIChild = null;
+        private TimerBackUpForm TimerBUMDIChild = null;
 
         public BScripMDIParent() {
             InitializeComponent();
             HostsForm.allhostsform = new HostsForm();
             HostsForm.allhostsform.MdiParent = this;
-            HostsForm.allhostsform.Dock = DockStyle.Left;
-            HostsForm.allhostsform.Show(); 
+            HostsForm.allhostsform.Parent = splitContainer1.Panel1;
+            HostsForm.allhostsform.Dock = DockStyle.Fill;
+            HostsForm.allhostsform.Show();
         }
 
         private void ShowNewForm(object sender, EventArgs e) {
@@ -88,15 +91,30 @@ namespace BScrip {
         }
 
         private void BackUpConf_Click(object sender, EventArgs e) {
-            BackUpConfForm newMDIChild = new BackUpConfForm();
-            newMDIChild.MdiParent = this;
-            newMDIChild.Show();
+            splitContainer1.Panel2.Controls.Clear();
+            if (backUpMDIChild == null || backUpMDIChild.IsDisposed) {
+                backUpMDIChild = new BackUpConfForm();
+                backUpMDIChild.MdiParent = this;
+                backUpMDIChild.Parent = splitContainer1.Panel2;
+                backUpMDIChild.Dock = DockStyle.Fill;
+                backUpMDIChild.Show();
+            }
+            else
+                splitContainer1.Panel2.Controls.Add(backUpMDIChild);
+            
         }
 
         private void timerBackUp_Click(object sender, EventArgs e) {
-            TimerBackUpForm newMDIChild = new TimerBackUpForm();
-            newMDIChild.MdiParent = this;
-            newMDIChild.Show();
+            splitContainer1.Panel2.Controls.Clear();
+            if (TimerBUMDIChild == null || TimerBUMDIChild.IsDisposed) {
+                TimerBUMDIChild = new TimerBackUpForm();
+                TimerBUMDIChild.MdiParent = this;
+                TimerBUMDIChild.Parent = splitContainer1.Panel2;
+                TimerBUMDIChild.Dock = DockStyle.Fill;
+                TimerBUMDIChild.Show();
+            }
+            else
+                splitContainer1.Panel2.Controls.Add(TimerBUMDIChild);
         }
     }
 }

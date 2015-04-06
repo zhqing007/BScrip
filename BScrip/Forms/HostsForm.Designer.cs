@@ -37,7 +37,7 @@
             this.HostView.Location = new System.Drawing.Point(0, 0);
             this.HostView.Margin = new System.Windows.Forms.Padding(4);
             this.HostView.Name = "HostView";
-            this.HostView.Size = new System.Drawing.Size(268, 622);
+            this.HostView.Size = new System.Drawing.Size(266, 622);
             this.HostView.TabIndex = 23;
             this.HostView.UseCompatibleStateImageBehavior = false;
             this.HostView.View = System.Windows.Forms.View.Details;
@@ -56,6 +56,7 @@
             // 
             // del
             // 
+            this.del.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.del.Location = new System.Drawing.Point(178, 628);
             this.del.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.del.Name = "del";
@@ -80,7 +81,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(268, 664);
+            this.ClientSize = new System.Drawing.Size(266, 664);
             this.ControlBox = false;
             this.Controls.Add(this.HostView);
             this.Controls.Add(this.selectAllHosts);
