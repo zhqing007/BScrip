@@ -60,8 +60,9 @@ namespace BScrip {
             hostname = name;
         }
         
-        public static List<Host> GetAllHosts() {
-            DataTable data = DBhelper.ExecuteDataTable("select * from hosts", null);
+        //type: 0为交换机，1为服务器
+        public static List<Host> GetAllHosts(int type) {
+            DataTable data = DBhelper.ExecuteDataTable("select * from hosts where type=" + type, null);
             List<Host> hosts = new List<Host>();
             foreach (DataRow row in data.Rows) {
                 Host h = new Host(row["name"].ToString());
@@ -75,10 +76,19 @@ namespace BScrip {
             }
             return hosts;
         }
+        
+        public static List<Host> GetAllHosts() {
+            return GetAllHosts(0);
+        }
+
+        public static List<Host> GetAllServer() {
+            return GetAllHosts(1);
+        }
 
         public bool GetFromName() {
             if (hostname == null || hostname.Trim().Length == 0) return false;
-            DataTable data = DBhelper.ExecuteDataTable("select * from hosts where name = '" + hostname + "'", null);
+            DataTable data = DBhelper.ExecuteDataTable("select * from hosts where name='" + hostname + 
+                "' and type=0", null);
             if (data.Rows.Count == 0) return false;
 
             ipaddress = data.Rows[0]["ipaddress"].ToString();
@@ -90,20 +100,22 @@ namespace BScrip {
             return true;
         }
 
+        //loginmode: 0为telnet, 1为SSH2
         public bool Save() {
             if (hostname == null || hostname.Trim().Length == 0) return false;
             if (GetFromName() == false) return false;
 
-            SQLiteParameter[] p = {new SQLiteParameter("@ip", ipaddress),
-                                      new SQLiteParameter("@hn", hostname),
-                                      new SQLiteParameter("@ln", loginname),
-                                      new SQLiteParameter("@mode", loginmode),
-                                      new SQLiteParameter("@pw", password),
-                                      new SQLiteParameter("@spw", superpw)};
+            SQLiteParameter[] p = {new SQLiteParameter("@ip", ipaddress)
+                                      , new SQLiteParameter("@hn", hostname)
+                                      , new SQLiteParameter("@ln", loginname)
+                                      , new SQLiteParameter("@mode", loginmode)
+                                      , new SQLiteParameter("@pw", password)
+                                      , new SQLiteParameter("@spw", superpw)
+                                      , new SQLiteParameter("@type", 0)};
 
             DBhelper.ExecuteSQL("insert into hosts" +
-                        "(ipaddress, name, loginname, loginmode, password, superpw) " +
-                        "values(@ip, @hn, @ln, @mode, @pw, @spw)", p);
+                        "(ipaddress, name, loginname, loginmode, password, superpw, type) " +
+                        "values(@ip, @hn, @ln, @mode, @pw, @spw, @type)", p);
             return true;
         }
 
@@ -112,22 +124,23 @@ namespace BScrip {
             Host th = new Host(hostname);
             if (!th.GetFromName()) return false;
 
-            SQLiteParameter[] p = {new SQLiteParameter("@ip", ipaddress),
-                                      new SQLiteParameter("@hn", hostname),
-                                      new SQLiteParameter("@ln", loginname),
-                                      new SQLiteParameter("@mode", loginmode),
-                                      new SQLiteParameter("@pw", password),
-                                      new SQLiteParameter("@spw", superpw)};
+            SQLiteParameter[] p = {new SQLiteParameter("@ip", ipaddress)
+                                      , new SQLiteParameter("@hn", hostname)
+                                      , new SQLiteParameter("@ln", loginname)
+                                      , new SQLiteParameter("@mode", loginmode)
+                                      , new SQLiteParameter("@pw", password)
+                                      , new SQLiteParameter("@spw", superpw)
+                                      , new SQLiteParameter("@type", 0)};
 
             DBhelper.ExecuteSQL("update hosts " +
                         "set ipaddress=@ip, loginname=@ln, loginmode=@mode, password=@pw, " +
-                        "superpw=@spw where name=@hn", p);
+                        "superpw=@spw, type=@type where name=@hn", p);
             return true;
         }
 
         public void Del() {
             if (hostname == null || hostname.Trim().Length == 0) return;
-            DBhelper.ExecuteSQL("delete from hosts where name='" + hostname.Trim() + "'");
+            DBhelper.ExecuteSQL("delete from hosts where name='" + hostname.Trim() + "' and type=0");
         }
 
         public override string ToString() {
