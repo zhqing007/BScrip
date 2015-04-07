@@ -68,6 +68,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\FileTransfer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FileTransfer.Designer.cs">
+      <DependentUpon>FileTransfer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\BScripMDIParent.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +108,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemoteFileTransfer.cs" />
     <Compile Include="RemoteLoginer.cs" />
     <Compile Include="StaticFun.cs" />
     <Compile Include="TelnetInterface.cs" />
@@ -111,8 +118,12 @@
     <Compile Include="Forms\TimerBackUpForm.Designer.cs">
       <DependentUpon>TimerBackUpForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Util.cs" />
     <Compile Include="XMLHelper.cs" />
     <Compile Include="XmlHelper_S.cs" />
+    <EmbeddedResource Include="Forms\FileTransfer.resx">
+      <DependentUpon>FileTransfer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\BScripMDIParent.resx">
       <DependentUpon>BScripMDIParent.cs</DependentUpon>
     </EmbeddedResource>

@@ -129,7 +129,9 @@ namespace BScrip {
         }
 
         private void getConfB_remote_Click(object sender, EventArgs e) {
-
+            FileTransfer tranHost = new FileTransfer();
+            tranHost.ShowDialog();
+            //SshFileTransfer.PutFileSFTP(
         }
 
     }
