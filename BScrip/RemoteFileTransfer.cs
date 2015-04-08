@@ -43,7 +43,12 @@ namespace BScrip {
                 //        sshCp.Get(rfile, lpath);
                 //    }
                 //}
-                sshCp.Put(filename, filename);
+                string path = filename.Substring(0, filename.LastIndexOf('/'));
+                try {
+                    sshCp.Mkdir(path);
+                }
+                catch (Tamir.SharpSsh.jsch.SftpException ex) { }
+                sshCp.Put(filename.Substring(1), filename);
                 sshCp.Close();
             }
             catch (Exception e) {

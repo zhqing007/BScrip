@@ -131,7 +131,9 @@ namespace BScrip {
         private void getConfB_remote_Click(object sender, EventArgs e) {
             FileTransfer tranHost = new FileTransfer();
             tranHost.ShowDialog();
-            //SshFileTransfer.PutFileSFTP(
+            if (tranHost.DialogResult != DialogResult.OK) return;
+            Host server = tranHost.GetServer();
+            SshFileTransfer.PutFileSFTP(server, "/abcd/abc.txt");
         }
 
     }
@@ -199,7 +201,7 @@ namespace BScrip {
                     sw.Write(strConfiguration);
                     sw.Close();
                     loginer.Close();
-                    Addstr(item, "文件写入完成\n******");
+                    Addstr(item, "文件写入完成" + System.Environment.NewLine + "******");
                 }
                 catch (Exception exc) {
                     Addstr(item, "导出配置出现异常：" + exc.StackTrace);
