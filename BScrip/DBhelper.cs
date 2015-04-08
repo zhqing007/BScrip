@@ -55,6 +55,7 @@ namespace BScrip {
         public int loginmode;
         public string password;
         public string superpw;
+        public int type = 0;
 
         public Host(string name) {
             hostname = name;
@@ -111,7 +112,7 @@ namespace BScrip {
                                       , new SQLiteParameter("@mode", loginmode)
                                       , new SQLiteParameter("@pw", password)
                                       , new SQLiteParameter("@spw", superpw)
-                                      , new SQLiteParameter("@type", 0)};
+                                      , new SQLiteParameter("@type", type)};
 
             DBhelper.ExecuteSQL("insert into hosts" +
                         "(ipaddress, name, loginname, loginmode, password, superpw, type) " +
@@ -146,5 +147,18 @@ namespace BScrip {
         public override string ToString() {
             return this.hostname;
         }
+
+        //public override bool Equals(object obj) {
+        //    if (!(obj is Host)) return false;
+        //    Host h = obj as Host;
+        //    if (this.hostname == h.hostname
+        //        && this.ipaddress == h.ipaddress
+        //        && this.loginmode == h.loginmode
+        //        && this.loginname == h.loginname
+        //        && this.password == h.password
+        //        && this.superpw == h.superpw)
+        //    return true;
+        //    return false;
+        //}
     }
 }

@@ -47,11 +47,15 @@ namespace BScrip {
         //}
 
         private void getConfB_Local_Click(object sender, EventArgs e) {
+            GetConfiguration(null);
+        }
+
+        private void GetConfiguration(Host _server) {
             if (DownHosts.Items.Count <= 0) {
                 MessageBox.Show("没有要备份的主机！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-                
+
             List<Host> hostlist = new List<Host>();
             foreach (object item in DownHosts.Items) {
                 hostlist.Add((item as ListViewItem).Tag as Host);
@@ -61,11 +65,11 @@ namespace BScrip {
             LogForm logd = new LogForm(logevent);
             logd.ReDoButtons(false);
             GetConfThread confth = new GetConfThread(logd, logd.GetLogBox(), logevent, hostlist);
+            confth.server = _server;
             Thread logThread = new Thread(new ThreadStart(confth.GetConfInThread));
             logThread.Start();
             logd.ShowDialog();
         }
-
 
             //Process p = new Process();
 
@@ -132,10 +136,20 @@ namespace BScrip {
             FileTransfer tranHost = new FileTransfer();
             tranHost.ShowDialog();
             if (tranHost.DialogResult != DialogResult.OK) return;
-            Host server = tranHost.GetServer();
-            SshFileTransfer.PutFileSFTP(server, "/abcd/abc.txt");
+            Host server = tranHost.GetServer();            
+            switch(tranHost.SaveOrNot()){
+                case FileTransfer.NEWSERVER:
+                    server.Save();
+                    break;
+                case FileTransfer.UPDATESERVER:
+                    server.Update();
+                    break;
+                default:
+                    break;
+            }
+            GetConfiguration(server);
+            //SshFileTransfer.PutFileSFTP(server, "/abcd/abc.txt");
         }
-
     }
 
     public class GetConfThread {
@@ -143,6 +157,8 @@ namespace BScrip {
         private AutoResetEvent myResetEvent;
         private TextBox tbox;
         private LogForm logF;
+        public Host server;
+        private List<string> filenames;
 
         public GetConfThread(LogForm logfo, TextBox logbox, AutoResetEvent loge, List<Host> hostl) {
             logF = logfo;
@@ -192,16 +208,27 @@ namespace BScrip {
                     }
                     StringBuilder fileN = new StringBuilder(item.hostname);
                     fileN.Append('_').Append(item.ipaddress.Replace('.', '_'));
-                    if (!Directory.Exists(fileN.ToString()))
-                        Directory.CreateDirectory(fileN.ToString());
+                    StringBuilder filePath = new StringBuilder(fileN.ToString());
+                    if (!Directory.Exists(filePath.ToString()))
+                        Directory.CreateDirectory(filePath.ToString());
                     fileN = new StringBuilder(Path.GetFullPath(fileN.ToString()));
-                    fileN.Append('\\').Append(DateTime.Now.ToString("yyyyMMddHHmm")).Append(".log");
+                    string filename = DateTime.Now.ToString("yyyyMMddHHmm") + ".log";
+                    fileN.Append('\\').Append(filename);
+                    filePath.Append('/').Append(filename);
+                    filenames.Add(filePath.ToString());
+
                     StreamWriter sw = File.CreateText(fileN.ToString());
                     Addstr(item, "导出文件 " + fileN);
                     sw.Write(strConfiguration);
                     sw.Close();
                     loginer.Close();
-                    Addstr(item, "文件写入完成" + System.Environment.NewLine + "******");
+                    Addstr(item, "文件写入完成");
+                    if (server == null) {
+                        Addstr(item, "******");
+                        return;
+                    }
+
+
                 }
                 catch (Exception exc) {
                     Addstr(item, "导出配置出现异常：" + exc.StackTrace);

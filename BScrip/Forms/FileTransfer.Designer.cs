@@ -33,13 +33,14 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.CancelButton = new System.Windows.Forms.Button();
+            this.savedServer = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // serverBox
             // 
             this.serverBox.FormattingEnabled = true;
             this.serverBox.Location = new System.Drawing.Point(162, 39);
-            this.serverBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.serverBox.Margin = new System.Windows.Forms.Padding(4);
             this.serverBox.Name = "serverBox";
             this.serverBox.Size = new System.Drawing.Size(272, 23);
             this.serverBox.TabIndex = 0;
@@ -48,7 +49,7 @@
             // PWBox
             // 
             this.PWBox.Location = new System.Drawing.Point(162, 188);
-            this.PWBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.PWBox.Margin = new System.Windows.Forms.Padding(4);
             this.PWBox.Name = "PWBox";
             this.PWBox.PasswordChar = '*';
             this.PWBox.Size = new System.Drawing.Size(272, 25);
@@ -56,8 +57,8 @@
             // 
             // OKButton
             // 
-            this.OKButton.Location = new System.Drawing.Point(104, 262);
-            this.OKButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.OKButton.Location = new System.Drawing.Point(104, 280);
+            this.OKButton.Margin = new System.Windows.Forms.Padding(4);
             this.OKButton.Name = "OKButton";
             this.OKButton.Size = new System.Drawing.Size(99, 35);
             this.OKButton.TabIndex = 2;
@@ -68,7 +69,7 @@
             // ipBox
             // 
             this.ipBox.Location = new System.Drawing.Point(162, 88);
-            this.ipBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ipBox.Margin = new System.Windows.Forms.Padding(4);
             this.ipBox.Name = "ipBox";
             this.ipBox.Size = new System.Drawing.Size(272, 25);
             this.ipBox.TabIndex = 3;
@@ -76,7 +77,7 @@
             // loginNameBox
             // 
             this.loginNameBox.Location = new System.Drawing.Point(162, 138);
-            this.loginNameBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.loginNameBox.Margin = new System.Windows.Forms.Padding(4);
             this.loginNameBox.Name = "loginNameBox";
             this.loginNameBox.Size = new System.Drawing.Size(272, 25);
             this.loginNameBox.TabIndex = 4;
@@ -123,8 +124,8 @@
             // 
             // CancelButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(301, 262);
-            this.CancelButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.CancelButton.Location = new System.Drawing.Point(302, 280);
+            this.CancelButton.Margin = new System.Windows.Forms.Padding(4);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(99, 35);
             this.CancelButton.TabIndex = 9;
@@ -132,11 +133,22 @@
             this.CancelButton.UseVisualStyleBackColor = true;
             this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
+            // savedServer
+            // 
+            this.savedServer.AutoSize = true;
+            this.savedServer.Location = new System.Drawing.Point(162, 240);
+            this.savedServer.Name = "savedServer";
+            this.savedServer.Size = new System.Drawing.Size(134, 19);
+            this.savedServer.TabIndex = 10;
+            this.savedServer.Text = "保存服务器信息";
+            this.savedServer.UseVisualStyleBackColor = true;
+            // 
             // FileTransfer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(496, 352);
+            this.Controls.Add(this.savedServer);
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -147,7 +159,7 @@
             this.Controls.Add(this.OKButton);
             this.Controls.Add(this.PWBox);
             this.Controls.Add(this.serverBox);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FileTransfer";
@@ -170,5 +182,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.CheckBox savedServer;
     }
 }
