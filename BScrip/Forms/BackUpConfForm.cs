@@ -152,7 +152,7 @@ namespace BScrip {
                 default:
                     break;
             }
-            //GetConfiguration(server);
+            GetConfiguration(server);
         }
     }
 
@@ -177,9 +177,13 @@ namespace BScrip {
         }
 
         private void Addstr(Host item, string str) {
+            if (item == null) {
+                tbox.Text += str;
+                return;
+            }
             StringBuilder strb = new StringBuilder(tbox.Text);
             strb.Append(DateTime.Now.GetDateTimeFormats('g')[0].ToString());
-            if(item != null)
+            if (item != null)
                 strb.Append('：').Append(item.hostname).Append("--");
             strb.Append(str).Append(System.Environment.NewLine);
             tbox.Text = strb.ToString();
@@ -228,7 +232,7 @@ namespace BScrip {
                     sw.Close();
                     loginer.Close();
                     Addstr(item, "文件写入完成");
-                    Addstr(item, "******");                    
+                    Addstr(null, "******");
                 }
                 catch (Exception exc) {
                     Addstr(item, "导出配置出现异常：" + exc.StackTrace);

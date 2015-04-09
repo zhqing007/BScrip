@@ -40,6 +40,7 @@
             this.minuteUpDown = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.localIsRunningPic = new System.Windows.Forms.PictureBox();
             this.stopRemote = new System.Windows.Forms.Button();
             this.stopLocal = new System.Windows.Forms.Button();
             this.selectAllB = new System.Windows.Forms.Button();
@@ -48,6 +49,7 @@
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.minuteUpDown)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.localIsRunningPic)).BeginInit();
             this.SuspendLayout();
             // 
             // moveRightB_t
@@ -241,6 +243,7 @@
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.localIsRunningPic);
             this.panel1.Controls.Add(this.stopRemote);
             this.panel1.Controls.Add(this.stopLocal);
             this.panel1.Controls.Add(this.label1);
@@ -252,6 +255,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(416, 286);
             this.panel1.TabIndex = 32;
+            // 
+            // localIsRunningPic
+            // 
+            this.localIsRunningPic.BackColor = System.Drawing.SystemColors.Control;
+            this.localIsRunningPic.Location = new System.Drawing.Point(318, 183);
+            this.localIsRunningPic.Name = "localIsRunningPic";
+            this.localIsRunningPic.Size = new System.Drawing.Size(76, 78);
+            this.localIsRunningPic.TabIndex = 33;
+            this.localIsRunningPic.TabStop = false;
+            this.localIsRunningPic.Paint += new System.Windows.Forms.PaintEventHandler(this.localIsRunningPic_Paint);
             // 
             // stopRemote
             // 
@@ -308,6 +321,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.minuteUpDown)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.localIsRunningPic)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -335,5 +349,6 @@
         private System.Windows.Forms.Button selectAllB;
         private System.Windows.Forms.Button stopRemote;
         private System.Windows.Forms.Button stopLocal;
+        private System.Windows.Forms.PictureBox localIsRunningPic;
     }
 }

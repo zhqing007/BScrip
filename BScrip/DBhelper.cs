@@ -104,7 +104,7 @@ namespace BScrip {
         public bool Exist() {
             if (hostname == null || hostname.Trim().Length == 0) return false;
             DataTable data = DBhelper.ExecuteDataTable("select * from hosts where name='" + hostname +
-                "' and type=0", null);
+                "' and type=" + type , null);
             if (data.Rows.Count == 0) return false;
             return true;
         }

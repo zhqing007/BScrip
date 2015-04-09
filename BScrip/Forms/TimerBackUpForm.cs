@@ -21,6 +21,7 @@ namespace BScrip {
             timerBackUpL.Columns.Add("登录方式", 80, HorizontalAlignment.Left);
             beginTimePicker.Value = beginTimePicker.MinDate = DateTime.Now;
             beginTimePicker.MaxDate = DateTime.Now + new TimeSpan(365, 0, 0, 0);
+            DrawCircle(Color.Red);
         }
 
         private void moveRightB_t_Click(object sender, EventArgs e) {
@@ -81,6 +82,21 @@ namespace BScrip {
             this.timersTimer.Dispose();
             this.stopLocal.Enabled = false;
             this.timerLocBu.Enabled = true;
+        }
+
+        private void DrawCircle(Color c) {
+            Graphics gra = this.localIsRunningPic.CreateGraphics();
+            //gra.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            Brush bush = new SolidBrush(Color.Red);//填充的颜色
+            gra.FillEllipse(bush, 0, 0, 100, 100);//画填充椭圆的方法，x坐标、y坐标、宽、高，如果是100，则半径为50
+        }
+
+        private void localIsRunningPic_Paint(object sender, PaintEventArgs e) {
+            base.OnPaint(e);
+            //Graphics gra = e.Graphics;
+            ////gra.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            //Brush bush = new SolidBrush(Color.Red);//填充的颜色
+            //gra.FillEllipse(bush, 0, 0, 100, 100);//画填充椭圆的方法，x坐标、y坐标、宽、高，如果是100，则半径为50
         }
     }
 
