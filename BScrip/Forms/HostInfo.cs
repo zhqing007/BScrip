@@ -13,8 +13,13 @@ namespace BScrip {
         }
 
         private void InfoOK_Click(object sender, EventArgs e) {
-            if (StaticFun.CheckHostInfo(NameBox.Text, IPBox.Text, LoginNameBox.Text, PWBox.Text))
-                this.DialogResult = DialogResult.OK;
+            if (!StaticFun.CheckHostInfo(NameBox.Text, IPBox.Text, LoginNameBox.Text, PWBox.Text))
+                return;
+            if (!NameBox.ReadOnly && GetHost().Exist()) {
+                MessageBox.Show("同名主机已存在！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            this.DialogResult = DialogResult.OK;
         }
 
         private void InfoCancle_Click(object sender, EventArgs e) {
@@ -73,7 +78,7 @@ namespace BScrip {
             else sshBox.Checked = true;
         }
 
-        public void SetIPBoxMode(bool editable) {
+        public void SetNameBoxMode(bool editable) {
             NameBox.ReadOnly = editable;
         }
 

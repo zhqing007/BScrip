@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace BScrip {
     public partial class FileTransfer : Form {
-        public static const int NOTSAVE = 0;
-        public static const int NEWSERVER = 1;
-        public static const int UPDATESERVER = 2;
+        public const int NOTSAVE = 0;
+        public const int NEWSERVER = 1;
+        public const int UPDATESERVER = 2;
 
         public FileTransfer() {
             InitializeComponent();

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using Tamir.SharpSsh;
+using System.Collections.Generic;
 
 namespace BScrip {
     /// <summary>
@@ -8,6 +8,30 @@ namespace BScrip {
     /// SharpSSH such as SFTP and SCP
     /// </summary>
     public class SshFileTransfer {
+        public static void PutFileListSFTP(Host server, List<string> filelist) {
+            try {
+                SshConnectionInfo input = Util.GetLoginInfo(server);
+                Sftp sshCp = new Sftp(input.Host, input.User);
+
+                if (input.Pass != null) sshCp.Password = input.Pass;
+                if (input.IdentityFile != null) sshCp.AddIdentityFile(input.IdentityFile);
+
+                sshCp.Connect();
+                foreach (string filename in filelist) {
+                    string path = filename.Substring(0, filename.LastIndexOf('/'));
+                    try {
+                        sshCp.Mkdir(path);
+                    }
+                    catch (Tamir.SharpSsh.jsch.SftpException ex) { }
+                    sshCp.Put(filename.Substring(1), filename);
+                }
+                sshCp.Close();
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.Message);
+            }
+        }
+
         public static void PutFileSFTP(Host server, String filename) {
             try {
                 SshConnectionInfo input = Util.GetLoginInfo(server);

@@ -101,10 +101,18 @@ namespace BScrip {
             return true;
         }
 
+        public bool Exist() {
+            if (hostname == null || hostname.Trim().Length == 0) return false;
+            DataTable data = DBhelper.ExecuteDataTable("select * from hosts where name='" + hostname +
+                "' and type=0", null);
+            if (data.Rows.Count == 0) return false;
+            return true;
+        }
+
         //loginmode: 0为telnet, 1为SSH2
         public bool Save() {
             if (hostname == null || hostname.Trim().Length == 0) return false;
-            if (GetFromName() == false) return false;
+            if (Exist()) return false;
 
             SQLiteParameter[] p = {new SQLiteParameter("@ip", ipaddress)
                                       , new SQLiteParameter("@hn", hostname)
@@ -122,8 +130,7 @@ namespace BScrip {
 
         public bool Update() {
             if (hostname == null || hostname.Trim().Length == 0) return false;
-            Host th = new Host(hostname);
-            if (!th.GetFromName()) return false;
+            if (!Exist()) return false;
 
             SQLiteParameter[] p = {new SQLiteParameter("@ip", ipaddress)
                                       , new SQLiteParameter("@hn", hostname)
@@ -131,7 +138,7 @@ namespace BScrip {
                                       , new SQLiteParameter("@mode", loginmode)
                                       , new SQLiteParameter("@pw", password)
                                       , new SQLiteParameter("@spw", superpw)
-                                      , new SQLiteParameter("@type", 0)};
+                                      , new SQLiteParameter("@type", type)};
 
             DBhelper.ExecuteSQL("update hosts " +
                         "set ipaddress=@ip, loginname=@ln, loginmode=@mode, password=@pw, " +

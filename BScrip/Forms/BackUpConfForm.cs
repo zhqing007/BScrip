@@ -133,10 +133,15 @@ namespace BScrip {
         }
 
         private void getConfB_remote_Click(object sender, EventArgs e) {
+            if (DownHosts.Items.Count <= 0) {
+                MessageBox.Show("没有要备份的主机！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             FileTransfer tranHost = new FileTransfer();
             tranHost.ShowDialog();
             if (tranHost.DialogResult != DialogResult.OK) return;
-            Host server = tranHost.GetServer();            
+            Host server = tranHost.GetServer();
             switch(tranHost.SaveOrNot()){
                 case FileTransfer.NEWSERVER:
                     server.Save();
@@ -147,8 +152,7 @@ namespace BScrip {
                 default:
                     break;
             }
-            GetConfiguration(server);
-            //SshFileTransfer.PutFileSFTP(server, "/abcd/abc.txt");
+            //GetConfiguration(server);
         }
     }
 
@@ -158,7 +162,7 @@ namespace BScrip {
         private TextBox tbox;
         private LogForm logF;
         public Host server;
-        private List<string> filenames;
+        private List<string> filenames = new List<string>();
 
         public GetConfThread(LogForm logfo, TextBox logbox, AutoResetEvent loge, List<Host> hostl) {
             logF = logfo;
@@ -176,7 +180,7 @@ namespace BScrip {
             StringBuilder strb = new StringBuilder(tbox.Text);
             strb.Append(DateTime.Now.GetDateTimeFormats('g')[0].ToString());
             if(item != null)
-                strb.Append(item.hostname).Append(':');
+                strb.Append('：').Append(item.hostname).Append("--");
             strb.Append(str).Append(System.Environment.NewLine);
             tbox.Text = strb.ToString();
         }
@@ -208,9 +212,10 @@ namespace BScrip {
                     }
                     StringBuilder fileN = new StringBuilder(item.hostname);
                     fileN.Append('_').Append(item.ipaddress.Replace('.', '_'));
-                    StringBuilder filePath = new StringBuilder(fileN.ToString());
-                    if (!Directory.Exists(filePath.ToString()))
-                        Directory.CreateDirectory(filePath.ToString());
+                    StringBuilder filePath = new StringBuilder("/");
+                    filePath.Append(fileN.ToString());
+                    if (!Directory.Exists(fileN.ToString()))
+                        Directory.CreateDirectory(fileN.ToString());
                     fileN = new StringBuilder(Path.GetFullPath(fileN.ToString()));
                     string filename = DateTime.Now.ToString("yyyyMMddHHmm") + ".log";
                     fileN.Append('\\').Append(filename);
@@ -223,16 +228,22 @@ namespace BScrip {
                     sw.Close();
                     loginer.Close();
                     Addstr(item, "文件写入完成");
-                    if (server == null) {
-                        Addstr(item, "******");
-                        return;
-                    }
-
-
+                    Addstr(item, "******");                    
                 }
                 catch (Exception exc) {
                     Addstr(item, "导出配置出现异常：" + exc.StackTrace);
                 }
+            }
+            if (server == null) return;
+            try {
+                SshFileTransfer.PutFileListSFTP(server, filenames);
+                Addstr(server, "上传文件完成");
+                foreach (string file in filenames) {
+                    File.Delete(file.Substring(1));
+                }
+            }
+            catch (Exception exc) {
+                Addstr(server, "上传文件出现异常：" + exc.StackTrace);
             }
         }
 

@@ -74,7 +74,7 @@ namespace BScrip {
         private void HostView_DoubleClick(object sender, EventArgs e) {
             Host h = HostView.SelectedItems[0].Tag as Host;
             HostInfo hostDia = new HostInfo();
-            hostDia.SetIPBoxMode(true);
+            hostDia.SetNameBoxMode(true);
 
             hostDia.SetHostName(h.hostname);
             hostDia.SetIP(h.ipaddress);
