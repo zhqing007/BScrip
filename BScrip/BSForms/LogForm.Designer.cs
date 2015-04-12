@@ -1,4 +1,4 @@
-﻿namespace BScrip {
+﻿namespace BScrip.BSForms {
     partial class LogForm {
         /// <summary>
         /// Required designer variable.

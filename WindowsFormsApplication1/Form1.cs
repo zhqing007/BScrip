@@ -24,8 +24,15 @@ namespace WindowsFormsApplication1 {
         }
 
         private void button1_Click(object sender, EventArgs e) {
-            cor = Color.Blue;
-            pictureBox1.Invalidate();
+            double yvalue = 50.0;
+            Random ra = new Random();
+            for (int i = 0; i < 2000; ++i) {
+                yvalue = yvalue + (ra.NextDouble() * 10.0 - 5.0);
+                chart1.Series[0].Points.AddY(yvalue);
+            }
+
+
+
         }
 
         private void Form1_Activated(object sender, EventArgs e) {
@@ -42,13 +49,6 @@ namespace WindowsFormsApplication1 {
 
         private void pictureBox1_LoadCompleted(object sender, AsyncCompletedEventArgs e) {
 
-        }
-
-        private void pictureBox1_Paint(object sender, PaintEventArgs e) {
-            Graphics gra = e.Graphics;
-            //gra.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            Brush bush = new SolidBrush(cor);//填充的颜色
-            gra.FillEllipse(bush, 0, 0, pictureBox1.Size.Width, pictureBox1.Size.Height);
         }
 
 

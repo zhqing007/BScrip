@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace BScrip {
+namespace BScrip.BSForms {
     public partial class HostsForm : Form {
         public static HostsForm allhostsform;
 
@@ -98,14 +98,13 @@ namespace BScrip {
         }
 
         private void HostsForm_Resize(object sender, EventArgs e) {
-            HostView.Height = Height - 70;
-            selectAllHosts.Location =
-                new Point(selectAllHosts.Location.X, Height - 65);
+            HostView.Height = add.Location.Y - 5;
             add.Location =
-                new Point((del.Location.X + selectAllHosts.Location.X + selectAllHosts.Width- add.Width) / 2
-                    , Height - 65);
-            del.Location =
-                new Point(del.Location.X, Height - 65);
+                new Point(selectAllHosts.Location.X * 2 / 3 + del.Location.X / 3
+                    , add.Location.Y);
+            showInfo.Location =
+                new Point(add.Location.X + (del.Location.X - selectAllHosts.Location.X) / 3
+                    , showInfo.Location.Y);
         }
 
         public List<Host> GetSelectHosts() {
@@ -113,6 +112,10 @@ namespace BScrip {
             foreach (ListViewItem hostn in HostView.SelectedItems)
                 selectedhosts.Add(hostn.Tag as Host);
             return selectedhosts;
+        }
+
+        private void showInfo_Click(object sender, EventArgs e) {
+            BSForms.BScripMDIParent.onlyOneMDI.ShowSwitchInfo();
         }
     }
 }

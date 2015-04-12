@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace BScrip {
+namespace BScrip.BSForms {
     public partial class HostInfo : Form {
         public HostInfo() {
             InitializeComponent();

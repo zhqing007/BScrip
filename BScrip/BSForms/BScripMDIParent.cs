@@ -7,11 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace BScrip {
+namespace BScrip.BSForms {
     public partial class BScripMDIParent : Form {
+        public static BScripMDIParent onlyOneMDI = null;
+
         private int childFormNumber = 0;
-        private BackUpConfForm backUpMDIChild = null;
-        private TimerBackUpForm TimerBUMDIChild = null;
+        private BSForms.BackUpConfForm backUpMDIChild = null;
+        private TimerBackUpForm timerBUMDIChild = null;
+        private BSForms.SwitchControler switchCMDIChild = null;
 
         public BScripMDIParent() {
             InitializeComponent();
@@ -93,7 +96,7 @@ namespace BScrip {
         private void BackUpConf_Click(object sender, EventArgs e) {
             splitContainer1.Panel2.Controls.Clear();
             if (backUpMDIChild == null || backUpMDIChild.IsDisposed) {
-                backUpMDIChild = new BackUpConfForm();
+                backUpMDIChild = new BSForms.BackUpConfForm();
                 backUpMDIChild.MdiParent = this;
                 backUpMDIChild.Parent = splitContainer1.Panel2;
                 backUpMDIChild.Dock = DockStyle.Fill;
@@ -106,15 +109,37 @@ namespace BScrip {
 
         private void timerBackUp_Click(object sender, EventArgs e) {
             splitContainer1.Panel2.Controls.Clear();
-            if (TimerBUMDIChild == null || TimerBUMDIChild.IsDisposed) {
-                TimerBUMDIChild = new TimerBackUpForm();
-                TimerBUMDIChild.MdiParent = this;
-                TimerBUMDIChild.Parent = splitContainer1.Panel2;
-                TimerBUMDIChild.Dock = DockStyle.Fill;
-                TimerBUMDIChild.Show();
+            if (timerBUMDIChild == null || timerBUMDIChild.IsDisposed) {
+                timerBUMDIChild = new TimerBackUpForm();
+                timerBUMDIChild.MdiParent = this;
+                timerBUMDIChild.Parent = splitContainer1.Panel2;
+                timerBUMDIChild.Dock = DockStyle.Fill;
+                timerBUMDIChild.Show();
             }
             else
-                splitContainer1.Panel2.Controls.Add(TimerBUMDIChild);
+                splitContainer1.Panel2.Controls.Add(timerBUMDIChild);
+        }
+
+        private void showInfo_Click(object sender, EventArgs e) {
+            ShowSwitchInfo();
+        }
+
+        public void ShowSwitchInfo() {
+            List<Host> selecthosts = HostsForm.allhostsform.GetSelectHosts();
+            if (selecthosts.Count <= 0) {
+                MessageBox.Show("没有选择设备！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            splitContainer1.Panel2.Controls.Clear();
+            if (switchCMDIChild == null || switchCMDIChild.IsDisposed) {
+                switchCMDIChild = new BSForms.SwitchControler(selecthosts[0]);
+                switchCMDIChild.MdiParent = this;
+                switchCMDIChild.Parent = splitContainer1.Panel2;
+                switchCMDIChild.Dock = DockStyle.Fill;
+                switchCMDIChild.Show();
+            }
+            else
+                splitContainer1.Panel2.Controls.Add(switchCMDIChild);
         }
     }
 }

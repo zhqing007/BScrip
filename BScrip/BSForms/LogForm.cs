@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.IO;
 
-namespace BScrip {
+namespace BScrip.BSForms {
     public partial class LogForm : Form {
         private AutoResetEvent logevent;
 

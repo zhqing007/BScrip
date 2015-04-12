@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace BScrip
+namespace BScrip.BSForms
 {
     partial class BackUpConfForm
     {
@@ -36,7 +36,9 @@ namespace BScrip
             this.moveLeftButton = new System.Windows.Forms.Button();
             this.selectAllHost = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.getConfB_remote = new System.Windows.Forms.Button();
+            this.selserver = new System.Windows.Forms.Button();
+            this.isUpLoad = new System.Windows.Forms.CheckBox();
+            this.remoser = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // getConfB_Local
@@ -47,7 +49,7 @@ namespace BScrip
             this.getConfB_Local.Name = "getConfB_Local";
             this.getConfB_Local.Size = new System.Drawing.Size(99, 30);
             this.getConfB_Local.TabIndex = 2;
-            this.getConfB_Local.Text = "备份到本地";
+            this.getConfB_Local.Text = "开始备份";
             this.getConfB_Local.UseVisualStyleBackColor = true;
             this.getConfB_Local.Click += new System.EventHandler(this.getConfB_Local_Click);
             // 
@@ -108,24 +110,48 @@ namespace BScrip
             this.label2.TabIndex = 17;
             this.label2.Text = "需要备份配置的交换机：";
             // 
-            // getConfB_remote
+            // selserver
             // 
-            this.getConfB_remote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.getConfB_remote.Location = new System.Drawing.Point(262, 466);
-            this.getConfB_remote.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.getConfB_remote.Name = "getConfB_remote";
-            this.getConfB_remote.Size = new System.Drawing.Size(99, 30);
-            this.getConfB_remote.TabIndex = 18;
-            this.getConfB_remote.Text = "备份到远程";
-            this.getConfB_remote.UseVisualStyleBackColor = true;
-            this.getConfB_remote.Click += new System.EventHandler(this.getConfB_remote_Click);
+            this.selserver.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.selserver.Enabled = false;
+            this.selserver.Location = new System.Drawing.Point(633, 466);
+            this.selserver.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.selserver.Name = "selserver";
+            this.selserver.Size = new System.Drawing.Size(40, 30);
+            this.selserver.TabIndex = 18;
+            this.selserver.Text = "...";
+            this.selserver.UseVisualStyleBackColor = true;
+            this.selserver.Click += new System.EventHandler(this.selserver_Click);
+            // 
+            // isUpLoad
+            // 
+            this.isUpLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.isUpLoad.AutoSize = true;
+            this.isUpLoad.Location = new System.Drawing.Point(285, 473);
+            this.isUpLoad.Name = "isUpLoad";
+            this.isUpLoad.Size = new System.Drawing.Size(104, 19);
+            this.isUpLoad.TabIndex = 19;
+            this.isUpLoad.Text = "上传到远端";
+            this.isUpLoad.UseVisualStyleBackColor = true;
+            this.isUpLoad.CheckedChanged += new System.EventHandler(this.isUpLoad_CheckedChanged);
+            // 
+            // remoser
+            // 
+            this.remoser.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.remoser.Location = new System.Drawing.Point(395, 468);
+            this.remoser.Name = "remoser";
+            this.remoser.ReadOnly = true;
+            this.remoser.Size = new System.Drawing.Size(238, 25);
+            this.remoser.TabIndex = 20;
             // 
             // BackUpConfForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(685, 507);
-            this.Controls.Add(this.getConfB_remote);
+            this.Controls.Add(this.remoser);
+            this.Controls.Add(this.isUpLoad);
+            this.Controls.Add(this.selserver);
             this.Controls.Add(this.getConfB_Local);
             this.Controls.Add(this.selectAllHost);
             this.Controls.Add(this.label2);
@@ -149,7 +175,9 @@ namespace BScrip
         private System.Windows.Forms.Button moveLeftButton;
         private System.Windows.Forms.Button selectAllHost;
         private System.Windows.Forms.Label label2;
-        private Button getConfB_remote;
+        private Button selserver;
+        private CheckBox isUpLoad;
+        private TextBox remoser;
     }
 }
 

@@ -35,7 +35,10 @@ namespace MinimalisticTelnet
         {
             tcpSocket = new TcpClient(Hostname, Port);
             TimeOutMs = TimeOut;
+        }
 
+        public void Close() {
+            tcpSocket.Close();
         }
 
         public string Login(string Username,string Password,int LoginTimeOutMs)

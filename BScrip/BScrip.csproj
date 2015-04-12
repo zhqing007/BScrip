@@ -62,49 +62,57 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml" />
     <Reference Include="Tamir.SharpSSH">
       <HintPath>.\Tamir.SharpSSH.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\FileTransfer.cs">
+    <Compile Include="BSDevice\device.cs" />
+    <Compile Include="BSForms\FileTransfer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FileTransfer.Designer.cs">
+    <Compile Include="BSForms\FileTransfer.Designer.cs">
       <DependentUpon>FileTransfer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\BScripMDIParent.cs">
+    <Compile Include="BSForms\BScripMDIParent.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\BScripMDIParent.Designer.cs">
+    <Compile Include="BSForms\BScripMDIParent.Designer.cs">
       <DependentUpon>BScripMDIParent.cs</DependentUpon>
     </Compile>
     <Compile Include="DBhelper.cs" />
     <Compile Include="EncodeAndDecode.cs" />
-    <Compile Include="Forms\BackUpConfForm.cs">
+    <Compile Include="BSForms\BackUpConfForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\BackUpConfForm.Designer.cs">
+    <Compile Include="BSForms\BackUpConfForm.Designer.cs">
       <DependentUpon>BackUpConfForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\HostInfo.cs">
+    <Compile Include="BSForms\HostInfo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\HostInfo.Designer.cs">
+    <Compile Include="BSForms\HostInfo.Designer.cs">
       <DependentUpon>HostInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\HostsForm.cs">
+    <Compile Include="BSForms\HostsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\HostsForm.Designer.cs">
+    <Compile Include="BSForms\HostsForm.Designer.cs">
       <DependentUpon>HostsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\LogForm.cs">
+    <Compile Include="BSForms\LogForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\LogForm.Designer.cs">
+    <Compile Include="BSForms\LogForm.Designer.cs">
       <DependentUpon>LogForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BSForms\SwitchControler.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BSForms\SwitchControler.Designer.cs">
+      <DependentUpon>SwitchControler.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -112,32 +120,36 @@
     <Compile Include="RemoteLoginer.cs" />
     <Compile Include="StaticFun.cs" />
     <Compile Include="TelnetInterface.cs" />
-    <Compile Include="Forms\TimerBackUpForm.cs">
+    <Compile Include="BSForms\TimerBackUpForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\TimerBackUpForm.Designer.cs">
+    <Compile Include="BSForms\TimerBackUpForm.Designer.cs">
       <DependentUpon>TimerBackUpForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="BSThread\ConfThread.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="XMLHelper.cs" />
     <Compile Include="XmlHelper_S.cs" />
-    <EmbeddedResource Include="Forms\FileTransfer.resx">
+    <EmbeddedResource Include="BSForms\FileTransfer.resx">
       <DependentUpon>FileTransfer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\BScripMDIParent.resx">
+    <EmbeddedResource Include="BSForms\BScripMDIParent.resx">
       <DependentUpon>BScripMDIParent.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\BackUpConfForm.resx">
+    <EmbeddedResource Include="BSForms\BackUpConfForm.resx">
       <DependentUpon>BackUpConfForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\HostInfo.resx">
+    <EmbeddedResource Include="BSForms\HostInfo.resx">
       <DependentUpon>HostInfo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\HostsForm.resx">
+    <EmbeddedResource Include="BSForms\HostsForm.resx">
       <DependentUpon>HostsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\LogForm.resx">
+    <EmbeddedResource Include="BSForms\LogForm.resx">
       <DependentUpon>LogForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BSForms\SwitchControler.resx">
+      <DependentUpon>SwitchControler.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -149,7 +161,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Forms\TimerBackUpForm.resx">
+    <EmbeddedResource Include="BSForms\TimerBackUpForm.resx">
       <DependentUpon>TimerBackUpForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />

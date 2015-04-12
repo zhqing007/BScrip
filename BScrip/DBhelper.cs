@@ -15,6 +15,30 @@ namespace BScrip {
             sqlcmd = sqlconn.CreateCommand();
         }
 
+        private static object GetConfiguration(string key) {
+            DataTable data = ExecuteDataTable(
+                "select value from configuration where key='" + key + "'", null);
+            if (data.Rows.Count == 0) return null;
+            return data.Rows[0][0];
+        }
+
+        private static void SetConfiguration(string key, string value) {
+            ExecuteSQL("update configuration set value='" +
+                value + "' where key='" + key + "'");
+        }
+
+        public static Host GetDefaultUpLoadServer() {
+            string hostName = GetConfiguration("default_upload_server") as string;
+            if(hostName == null) return null;
+            Host rh = new Host(hostName);
+            rh.GetFromName();
+            return  rh;
+        }
+
+        public static void SetDefaultUpLoadServer(string ser) {
+            SetConfiguration("default_upload_server", ser);
+        }
+
         public static void ExecuteSQL(string sql) {
             sqlcmd.CommandText = sql;
             sqlcmd.ExecuteNonQuery();

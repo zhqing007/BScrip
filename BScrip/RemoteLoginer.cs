@@ -6,194 +6,150 @@ using System.Threading;
 using MinimalisticTelnet;
 
 namespace BScrip {
-    public abstract class RemoteLoginer {
-        protected string ip;
-        protected string name;
-        protected string pw;
-        protected string spw;
-        protected bool isConnected;
+    public abstract class Linker {
+        protected string hostname;
+        protected string username;
+        protected string password;
 
-        protected string Name {
-            get { return name; }
-        }        
-
-        protected string Pw {
-            get { return pw; }
+        public Linker(string ho, string user, string pw){
+            hostname = ho;
+            username = user;
+            password = pw;
         }
 
-        protected string Spw {
-            get { return spw; }
-        }
-
-        public string IP {
-            get { return ip; }
-        }
-
-        public RemoteLoginer(string _ip, string _name, string _pw, string _spw) {
-            ip = _ip;
-            name = _name;
-            pw = _pw;
-            spw = _spw;
-            isConnected = false;
-        }
-
-        public abstract bool Connect();
+        public abstract string Connect();
         public abstract void Close();
         public abstract void Send(string com);
-        public abstract void WaitFor(string com);
-        public abstract string GetConfiguration();
+        public abstract string Read();
+
+        public virtual void WaitFor(string com){            
+            if (com == null || com.Length == 0) throw new NullReferenceException();
+            com = com.ToLower();
+            for (int i = 0; i < 5; ++i) {
+                if (Read().ToLower().Contains(com))
+                    return;
+                Thread.Sleep(50);
+            }
+            throw new Exception("Failed WaitFor: " + com);
+        }
     }
 
-    public class RemoteLoginerTel : RemoteLoginer {
-        //private Telnet tel_con;
-        private TelnetConnection tel_con;
+    public class TelnetLinker : Linker {
+        private int port;
+        private int timeout;
+        private TelnetConnection tel_con = null;
+        
 
-        public RemoteLoginerTel(string _ip, string _name, string _pw, string _spw)
-            : base(_ip, _name, _pw, _spw) {                
+        public TelnetLinker(string hostname, string username, string password, int port = 23, int timeout = 100)
+            : base(hostname, username,password){
+            this.port = port;
+            this.timeout = timeout;
         }
 
-        public override bool Connect() {
-            tel_con = new TelnetConnection(ip, 23, 150);
-            string r = tel_con.Read();
-            if (r.TrimEnd().EndsWith("Username:")) {
-                tel_con.WriteLine(name);
-                r = tel_con.Read();
-                if (!r.TrimEnd().EndsWith("Password:")) return false;
-                tel_con.WriteLine(pw);
-                r = tel_con.Read();
-            }
+        public override string Connect() {
+            tel_con = new TelnetConnection(hostname, port, timeout);
+            return tel_con.Login(username, password, timeout);
+        }
 
-            if (r.TrimEnd().EndsWith(">")) {
-                if (spw != null && spw.Length > 0) {
-                    tel_con.WriteLine("su");
-                    r = tel_con.Read();
-                    if (r.TrimEnd().EndsWith("Password:")) {
-                        tel_con.WriteLine(spw);
-                        r = tel_con.Read();
-                        if (!r.TrimEnd().EndsWith(">")) return false;
-                    }
-                }
-                tel_con.WriteLine("sys");
-                r = tel_con.Read();
-
-            }
-            if (!r.TrimEnd().EndsWith("]")) return false;
-            isConnected = true;
-            return true;
+        public override void Close() {
+            tel_con.Close();
         }
 
         public override void Send(string com) {
             tel_con.WriteLine(com);
         }
 
-        public override void WaitFor(string com) {
-            for (int i = 0; i < 5; ++i) {
-                if (tel_con.Read().IndexOf(com) >= 0)
-                    return;
-            }
-            throw new Exception("Failed WaitFor: " + com);
-        }
-
-        public override string GetConfiguration() {
-            if (!isConnected) throw new Exception("Failed Connecte");
-            tel_con.WriteLine("user-interface vty 0 4");
-            WaitFor("vty0-4]");
-            tel_con.WriteLine("screen-length 0");
-            WaitFor("vty0-4]");
-            tel_con.WriteLine("dis curr");
-            string sessionLog = tel_con.Read().TrimEnd();
-            int i;
-            for (i = 0; i < 3; ++i) {
-                if (sessionLog.IndexOf("return") >= 0) break;
-                sessionLog += tel_con.Read().TrimEnd();
-            }
-            if (i == 3) throw new Exception("Failed get configuration");
-            
-            tel_con.WriteLine("undo screen-length");
-            WaitFor("vty0-4]");
-            tel_con.WriteLine("qu");
-            WaitFor("]");
-            return sessionLog;
-        }
-
-        public override void Close() {
-            if (!isConnected) return ;
-            tel_con.WriteLine("qu");
-            WaitFor(">");
-            tel_con.WriteLine("qu");
-            isConnected = false;
+        public override string Read() {
+            return tel_con.Read();
         }
     }
 
-    public class RemoteLoginerSSH : RemoteLoginer {
-        private SshStream ssh_con;
+    public class SSH2Linker : Linker {
+        private SshStream ssh_con = null;
 
-        public RemoteLoginerSSH(string _ip, string _name, string _pw, string _spw)
-            : base(_ip, _name, _pw, _spw) { }
+        public SSH2Linker(string hostname, string username, string password)
+            : base(hostname, username, password){}
 
-        public override bool Connect() {
-            ssh_con = new SshStream(ip, name, pw);
+        public override string Connect() {
+            ssh_con = new SshStream(hostname, username, password);
             ssh_con.RemoveTerminalEmulationCharacters = true;
-            ssh_con.ReadResponse();
-            isConnected = true;
-            return true;
+            Thread.Sleep(10);
+            return ssh_con.ReadResponse();
+        }
+
+        public override void Close() {
+            ssh_con.Close();
         }
 
         public override void Send(string com) {
             ssh_con.Write(com);
         }
 
-        public override void WaitFor(string com) {
-            if(com == null || com.Length == 0) throw new NullReferenceException();
-            try {
-                //byte[] back = new byte[1024];
-                //ssh_con.Read(back, 0, 1024);
-                //string backstr = Encoding.ASCII.GetString(back);
+        public override string Read() {
+            return ssh_con.ReadResponse();
+        }
+    }
 
-                string backstr = ssh_con.ReadResponse();
-                string com_l = com.ToLower();
-                while (!backstr.ToLower().Contains(com)) {
-                    Thread.Sleep(5);
-                    backstr = ssh_con.ReadResponse();
-                    //ssh_con.Read(back, 0, 1024);
-                    //backstr = Encoding.ASCII.GetString(back);
+    public class RemoteConnecter {
+        private Linker lin = null;
+        private BSDevice.Device dev = null;
+        public string SuperPassWord = null;
+        public bool isSuper = false;
 
-                }
-            }
-            catch( Exception exc) {
-                Console.WriteLine(exc.StackTrace);
-                return;
-            }
+        public RemoteConnecter(Linker _lin) {
+            SetLinker(_lin);
         }
 
-        public override void Close() {
-            ssh_con.Close();
-            isConnected = false;
+        public void SetLinker(Linker _lin) {
+            lin = _lin;
+            dev = BSDevice.Device.DeviceFactory(lin.Connect());
         }
 
-        public override string GetConfiguration() {
-            if (!isConnected) return null;
-            Send("sys");
-            WaitFor("]");
-            Send("user-interface vty 0 4");
-            WaitFor("]");
-            Send("screen-length 0");
-            WaitFor("]");
-            Send("dis curr");
-            StringBuilder logBuilder = new StringBuilder();
-            string backstr = ssh_con.ReadResponse();
-            while (!backstr.Contains("return")) {
-                logBuilder.Append(backstr);
-                backstr = ssh_con.ReadResponse();
+        private void SuperMe() {
+            if (SuperPassWord == null || SuperPassWord.Length == 0) return;
+            if (isSuper) return;
+
+            lin.Send(dev.SUPERPW_MARK_STR);
+            string r = lin.Read();
+            if (!r.TrimEnd().EndsWith(dev.PASSWORD_MARK_STR))
+                throw new Exception("Failed WaitFor: " + dev.PASSWORD_MARK_STR);
+            lin.Send(SuperPassWord);
+            r = lin.Read();
+            if (!r.TrimEnd().EndsWith(dev.LEVEL1_MARK_STR)
+                && !r.TrimEnd().EndsWith(dev.LEVEL3_MARK_STR))
+                throw new Exception("Failed WaitFor: LEVEL_MARK_STR");
+            isSuper = true;
+        }
+
+        public string GetConfiguration() {
+            SuperMe();
+            lin.Send(dev.SYS_MARK_STR);
+            string r = lin.Read();
+            if (!r.TrimEnd().EndsWith(dev.LEVEL3_MARK_STR))
+                throw new Exception("Failed WaitFor: " + dev.LEVEL3_MARK_STR);
+            lin.Send(dev.USERVTY_STR);
+            lin.WaitFor(dev.LEVEL3_MARK_STR);
+            lin.Send(dev.SCRLEN0_STR);
+            lin.WaitFor(dev.LEVEL3_MARK_STR);
+            lin.Send(dev.CONFIGURATION_STR);
+            string sessionLog = lin.Read().TrimEnd();
+            int i;
+            for (i = 0; i < 5; ++i) {
+                if (sessionLog.Contains(dev.CONFIGEND_MARK_STR)) break;
+                sessionLog += lin.Read().TrimEnd();
             }
-            logBuilder.Append(backstr);
-            Send("undo screen-length");
-            WaitFor("]");
-            Send("qu");
-            WaitFor("]");
-            Send("qu");
-            WaitFor(">");
-            return logBuilder.ToString();
+            if (i == 5) throw new Exception("Failed get configuration");
+
+            lin.Send(dev.UNDOSCRLEN_STR);
+            lin.WaitFor(dev.LEVEL3_MARK_STR);
+            lin.Send(dev.QUIT_STR);
+            lin.WaitFor(dev.LEVEL3_MARK_STR);
+            return sessionLog;
+        }
+
+        public void Close() {
+            lin.Close();
+            lin = null;
         }
     }
 }

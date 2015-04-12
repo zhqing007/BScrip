@@ -12,7 +12,7 @@ using System.IO;
 using Tamir.SharpSsh;
 using System.Threading;
 
-namespace BScrip {
+namespace BScrip.BSForms {
     public partial class BackUpConfForm : Form {
         //public Configuration cfa;
         //private XMLHelper xhelper;
@@ -23,6 +23,11 @@ namespace BScrip {
             DownHosts.Columns.Add("IP地址", 120, HorizontalAlignment.Left);
             DownHosts.Columns.Add("登录名", 120, HorizontalAlignment.Left);
             DownHosts.Columns.Add("登录方式", 80, HorizontalAlignment.Left);
+            Host dfs = DBhelper.GetDefaultUpLoadServer();
+            if (dfs != null) {
+                remoser.Tag = dfs;
+                remoser.Text = dfs.hostname;
+            }
             //xhelper = new XMLHelper();
             //if (!System.IO.File.Exists("HostList.xml")) {
             //    xhelper.CreateXmlDocument("HostList.xml", "hosts");
@@ -47,7 +52,10 @@ namespace BScrip {
         //}
 
         private void getConfB_Local_Click(object sender, EventArgs e) {
-            GetConfiguration(null);
+            if(isUpLoad.Checked)
+                GetConfiguration(remoser.Tag as Host);
+            else
+                GetConfiguration(null);
         }
 
         private void GetConfiguration(Host _server) {
@@ -64,7 +72,7 @@ namespace BScrip {
             AutoResetEvent logevent = new AutoResetEvent(false);
             LogForm logd = new LogForm(logevent);
             logd.ReDoButtons(false);
-            GetConfThread confth = new GetConfThread(logd, logd.GetLogBox(), logevent, hostlist);
+            BSThread.ConfThread confth = new BSThread.ConfThread(logd, logd.GetLogBox(), logevent, hostlist);
             confth.server = _server;
             Thread logThread = new Thread(new ThreadStart(confth.GetConfInThread));
             logThread.Start();
@@ -132,130 +140,28 @@ namespace BScrip {
             StaticFun.SelectAll_ListView(DownHosts);
         }
 
-        private void getConfB_remote_Click(object sender, EventArgs e) {
-            if (DownHosts.Items.Count <= 0) {
-                MessageBox.Show("没有要备份的主机！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        private void isUpLoad_CheckedChanged(object sender, EventArgs e) {
+            if (!(sender as CheckBox).Checked) {
+                selserver.Enabled = false;
                 return;
             }
+            selserver.Enabled = true;
+            if (remoser.Tag != null) return;
+            selserver_Click(sender, e);
+            if (remoser.Tag == null)
+                isUpLoad.Checked = false;
+        }
 
+        private void selserver_Click(object sender, EventArgs e) {
             FileTransfer tranHost = new FileTransfer();
             tranHost.ShowDialog();
             if (tranHost.DialogResult != DialogResult.OK) return;
-            Host server = tranHost.GetServer();
-            switch(tranHost.SaveOrNot()){
-                case FileTransfer.NEWSERVER:
-                    server.Save();
-                    break;
-                case FileTransfer.UPDATESERVER:
-                    server.Update();
-                    break;
-                default:
-                    break;
-            }
-            GetConfiguration(server);
+            Host ser = tranHost.GetServer();
+            remoser.Tag = ser;
+            remoser.Text = ser.hostname;
         }
     }
 
-    public class GetConfThread {
-        private List<Host> hosts;
-        private AutoResetEvent myResetEvent;
-        private TextBox tbox;
-        private LogForm logF;
-        public Host server;
-        private List<string> filenames = new List<string>();
-
-        public GetConfThread(LogForm logfo, TextBox logbox, AutoResetEvent loge, List<Host> hostl) {
-            logF = logfo;
-            tbox = logbox;
-            myResetEvent = loge;
-            hosts = hostl;
-        }
-
-        public GetConfThread(TextBox logbox, List<Host> hostl) {
-            tbox = logbox;
-            hosts = hostl;
-        }
-
-        private void Addstr(Host item, string str) {
-            if (item == null) {
-                tbox.Text += str;
-                return;
-            }
-            StringBuilder strb = new StringBuilder(tbox.Text);
-            strb.Append(DateTime.Now.GetDateTimeFormats('g')[0].ToString());
-            if (item != null)
-                strb.Append('：').Append(item.hostname).Append("--");
-            strb.Append(str).Append(System.Environment.NewLine);
-            tbox.Text = strb.ToString();
-        }
-
-        public void GetConfNoThread() {
-            RemoteLoginer loginer = null;
-            foreach (Host item in hosts) {
-                try {
-                    if (item.loginmode == 0) {
-                        loginer = new RemoteLoginerTel(item.ipaddress, item.loginname, item.password, item.superpw);
-                        Addstr(item, "Telnet登录");
-                    }
-                    else {
-                        loginer = new RemoteLoginerSSH(item.ipaddress, item.loginname, item.password, item.superpw);
-                        Addstr(item, "SSH2登录");
-                    }
-                    if (loginer.Connect())
-                        Addstr(item, "登录成功");
-                    else {
-                        Addstr(item, "登录失败");
-                        continue;
-                    }
-                    string strConfiguration = loginer.GetConfiguration();
-                    if (strConfiguration != null && strConfiguration.Trim().Length > 0)
-                        Addstr(item, "导出配置成功");
-                    else {
-                        Addstr(item, "导出配置失败");
-                        continue;
-                    }
-                    StringBuilder fileN = new StringBuilder(item.hostname);
-                    fileN.Append('_').Append(item.ipaddress.Replace('.', '_'));
-                    StringBuilder filePath = new StringBuilder("/");
-                    filePath.Append(fileN.ToString());
-                    if (!Directory.Exists(fileN.ToString()))
-                        Directory.CreateDirectory(fileN.ToString());
-                    fileN = new StringBuilder(Path.GetFullPath(fileN.ToString()));
-                    string filename = DateTime.Now.ToString("yyyyMMddHHmm") + ".log";
-                    fileN.Append('\\').Append(filename);
-                    filePath.Append('/').Append(filename);
-                    filenames.Add(filePath.ToString());
-
-                    StreamWriter sw = File.CreateText(fileN.ToString());
-                    Addstr(item, "导出文件 " + fileN);
-                    sw.Write(strConfiguration);
-                    sw.Close();
-                    loginer.Close();
-                    Addstr(item, "文件写入完成");
-                    Addstr(null, "******");
-                }
-                catch (Exception exc) {
-                    Addstr(item, "导出配置出现异常：" + exc.StackTrace);
-                }
-            }
-            if (server == null) return;
-            try {
-                SshFileTransfer.PutFileListSFTP(server, filenames);
-                Addstr(server, "上传文件完成");
-                foreach (string file in filenames) {
-                    File.Delete(file.Substring(1));
-                }
-            }
-            catch (Exception exc) {
-                Addstr(server, "上传文件出现异常：" + exc.StackTrace);
-            }
-        }
-
-        public void GetConfInThread() {
-            myResetEvent.WaitOne();
-            GetConfNoThread();
-            logF.ReDoButtons(true);
-        }
-    }
+    
  
 }

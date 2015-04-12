@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace BScrip {
+namespace BScrip.BSForms {
     public partial class FileTransfer : Form {
         public const int NOTSAVE = 0;
         public const int NEWSERVER = 1;
@@ -22,8 +22,24 @@ namespace BScrip {
         }
 
         private void OKButton_Click(object sender, EventArgs e) {
-            if (StaticFun.CheckHostInfo(serverBox.Text, ipBox.Text, loginNameBox.Text, PWBox.Text))
-            this.DialogResult = DialogResult.OK;
+            if (StaticFun.CheckHostInfo(serverBox.Text, ipBox.Text, loginNameBox.Text, PWBox.Text)) {
+                if (defaultSer.Checked) {
+                    savedServer.Checked = true;
+                    DBhelper.SetDefaultUpLoadServer(serverBox.Text);
+                }
+                switch (SaveOrNot()) {
+                    case FileTransfer.NEWSERVER:
+                        GetServer().Save();
+                        break;
+                    case FileTransfer.UPDATESERVER:
+                        GetServer().Update();
+                        break;
+                    default:                        
+                        break;
+                }                
+
+                this.DialogResult = DialogResult.OK;
+            }
         }
 
         private void CancelButton_Click(object sender, EventArgs e) {
