@@ -67,7 +67,8 @@ namespace BScrip.BSForms {
 
             TimeSpan span = new TimeSpan(Decimal.ToInt32(dayUpDown.Value)
                 , Decimal.ToInt32(hourUpDown.Value)
-                , Decimal.ToInt32(minuteUpDown.Value));
+                , Decimal.ToInt32(minuteUpDown.Value)
+                , 0);
             List<Host> hostlist = new List<Host>();
             foreach (object item in timerBackUpL.Items) {
                 hostlist.Add((item as ListViewItem).Tag as Host);

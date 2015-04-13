@@ -29,17 +29,16 @@ namespace BScrip.BSThread {
         }
 
         private void Addstr(Host item, string str) {
-            StringBuilder strb = new StringBuilder(tbox.Text);
-            if (item == null) {
+            StringBuilder strb = new StringBuilder();
+            if (item == null)
                 strb.Append(str).Append(System.Environment.NewLine);
-                tbox.Text = strb.ToString();
-                return;
+            else {
+                strb.Append(DateTime.Now.GetDateTimeFormats('g')[0].ToString());
+                if (item != null)
+                    strb.Append('：').Append(item.hostname).Append("--");
+                strb.Append(str).Append(System.Environment.NewLine);
             }
-            strb.Append(DateTime.Now.GetDateTimeFormats('g')[0].ToString());
-            if (item != null)
-                strb.Append('：').Append(item.hostname).Append("--");
-            strb.Append(str).Append(System.Environment.NewLine);
-            tbox.Text = strb.ToString();
+            tbox.AppendText(strb.ToString());
         }
 
         public void GetConfNoThread() {
