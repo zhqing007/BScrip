@@ -10,6 +10,7 @@ namespace BScrip {
         protected string hostname;
         protected string username;
         protected string password;
+        protected string lastmessage;
 
         public Linker(string ho, string user, string pw){
             hostname = ho;
@@ -21,6 +22,7 @@ namespace BScrip {
         public abstract void Close();
         public abstract void Send(string com);
         public abstract string Read();
+        
 
         public virtual void WaitFor(string com){            
             if (com == null || com.Length == 0) throw new NullReferenceException();
@@ -32,11 +34,20 @@ namespace BScrip {
             }
             throw new Exception("Failed WaitFor: " + com);
         }
+
+        public virtual string ToUserInterface() {
+            if (lastmessage == null) return null;
+            char[] userif = {'>', ']', '#'};
+            while (lastmessage.IndexOfAny(userif) < 0) {
+                lastmessage = Read();
+            }
+            return lastmessage;
+        }
     }
 
     public class TelnetLinker : Linker {
         private int port;
-        private int timeout;
+        private int timeout;        
         private TelnetConnection tel_con = null;
         
 
@@ -48,7 +59,8 @@ namespace BScrip {
 
         public override string Connect() {
             tel_con = new TelnetConnection(hostname, port, timeout);
-            return tel_con.Login(username, password, timeout);
+            lastmessage = tel_con.Login(username, password, timeout);
+            return lastmessage;
         }
 
         public override void Close() {
@@ -60,7 +72,8 @@ namespace BScrip {
         }
 
         public override string Read() {
-            return tel_con.Read();
+            lastmessage = tel_con.Read();
+            return lastmessage;
         }
     }
 
@@ -73,8 +86,15 @@ namespace BScrip {
         public override string Connect() {
             ssh_con = new SshStream(hostname, username, password);
             ssh_con.RemoveTerminalEmulationCharacters = true;
-            Thread.Sleep(10);
-            return ssh_con.ReadResponse();
+            lastmessage = ssh_con.ReadResponse();
+            //string temp = null;
+            //Thread.Sleep(10);
+            //while (ssh_con.CanRead) {
+            //    temp = ssh_con.ReadResponse();
+            //    if (temp != null && temp.Length > 0)
+            //        re = temp;
+            //}
+            return lastmessage;
         }
 
         public override void Close() {
@@ -86,7 +106,8 @@ namespace BScrip {
         }
 
         public override string Read() {
-            return ssh_con.ReadResponse();
+            lastmessage = ssh_con.ReadResponse();
+            return lastmessage;
         }
     }
 
@@ -106,6 +127,7 @@ namespace BScrip {
         }
 
         private void SuperMe() {
+            lin.ToUserInterface();
             if (SuperPassWord == null || SuperPassWord.Length == 0) return;
             if (isSuper) return;
 
@@ -124,7 +146,8 @@ namespace BScrip {
         public string GetConfiguration() {
             SuperMe();
             lin.Send(dev.SYS_MARK_STR);
-            string r = lin.Read();
+            lin.Read();
+            string r = lin.ToUserInterface();
             if (!r.TrimEnd().EndsWith(dev.LEVEL3_MARK_STR))
                 throw new Exception("Failed WaitFor: " + dev.LEVEL3_MARK_STR);
             lin.Send(dev.USERVTY_STR);
@@ -133,12 +156,10 @@ namespace BScrip {
             lin.WaitFor(dev.LEVEL3_MARK_STR);
             lin.Send(dev.CONFIGURATION_STR);
             string sessionLog = lin.Read().TrimEnd();
-            int i;
-            for (i = 0; i < 5; ++i) {
-                if (sessionLog.Contains(dev.CONFIGEND_MARK_STR)) break;
+
+            while (!sessionLog.Contains(dev.CONFIGEND_MARK_STR)) {
                 sessionLog += lin.Read().TrimEnd();
             }
-            if (i == 5) throw new Exception("Failed get configuration");
 
             lin.Send(dev.UNDOSCRLEN_STR);
             lin.WaitFor(dev.LEVEL3_MARK_STR);

@@ -51,7 +51,7 @@ namespace BScrip.BSDevice {
             get { return comdic["SYS_MARK_STR"]; }
         }
         public string CONFIGEND_MARK_STR {
-            get { return comdic["USERVTY_STR"]; }
+            get { return comdic["CONFIGEND_MARK_STR"]; }
         }
         public string LEVEL1_MARK_STR {
             get { return comdic["LEVEL1_MARK_STR"]; }
@@ -60,21 +60,20 @@ namespace BScrip.BSDevice {
             get { return comdic["LEVEL3_MARK_STR"]; }
         }
 
-
-
         public static Device DeviceFactory(string singal) {
-            if(singal.IndexOf('<') + singal.IndexOf('[') + singal.IndexOf("Username:") >= 0)
-                return new HuaweiSwitch();
-            return new CiscoSwitch();
+            if(singal.Contains("User Access Verification"))
+                return new CiscoSwitch();
+            return new HuaweiSwitch();            
         }
+
     }
 
     public class HuaweiSwitch : Device {
         public HuaweiSwitch() {
             DataTable comtab = DBhelper.ExecuteDataTable(
                 "select key,value from devicecommand where devicetype="
-                + DeviceType.Switch + " and brandtype="
-                + BrandType.Huawei, null);
+                + (int)(DeviceType.Switch) + " and brandtype="
+                + (int)(BrandType.Huawei), null);
             foreach (DataRow row in comtab.Rows) {
                 comdic.Add(row["key"].ToString(), row["value"].ToString());
             }

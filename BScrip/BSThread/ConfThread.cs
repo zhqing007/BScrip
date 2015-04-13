@@ -29,11 +29,12 @@ namespace BScrip.BSThread {
         }
 
         private void Addstr(Host item, string str) {
+            StringBuilder strb = new StringBuilder(tbox.Text);
             if (item == null) {
-                tbox.Text += str;
+                strb.Append(str).Append(System.Environment.NewLine);
+                tbox.Text = strb.ToString();
                 return;
             }
-            StringBuilder strb = new StringBuilder(tbox.Text);
             strb.Append(DateTime.Now.GetDateTimeFormats('g')[0].ToString());
             if (item != null)
                 strb.Append('：').Append(item.hostname).Append("--");

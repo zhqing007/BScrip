@@ -10,8 +10,8 @@ using System.Threading;
 
 namespace BScrip.BSForms {
     public partial class TimerBackUpForm : Form {
-        private System.Threading.Timer locTimer = null;
-        private System.Threading.Timer remoteTimer = null;
+        private System.Threading.Timer locTimer;
+        private System.Threading.Timer remoteTimer;
 
         public TimerBackUpForm() {
             InitializeComponent();
@@ -56,7 +56,7 @@ namespace BScrip.BSForms {
             StaticFun.SelectAll_ListView(timerBackUpL);
         }
 
-        private bool BeginBackUp(System.Threading.Timer t, Host upserver) {
+        private bool BeginBackUp(ref System.Threading.Timer t, Host upserver) {
             TimeSpan beginTime = new TimeSpan();
             if (beginTimePicker.Value > DateTime.Now)
                 beginTime = beginTimePicker.Value - DateTime.Now;
@@ -92,9 +92,9 @@ namespace BScrip.BSForms {
             bool isbegin = false;
 
             if (isUpLoad_re.Checked)
-                isbegin = BeginBackUp(this.locTimer, remoser_re.Tag as Host);
+                isbegin = BeginBackUp(ref this.locTimer, remoser_re.Tag as Host);
             else
-                isbegin = BeginBackUp(this.locTimer, null);
+                isbegin = BeginBackUp(ref this.locTimer, null);
             if (!isbegin) return;
             this.stopLocal.Enabled = true;
             this.timerLocBu.Enabled = false;
@@ -110,7 +110,7 @@ namespace BScrip.BSForms {
             tranHost.ShowDialog();
             if (tranHost.DialogResult != DialogResult.OK) return;
 
-            if(!BeginBackUp(this.remoteTimer, tranHost.GetServer())) return;
+            if (!BeginBackUp(ref this.remoteTimer, tranHost.GetServer())) return;
             this.stopRemote.Enabled = true;
             this.timerRemBu.Enabled = false;
             SetLocalCircle(Color.Green);
