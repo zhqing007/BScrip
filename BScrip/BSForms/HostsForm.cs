@@ -71,7 +71,7 @@ namespace BScrip.BSForms {
             LoadHostToListView();
         }
 
-        private void HostView_DoubleClick(object sender, EventArgs e) {
+        private void modifyHost_Click(object sender, EventArgs e) {
             Host h = HostView.SelectedItems[0].Tag as Host;
             HostInfo hostDia = new HostInfo();
             hostDia.SetNameBoxMode(true);
@@ -116,6 +116,30 @@ namespace BScrip.BSForms {
 
         private void showInfo_Click(object sender, EventArgs e) {
             BSForms.BScripMDIParent.onlyOneMDI.ShowSwitchInfo();
+        }
+
+        private void setMenuVisible(bool visible) {
+            addToTimerB.Visible = visible;
+            addToBackUp.Visible = visible;
+            deleteHost.Visible = visible;
+            modifyHost.Visible = visible;
+            hostDetails.Visible = visible;
+        }
+
+        private void contextMenuStrip_Opening(object sender, CancelEventArgs e) {
+            if (this.HostView.SelectedItems.Count == 0) {
+                setMenuVisible(false);
+                return;
+            }
+            setMenuVisible(true);
+        }
+
+        private void addToBackUp_Click(object sender, EventArgs e) {
+            BSForms.BScripMDIParent.onlyOneMDI.AddHost();
+        }
+
+        private void addToTimerB_Click(object sender, EventArgs e) {
+            BSForms.BScripMDIParent.onlyOneMDI.AddHost(null, true);
         }
     }
 }

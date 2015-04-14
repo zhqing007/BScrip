@@ -13,7 +13,11 @@ using Tamir.SharpSsh;
 using System.Threading;
 
 namespace BScrip.BSForms {
-    public partial class BackUpConfForm : Form {
+    public abstract class BSForm : Form {
+        public abstract void AddHost(Host h = null);
+    }
+
+    public partial class BackUpConfForm : BSForm {
         //public Configuration cfa;
         //private XMLHelper xhelper;
 
@@ -130,6 +134,10 @@ namespace BScrip.BSForms {
             }
         }
 
+        public override void AddHost(Host h = null) {
+            moveRightButton_Click(null, null);
+        }
+
         private void moveLeftButton_Click(object sender, EventArgs e) {
             if (DownHosts.SelectedItems.Count == 0) return;
             for (int p = DownHosts.SelectedItems.Count - 1; p >= 0; --p)
@@ -160,6 +168,8 @@ namespace BScrip.BSForms {
             remoser.Tag = ser;
             remoser.Text = ser.hostname;
         }
+
+
     }
 
     

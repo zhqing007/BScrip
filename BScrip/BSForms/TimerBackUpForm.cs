@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.Threading;
 
 namespace BScrip.BSForms {
-    public partial class TimerBackUpForm : Form {
+    public partial class TimerBackUpForm : BSForm {
         private System.Threading.Timer locTimer;
         private System.Threading.Timer remoteTimer;
 
@@ -44,6 +44,10 @@ namespace BScrip.BSForms {
                 else
                     downh.SubItems.Add("SSH2");
             }
+        }
+
+        public override void AddHost(Host h = null) {
+            moveRightB_t_Click(null, null);
         }
 
         private void moveLeftB_t_Click(object sender, EventArgs e) {

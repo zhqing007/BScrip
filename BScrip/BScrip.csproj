@@ -82,6 +82,7 @@
     <Compile Include="BSForms\BScripMDIParent.Designer.cs">
       <DependentUpon>BScripMDIParent.cs</DependentUpon>
     </Compile>
+    <Compile Include="BSmenu\RightKeyMenu.cs" />
     <Compile Include="DBhelper.cs" />
     <Compile Include="EncodeAndDecode.cs" />
     <Compile Include="BSForms\BackUpConfForm.cs">

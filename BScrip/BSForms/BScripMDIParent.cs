@@ -124,6 +124,15 @@ namespace BScrip.BSForms {
             ShowSwitchInfo();
         }
 
+        public void AddHost(Host h = null, bool timer = false) {
+            if (timer)
+                timerBackUp_Click(null, null);
+            else
+                BackUpConf_Click(null, null);
+            BSForm bsf = splitContainer1.Panel2.Controls[0] as BSForm;
+            bsf.AddHost(h);
+        }
+
         public void ShowSwitchInfo() {
             List<Host> selecthosts = HostsForm.allhostsform.GetSelectHosts();
             if (selecthosts.Count <= 0) {
@@ -141,5 +150,7 @@ namespace BScrip.BSForms {
             else
                 splitContainer1.Panel2.Controls.Add(switchCMDIChild);
         }
+
+
     }
 }
