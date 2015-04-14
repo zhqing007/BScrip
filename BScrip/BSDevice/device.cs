@@ -81,6 +81,15 @@ namespace BScrip.BSDevice {
     }
 
     public class CiscoSwitch : Device {
+        public CiscoSwitch() {
+            DataTable comtab = DBhelper.ExecuteDataTable(
+                "select key,value from devicecommand where devicetype="
+                + (int)(DeviceType.Switch) + " and brandtype="
+                + (int)(BrandType.Cisco), null);
+            foreach (DataRow row in comtab.Rows) {
+                comdic.Add(row["key"].ToString(), row["value"].ToString());
+            }
+        }
     }
 
 }
