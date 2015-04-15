@@ -14,7 +14,7 @@ namespace BScrip.BSForms {
         private int childFormNumber = 0;
         private BSForms.BackUpConfForm backUpMDIChild = null;
         private TimerBackUpForm timerBUMDIChild = null;
-        private BSForms.SwitchControler switchCMDIChild = null;
+        private BSForms.DeviceViewer switchCMDIChild = null;
 
         public BScripMDIParent() {
             InitializeComponent();
@@ -141,7 +141,7 @@ namespace BScrip.BSForms {
             }
             splitContainer1.Panel2.Controls.Clear();
             if (switchCMDIChild == null || switchCMDIChild.IsDisposed) {
-                switchCMDIChild = new BSForms.SwitchControler(selecthosts[0]);
+                switchCMDIChild = new BSForms.DeviceViewer(selecthosts[0]);
                 switchCMDIChild.MdiParent = this;
                 switchCMDIChild.Parent = splitContainer1.Panel2;
                 switchCMDIChild.Dock = DockStyle.Fill;

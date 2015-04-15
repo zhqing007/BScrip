@@ -26,17 +26,17 @@
             this.components = new System.ComponentModel.Container();
             this.HostView = new System.Windows.Forms.ListView();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.addHost = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteHost = new System.Windows.Forms.ToolStripMenuItem();
+            this.addToBackUp = new System.Windows.Forms.ToolStripMenuItem();
+            this.addToTimerB = new System.Windows.Forms.ToolStripMenuItem();
+            this.hostDetails = new System.Windows.Forms.ToolStripMenuItem();
             this.selectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.modifyHost = new System.Windows.Forms.ToolStripMenuItem();
-            this.hostDetails = new System.Windows.Forms.ToolStripMenuItem();
+            this.addHost = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteHost = new System.Windows.Forms.ToolStripMenuItem();
             this.selectAllHosts = new System.Windows.Forms.Button();
             this.del = new System.Windows.Forms.Button();
             this.add = new System.Windows.Forms.Button();
             this.showInfo = new System.Windows.Forms.Button();
-            this.addToBackUp = new System.Windows.Forms.ToolStripMenuItem();
-            this.addToTimerB = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -66,22 +66,29 @@
             this.addHost,
             this.deleteHost});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(184, 194);
+            this.contextMenuStrip.Size = new System.Drawing.Size(184, 172);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
-            // addHost
+            // addToBackUp
             // 
-            this.addHost.Name = "addHost";
-            this.addHost.Size = new System.Drawing.Size(183, 24);
-            this.addHost.Text = "添加";
-            this.addHost.Click += new System.EventHandler(this.add_Click);
+            this.addToBackUp.Name = "addToBackUp";
+            this.addToBackUp.Size = new System.Drawing.Size(183, 24);
+            this.addToBackUp.Text = "添加到备份";
+            this.addToBackUp.Click += new System.EventHandler(this.addToBackUp_Click);
             // 
-            // deleteHost
+            // addToTimerB
             // 
-            this.deleteHost.Name = "deleteHost";
-            this.deleteHost.Size = new System.Drawing.Size(183, 24);
-            this.deleteHost.Text = "删除";
-            this.deleteHost.Click += new System.EventHandler(this.del_Click);
+            this.addToTimerB.Name = "addToTimerB";
+            this.addToTimerB.Size = new System.Drawing.Size(183, 24);
+            this.addToTimerB.Text = "添加到定时备份";
+            this.addToTimerB.Click += new System.EventHandler(this.addToTimerB_Click);
+            // 
+            // hostDetails
+            // 
+            this.hostDetails.Name = "hostDetails";
+            this.hostDetails.Size = new System.Drawing.Size(183, 24);
+            this.hostDetails.Text = "查看运行数据";
+            this.hostDetails.Click += new System.EventHandler(this.showInfo_Click);
             // 
             // selectAll
             // 
@@ -97,12 +104,19 @@
             this.modifyHost.Text = "修改";
             this.modifyHost.Click += new System.EventHandler(this.modifyHost_Click);
             // 
-            // hostDetails
+            // addHost
             // 
-            this.hostDetails.Name = "hostDetails";
-            this.hostDetails.Size = new System.Drawing.Size(183, 24);
-            this.hostDetails.Text = "查看运行数据";
-            this.hostDetails.Click += new System.EventHandler(this.showInfo_Click);
+            this.addHost.Name = "addHost";
+            this.addHost.Size = new System.Drawing.Size(183, 24);
+            this.addHost.Text = "添加";
+            this.addHost.Click += new System.EventHandler(this.add_Click);
+            // 
+            // deleteHost
+            // 
+            this.deleteHost.Name = "deleteHost";
+            this.deleteHost.Size = new System.Drawing.Size(183, 24);
+            this.deleteHost.Text = "删除";
+            this.deleteHost.Click += new System.EventHandler(this.del_Click);
             // 
             // selectAllHosts
             // 
@@ -152,20 +166,6 @@
             this.showInfo.UseVisualStyleBackColor = true;
             this.showInfo.Click += new System.EventHandler(this.showInfo_Click);
             // 
-            // addToBackUp
-            // 
-            this.addToBackUp.Name = "addToBackUp";
-            this.addToBackUp.Size = new System.Drawing.Size(183, 24);
-            this.addToBackUp.Text = "添加到备份";
-            this.addToBackUp.Click += new System.EventHandler(this.addToBackUp_Click);
-            // 
-            // addToTimerB
-            // 
-            this.addToTimerB.Name = "addToTimerB";
-            this.addToTimerB.Size = new System.Drawing.Size(183, 24);
-            this.addToTimerB.Text = "添加到定时备份";
-            this.addToTimerB.Click += new System.EventHandler(this.addToTimerB_Click);
-            // 
             // HostsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -179,7 +179,7 @@
             this.Controls.Add(this.showInfo);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "HostsForm";
-            this.Text = "HostsForm";
+            this.Text = "设备信息";
             this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 

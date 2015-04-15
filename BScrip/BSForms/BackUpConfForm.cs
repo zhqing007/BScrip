@@ -13,10 +13,6 @@ using Tamir.SharpSsh;
 using System.Threading;
 
 namespace BScrip.BSForms {
-    public abstract class BSForm : Form {
-        public abstract void AddHost(Host h = null);
-    }
-
     public partial class BackUpConfForm : BSForm {
         //public Configuration cfa;
         //private XMLHelper xhelper;
@@ -168,10 +164,9 @@ namespace BScrip.BSForms {
             remoser.Tag = ser;
             remoser.Text = ser.hostname;
         }
-
-
     }
 
-    
- 
+    public abstract class BSForm : Form {
+        public abstract void AddHost(Host h = null);
+    }
 }

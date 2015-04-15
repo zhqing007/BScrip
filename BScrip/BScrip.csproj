@@ -109,16 +109,16 @@
     <Compile Include="BSForms\LogForm.Designer.cs">
       <DependentUpon>LogForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="BSForms\SwitchControler.cs">
+    <Compile Include="BSForms\DeviceViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BSForms\SwitchControler.Designer.cs">
-      <DependentUpon>SwitchControler.cs</DependentUpon>
+    <Compile Include="BSForms\DeviceViewer.Designer.cs">
+      <DependentUpon>DeviceViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteFileTransfer.cs" />
-    <Compile Include="RemoteLoginer.cs" />
+    <Compile Include="RemoteLinker.cs" />
     <Compile Include="StaticFun.cs" />
     <Compile Include="TelnetInterface.cs" />
     <Compile Include="BSForms\TimerBackUpForm.cs">
@@ -149,8 +149,8 @@
     <EmbeddedResource Include="BSForms\LogForm.resx">
       <DependentUpon>LogForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BSForms\SwitchControler.resx">
-      <DependentUpon>SwitchControler.cs</DependentUpon>
+    <EmbeddedResource Include="BSForms\DeviceViewer.resx">
+      <DependentUpon>DeviceViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.IO;
 using BScrip.BSForms;
+using BScrip.BSDevice;
 
 namespace BScrip.BSThread {
     public class ConfThread {
@@ -42,19 +43,19 @@ namespace BScrip.BSThread {
         }
 
         public void GetConfNoThread() {
-            RemoteConnecter connecter = null;
+            Device dev = null;
             foreach (Host item in hosts) {
                 try {
                     if (item.loginmode == 0) {
-                        connecter = new RemoteConnecter(new TelnetLinker(item.ipaddress, item.loginname, item.password));
+                        dev = Device.DeviceFactory(new TelnetLinker(item.ipaddress, item.loginname, item.password));
                         Addstr(item, "Telnet登录");
                     }
                     else {
-                        connecter = new RemoteConnecter(new SSH2Linker(item.ipaddress, item.loginname, item.password));
+                        dev = Device.DeviceFactory(new SSH2Linker(item.ipaddress, item.loginname, item.password));
                         Addstr(item, "SSH2登录");
                     }
-                    connecter.SuperPassWord = item.superpw;
-                    string strConfiguration = connecter.GetConfiguration();
+                    dev.SuperPassWord = item.superpw;
+                    string strConfiguration = dev.GetConfiguration();
                     if (strConfiguration != null && strConfiguration.Trim().Length > 0)
                         Addstr(item, "导出配置成功");
                     else {
@@ -77,7 +78,7 @@ namespace BScrip.BSThread {
                     Addstr(item, "导出文件 " + fileN);
                     sw.Write(strConfiguration);
                     sw.Close();
-                    connecter.Close();
+                    dev.Close();
                     Addstr(item, "文件写入完成");
                     Addstr(null, "******");
                 }

@@ -1,5 +1,5 @@
 ﻿namespace BScrip.BSForms {
-    partial class SwitchControler {
+    partial class DeviceViewer {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -27,6 +27,7 @@
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.bGWorker = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -36,24 +37,24 @@
             this.chart1.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(51, 119);
+            this.chart1.Location = new System.Drawing.Point(92, 12);
             this.chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(464, 300);
+            this.chart1.Size = new System.Drawing.Size(475, 279);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
             // 
-            // SwitchControler
+            // DeviceViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(676, 601);
             this.Controls.Add(this.chart1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "SwitchControler";
+            this.Name = "DeviceViewer";
             this.Text = "SwitchControler";
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
@@ -63,6 +64,7 @@
         #endregion
 
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private System.ComponentModel.BackgroundWorker bGWorker;
 
     }
 }
