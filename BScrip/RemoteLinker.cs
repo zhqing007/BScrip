@@ -43,6 +43,15 @@ namespace BScrip {
             }
             return lastmessage;
         }
+
+        public virtual string ToSuperUserInterface() {
+            if (lastmessage == null) return null;
+            char[] userif = { ']', '#' };
+            while (lastmessage.IndexOfAny(userif) < 0) {
+                lastmessage = Read();
+            }
+            return lastmessage;
+        }
     }
 
     public class TelnetLinker : Linker {
