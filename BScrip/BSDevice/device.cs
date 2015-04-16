@@ -25,7 +25,7 @@ namespace BScrip.BSDevice {
         public string runtime;
     }
 
-    public class Device {
+    public abstract class Device {
         //public DeviceType TYPE;
         //public string VERSION;//型号
         //public BrandType BRAND;
@@ -33,6 +33,7 @@ namespace BScrip.BSDevice {
         protected Linker lin = null;
         public string SuperPassWord = null;
         protected bool isSuper = false;
+        protected DeviceBaseInfo baseInfo;
 
         public string CONFIGURATION_STR {
             get { return comdic["CONFIGURATION_STR"]; }
@@ -49,11 +50,9 @@ namespace BScrip.BSDevice {
         public string QUIT_STR {
             get { return comdic["QUIT_STR"]; }
         }
-
         public string VERSION_STR {
             get { return comdic["VERSION_STR"]; }
         }
-
         public string LOGIN_MARK_STR {
             get { return comdic["LOGIN_MARK_STR"]; }
         }
@@ -75,16 +74,71 @@ namespace BScrip.BSDevice {
         public string LEVEL3_MARK_STR {
             get { return comdic["LEVEL3_MARK_STR"]; }
         }
+        public string CONFIGURATION_MODE_STR {
+            get { return comdic["CONFIGURATION_MODE_STR"]; }
+        }
 
         public static Device DeviceFactory(Linker lin) {
-            if(lin.Connect().Contains("User Access Verification"))
+            if (lin.Connect().Contains("User Access Verification"))
                 return new CiscoSwitch(lin);
             return new HuaweiSwitch(lin);
         }
 
-        public virtual void SuperMe() {
+        public virtual void SuperMe() { }
+        public virtual Device ClassFactory() { return null; }
+        public abstract string GetConfiguration();
+        public abstract DeviceBaseInfo GetBaseInfo();
+
+        public virtual void Close() {
+            lin.Close();
+            lin = null;
+        }
+    }
+
+    public class HuaweiSwitch : Device {
+        public HuaweiSwitch(Linker _lin) {
+            DataTable comtab = DBhelper.ExecuteDataTable(
+                "select key,value from devicecommand where devicetype="
+                + (int)(DeviceType.Switch) + " and brandtype="
+                + (int)(Brand.Huawei), null);
+            foreach (DataRow row in comtab.Rows) {
+                comdic.Add(row["key"].ToString(), row["value"].ToString());
+            }
+            base.lin = _lin;
+            SuperMe();
+        }
+
+        private string GetMessage(string com) {
+            lin.Send(SYS_MARK_STR);
+            lin.Read();
+            string r = lin.ToSuperUserInterface();
+            if (!r.TrimEnd().EndsWith(LEVEL3_MARK_STR))
+                throw new Exception("Failed WaitFor: " + LEVEL3_MARK_STR);
+            lin.Send(USERVTY_STR);
+            lin.WaitFor(LEVEL3_MARK_STR);
+            lin.Send(SCRLEN0_STR);
+            lin.WaitFor(LEVEL3_MARK_STR);
+            lin.Send(com);
+            string message = lin.Read().TrimEnd();
+
+            while (!message.Contains(CONFIGEND_MARK_STR)) {
+                message += lin.Read().TrimEnd();
+            }
+
+            lin.Send(UNDOSCRLEN_STR);
+            lin.WaitFor(LEVEL3_MARK_STR);
+            lin.Send(QUIT_STR);
+            lin.WaitFor(LEVEL3_MARK_STR);
+            return message;
+        }
+
+        public override string GetConfiguration() {
+            return GetMessage(CONFIGURATION_STR);
+        }
+
+        public override void SuperMe() {
             if (lin == null) return;
-            lin.ToUserInterface();
+            //if(lin.ToUserInterface().Contains(LEVEL3_MARK_STR)) return;
             if (SuperPassWord == null || SuperPassWord.Length == 0) return;
             if (isSuper) return;
 
@@ -100,80 +154,39 @@ namespace BScrip.BSDevice {
             isSuper = true;
         }
 
-        public virtual string GetConfiguration() {
-            SuperMe();
-            lin.Send(SYS_MARK_STR);
-            lin.Read();
-            string r = lin.ToUserInterface();
-            if (!r.TrimEnd().EndsWith(LEVEL3_MARK_STR))
-                throw new Exception("Failed WaitFor: " + LEVEL3_MARK_STR);
-            lin.Send(USERVTY_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
-            lin.Send(SCRLEN0_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
-            lin.Send(CONFIGURATION_STR);
-            string sessionLog = lin.Read().TrimEnd();
-
-            while (!sessionLog.Contains(CONFIGEND_MARK_STR)) {
-                sessionLog += lin.Read().TrimEnd();
-            }
-
-            lin.Send(UNDOSCRLEN_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
-            lin.Send(QUIT_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
-            return sessionLog;
-        }
-
-        public virtual void Close() {
-            lin.Close();
-            lin = null;
-        }
-
-        public virtual DeviceBaseInfo GetBaseInfo() {
+        public override Device ClassFactory() {
             if (lin == null) return null;
-            lin.Send(VERSION_STR);
-            lin.Read();
-            string txt = lin.ToUserInterface();
+            string txt = GetMessage(VERSION_STR);
             Stream txtstr = new MemoryStream(ASCIIEncoding.Default.GetBytes(txt));
             StreamReader txtreader = new StreamReader(txtstr);
             string txtline;
-            DeviceBaseInfo devinfo = new DeviceBaseInfo();
 
             string br = "Huawei";
             string uptime = "uptime is";
             string sw = "software,";
 
-            while(!txtreader.EndOfStream){
+            while (!txtreader.EndOfStream) {
                 txtline = txtreader.ReadLine();
-                if (txtline.Contains(br)) devinfo.brand = "华为";
+                if (txtline.Contains(br)) baseInfo.brand = "华为";
 
                 int flag = txtline.IndexOf(sw);
                 if (flag > 0)
-                    devinfo.softver = txtline.Substring(flag + sw.Length);
+                    baseInfo.softver = txtline.Substring(flag + sw.Length);
 
                 flag = txtline.IndexOf(uptime);
                 if (flag > 0) {
-                    devinfo.devicetype = txtline.Substring(0, flag - 1);
-                    devinfo.runtime = txtline.Substring(flag + uptime.Length);
+                    baseInfo.devicetype = txtline.Substring(0, flag - 1);
+                    baseInfo.runtime = txtline.Substring(flag + uptime.Length);
                     break;
                 }
             }
-            return devinfo;
+
+            string model = baseInfo.devicetype.Split(' ')[1];
+            return null;
         }
-    }
 
-    public class HuaweiSwitch : Device {
-         public HuaweiSwitch(Linker _lin) {
-            DataTable comtab = DBhelper.ExecuteDataTable(
-                "select key,value from devicecommand where devicetype="
-                + (int)(DeviceType.Switch) + " and brandtype="
-                + (int)(Brand.Huawei), null);
-            foreach (DataRow row in comtab.Rows) {
-                comdic.Add(row["key"].ToString(), row["value"].ToString());
-            }
-
-            base.lin = _lin;
+        public override DeviceBaseInfo GetBaseInfo() {
+            return baseInfo;
         }
     }
 
@@ -188,6 +201,48 @@ namespace BScrip.BSDevice {
             }
 
             base.lin = _lin;
+        }
+
+        public override string GetConfiguration() {
+            lin.Send(SYS_MARK_STR);
+            lin.Read();
+            string r = lin.ToUserInterface();
+            if (!r.TrimEnd().EndsWith(LEVEL3_MARK_STR))
+                throw new Exception("Failed WaitFor: " + LEVEL3_MARK_STR);
+            lin.Send(CONFIGURATION_MODE_STR);
+            lin.WaitFor(LEVEL3_MARK_STR);
+            lin.Send(USERVTY_STR);
+            lin.WaitFor(LEVEL3_MARK_STR);
+            lin.Send(SCRLEN0_STR);
+            lin.WaitFor(LEVEL3_MARK_STR);
+            lin.Send(QUIT_STR);
+            lin.WaitFor(LEVEL3_MARK_STR);
+            lin.Send(QUIT_STR);
+            lin.WaitFor(LEVEL3_MARK_STR);
+
+
+            lin.Send(CONFIGURATION_STR);
+            string sessionLog = lin.Read().TrimEnd();
+
+            while (!sessionLog.Contains(CONFIGEND_MARK_STR)) {
+                sessionLog += lin.Read().TrimEnd();
+            }
+
+            lin.Send(CONFIGURATION_MODE_STR);
+            lin.WaitFor(LEVEL3_MARK_STR);
+            lin.Send(USERVTY_STR);
+            lin.WaitFor(LEVEL3_MARK_STR);
+            lin.Send(UNDOSCRLEN_STR);
+            lin.WaitFor(LEVEL3_MARK_STR);
+            lin.Send(QUIT_STR);
+            lin.WaitFor(LEVEL3_MARK_STR);
+            lin.Send(QUIT_STR);
+            lin.WaitFor(LEVEL3_MARK_STR);
+            return sessionLog;
+        }
+
+        public override DeviceBaseInfo GetBaseInfo() {
+            throw new NotImplementedException();
         }
     }
 
