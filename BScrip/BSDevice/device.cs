@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.IO;
+using System.Reflection;
 
 namespace BScrip.BSDevice {
     public enum DeviceType {
@@ -21,6 +22,7 @@ namespace BScrip.BSDevice {
     public class DeviceBaseInfo {
         public string brand;
         public string devicetype;
+        public string model;
         public string softver;
         public string runtime;
     }
@@ -29,11 +31,11 @@ namespace BScrip.BSDevice {
         //public DeviceType TYPE;
         //public string VERSION;//型号
         //public BrandType BRAND;
-        protected Dictionary<string, string> comdic = new Dictionary<string, string>();
+        public Dictionary<string, string> comdic = new Dictionary<string, string>();
         protected Linker lin = null;
         public string SuperPassWord = null;
         protected bool isSuper = false;
-        protected DeviceBaseInfo baseInfo;
+        public DeviceBaseInfo baseInfo;
 
         public string CONFIGURATION_STR {
             get { return comdic["CONFIGURATION_STR"]; }
@@ -81,13 +83,14 @@ namespace BScrip.BSDevice {
         public static Device DeviceFactory(Linker lin) {
             if (lin.Connect().Contains("User Access Verification"))
                 return new CiscoSwitch(lin);
-            return new HuaweiSwitch(lin);
+            return new HuaweiDevice(lin);
         }
-
-        public virtual void SuperMe() { }
+        
         public virtual Device ClassFactory() { return null; }
+        public virtual void SuperMe() { }        
         public abstract string GetConfiguration();
-        public abstract DeviceBaseInfo GetBaseInfo();
+        protected abstract string GetMessage(string com);
+        public abstract string GetVersion();
 
         public virtual void Close() {
             lin.Close();
@@ -95,20 +98,17 @@ namespace BScrip.BSDevice {
         }
     }
 
-    public class HuaweiSwitch : Device {
-        public HuaweiSwitch(Linker _lin) {
-            DataTable comtab = DBhelper.ExecuteDataTable(
-                "select key,value from devicecommand where devicetype="
-                + (int)(DeviceType.Switch) + " and brandtype="
-                + (int)(Brand.Huawei), null);
-            foreach (DataRow row in comtab.Rows) {
-                comdic.Add(row["key"].ToString(), row["value"].ToString());
-            }
+    public class HuaweiDevice : Device {
+        public HuaweiDevice(Linker _lin) {
             base.lin = _lin;
-            SuperMe();
+            baseInfo.brand = "HUAWEI";
+            baseInfo.model = "BASE";
+            string classname = null;
+            StaticFun.GetCommandDicAndClassName(baseInfo.brand, baseInfo.model
+                , ref comdic, ref classname);
         }
 
-        private string GetMessage(string com) {
+        protected override string GetMessage(string com) {
             lin.Send(SYS_MARK_STR);
             lin.Read();
             string r = lin.ToSuperUserInterface();
@@ -154,39 +154,8 @@ namespace BScrip.BSDevice {
             isSuper = true;
         }
 
-        public override Device ClassFactory() {
-            if (lin == null) return null;
-            string txt = GetMessage(VERSION_STR);
-            Stream txtstr = new MemoryStream(ASCIIEncoding.Default.GetBytes(txt));
-            StreamReader txtreader = new StreamReader(txtstr);
-            string txtline;
-
-            string br = "Huawei";
-            string uptime = "uptime is";
-            string sw = "software,";
-
-            while (!txtreader.EndOfStream) {
-                txtline = txtreader.ReadLine();
-                if (txtline.Contains(br)) baseInfo.brand = "华为";
-
-                int flag = txtline.IndexOf(sw);
-                if (flag > 0)
-                    baseInfo.softver = txtline.Substring(flag + sw.Length);
-
-                flag = txtline.IndexOf(uptime);
-                if (flag > 0) {
-                    baseInfo.devicetype = txtline.Substring(0, flag - 1);
-                    baseInfo.runtime = txtline.Substring(flag + uptime.Length);
-                    break;
-                }
-            }
-
-            string model = baseInfo.devicetype.Split(' ')[1];
-            return null;
-        }
-
-        public override DeviceBaseInfo GetBaseInfo() {
-            return baseInfo;
+        public override string GetVersion() {
+            return GetMessage(VERSION_STR);
         }
     }
 
@@ -241,7 +210,11 @@ namespace BScrip.BSDevice {
             return sessionLog;
         }
 
-        public override DeviceBaseInfo GetBaseInfo() {
+        protected override string GetMessage(string com) {
+            throw new NotImplementedException();
+        }
+
+        public override string GetVersion() {
             throw new NotImplementedException();
         }
     }
