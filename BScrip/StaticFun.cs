@@ -74,47 +74,64 @@ namespace BScrip {
             classname = comtab.Rows[0]["class"].ToString();
         }
 
+        public static void AddCommandDic(string brand, string model, ref Dictionary<string, string> comdic) {
+            StringBuilder sqlb = new StringBuilder();
+            sqlb.Append("select key,value from devicecommand left join devicebrand ")
+                .Append("on devicecommand.comid=devicebrand.comid where brand='")
+                .Append(brand).Append("' and model='")
+                .Append(model).Append("'");
+            DataTable comtab = DBhelper.ExecuteDataTable(sqlb.ToString(), null);
+            foreach (DataRow row in comtab.Rows) {
+                if (comdic.ContainsKey(row["key"].ToString()))
+                    comdic[row["key"].ToString()] = row["value"].ToString();
+                else
+                    comdic.Add(row["key"].ToString(), row["value"].ToString());
+            }
+        }
+
+        public static Dictionary<string, string> GetCommandDic(string brand, string model) {
+            Dictionary<string, string> comdic = new Dictionary<string, string>();
+            StringBuilder sqlb = new StringBuilder();
+            sqlb.Append("select key,value from devicecommand left join devicebrand ")
+                .Append("on devicecommand.comid=devicebrand.comid where brand='")
+                .Append(brand).Append("' and model='")
+                .Append(model).Append("'");
+            DataTable comtab = DBhelper.ExecuteDataTable(sqlb.ToString(), null);
+            foreach (DataRow row in comtab.Rows) {
+                comdic.Add(row["key"].ToString(), row["value"].ToString());
+            }
+
+            return comdic;
+        }
+
+        public static string GetClassName(string brand, string model) {
+            StringBuilder sqlb = new StringBuilder();
+            sqlb.Append("select class from devicebrand where brand='")
+                .Append(brand).Append("' and model='")
+                .Append(model).Append("'");
+            DataTable comtab = DBhelper.ExecuteDataTable(sqlb.ToString(), null);
+
+            return comtab.Rows[0]["class"].ToString();
+        }
+
         public static BSDevice.Device HuaWeiFactory(Linker _linker) {
             if (_linker == null) return null;
             HuaweiDevice devhua = new HuaweiDevice(_linker);
+            DeviceBaseInfo devinfo = devhua.GetBaseInfo();
 
-            string txt = devhua.GetVersion();
-            Stream txtstr = new MemoryStream(ASCIIEncoding.Default.GetBytes(txt));
-            StreamReader txtreader = new StreamReader(txtstr);
-            string txtline;
+            Type type = Type.GetType(GetClassName(devinfo.brand, devinfo.model));
+            Device dev = System.Activator.CreateInstance(type, new object[] { _linker, devhua.comdic }) as Device;
+            dev.SuperMe();
+            return dev;
+        }
 
-            //string br = "HUAWEI";
-            string uptime = "uptime is";
-            string softw = "software,";
-            string model = null;
+        public static BSDevice.Device CiscoFactory(Linker _linker) {
+            if (_linker == null) return null;
+            CiscoDevice devcisco = new CiscoDevice(_linker);
+            DeviceBaseInfo devinfo = devcisco.GetBaseInfo();
 
-            while (!txtreader.EndOfStream) {
-                txtline = txtreader.ReadLine();
-                //if (txtline.ToUpper().Contains(br)) baseInfo.brand = br;
-
-                int flag = txtline.IndexOf(softw);
-                if (flag > 0)
-                    softw = txtline.Substring(flag + softw.Length);
-
-                flag = txtline.IndexOf(uptime);
-                if (flag > 0) {
-                    model = txtline.Substring(0, flag - 1).Trim();
-                    uptime = txtline.Substring(flag + uptime.Length);
-                    break;
-                }
-            }
-            string[] devarr = model.Split(' ');
-            string modeldb = devarr[0] + ' ' + devarr[1];
-            Dictionary<string, string> devdic = null;
-            string classname = null;
-
-            GetCommandDicAndClassName(devhua.baseInfo.brand, model, ref devdic, ref classname);
-
-            Type type = Type.GetType(classname);
-            Device dev = System.Activator.CreateInstance(type, new object[] {_linker}) as Device;
-            dev.comdic = devdic;
-            dev.baseInfo.runtime = uptime;
-            dev.baseInfo.softver = softw;
+            Type type = Type.GetType(GetClassName(devinfo.brand, devinfo.model));
+            Device dev = System.Activator.CreateInstance(type, new object[] { _linker, devcisco.comdic }) as Device;
             dev.SuperMe();
             return dev;
         }

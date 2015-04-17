@@ -37,6 +37,19 @@ namespace BScrip.BSDevice {
         protected bool isSuper = false;
         public DeviceBaseInfo baseInfo;
 
+        public Device(Linker _lin, Dictionary<string, string> _comdic, string brand, string model) {
+            lin = _lin;
+            baseInfo = new DeviceBaseInfo();
+            baseInfo.brand = brand;
+            baseInfo.model = model;
+            if (_comdic == null)
+                comdic = StaticFun.GetCommandDic(baseInfo.brand, baseInfo.model);
+            else {
+                comdic = _comdic;
+                StaticFun.AddCommandDic(baseInfo.brand, baseInfo.model, ref comdic);
+            }
+        }
+
         public string CONFIGURATION_STR {
             get { return comdic["CONFIGURATION_STR"]; }
         }
@@ -82,16 +95,16 @@ namespace BScrip.BSDevice {
 
         public static Device DeviceFactory(Linker lin) {
             if (lin.Connect().Contains("User Access Verification"))
-                return new CiscoSwitch(lin);
-            return new HuaweiDevice(lin);
+                return StaticFun.CiscoFactory(lin);
+            return StaticFun.HuaWeiFactory(lin);
         }
-        
-        public virtual Device ClassFactory() { return null; }
-        public virtual void SuperMe() { }        
-        public abstract string GetConfiguration();
-        protected abstract string GetMessage(string com);
-        public abstract string GetVersion();
 
+        protected abstract string GetMessage(string com, string end);
+        public abstract DeviceBaseInfo GetBaseInfo();
+
+        public virtual string GetConfiguration() { return GetMessage(CONFIGURATION_STR, CONFIGEND_MARK_STR); }
+        public virtual string GetVersion() { return GetMessage(VERSION_STR, LEVEL3_MARK_STR); }
+        public virtual void SuperMe() { }
         public virtual void Close() {
             lin.Close();
             lin = null;
@@ -99,16 +112,10 @@ namespace BScrip.BSDevice {
     }
 
     public class HuaweiDevice : Device {
-        public HuaweiDevice(Linker _lin) {
-            base.lin = _lin;
-            baseInfo.brand = "HUAWEI";
-            baseInfo.model = "BASE";
-            string classname = null;
-            StaticFun.GetCommandDicAndClassName(baseInfo.brand, baseInfo.model
-                , ref comdic, ref classname);
-        }
+        public HuaweiDevice(Linker _lin, Dictionary<string, string> _comdic = null)
+            : base(_lin, _comdic, "HUAWEI", "BASE") { }
 
-        protected override string GetMessage(string com) {
+        protected override string GetMessage(string com, string end) {
             lin.Send(SYS_MARK_STR);
             lin.Read();
             string r = lin.ToSuperUserInterface();
@@ -121,7 +128,7 @@ namespace BScrip.BSDevice {
             lin.Send(com);
             string message = lin.Read().TrimEnd();
 
-            while (!message.Contains(CONFIGEND_MARK_STR)) {
+            while (!message.Contains(end)) {
                 message += lin.Read().TrimEnd();
             }
 
@@ -130,10 +137,6 @@ namespace BScrip.BSDevice {
             lin.Send(QUIT_STR);
             lin.WaitFor(LEVEL3_MARK_STR);
             return message;
-        }
-
-        public override string GetConfiguration() {
-            return GetMessage(CONFIGURATION_STR);
         }
 
         public override void SuperMe() {
@@ -153,26 +156,40 @@ namespace BScrip.BSDevice {
                 throw new Exception("Failed WaitFor: LEVEL_MARK_STR");
             isSuper = true;
         }
+        
+        public override DeviceBaseInfo GetBaseInfo() {
+            string txt = GetVersion();
+            Stream txtstr = new MemoryStream(ASCIIEncoding.Default.GetBytes(txt));
+            StreamReader txtreader = new StreamReader(txtstr);
+            string txtline;
+            string runtime = "uptime is ";
+            string softw = "software, Version ";
+            string model = null;
 
-        public override string GetVersion() {
-            return GetMessage(VERSION_STR);
+            while (!txtreader.EndOfStream) {
+                txtline = txtreader.ReadLine();
+                int flag = txtline.IndexOf(softw);
+                if (flag > 0)
+                    baseInfo.softver = txtline.Substring(flag + softw.Length);
+
+                flag = txtline.IndexOf(runtime);
+                if (flag > 0) {
+                    model = txtline.Substring(0, flag - 1).Trim();
+                    baseInfo.runtime = txtline.Substring(flag + runtime.Length);
+                    break;
+                }
+            }
+            string[] devarr = model.Split(' ');
+            baseInfo.model = devarr[0] + ' ' + devarr[1];
+            return baseInfo;
         }
     }
 
-    public class CiscoSwitch : Device {
-        public CiscoSwitch(Linker _lin) {
-            DataTable comtab = DBhelper.ExecuteDataTable(
-                "select key,value from devicecommand where devicetype="
-                + (int)(DeviceType.Switch) + " and brandtype="
-                + (int)(Brand.Cisco), null);
-            foreach (DataRow row in comtab.Rows) {
-                comdic.Add(row["key"].ToString(), row["value"].ToString());
-            }
+    public class CiscoDevice : Device {
+        public CiscoDevice(Linker _lin, Dictionary<string, string> _comdic = null)
+            : base(_lin, _comdic, "Cisco", "BASE") { }
 
-            base.lin = _lin;
-        }
-
-        public override string GetConfiguration() {
+        protected override string GetMessage(string com, string end) {
             lin.Send(SYS_MARK_STR);
             lin.Read();
             string r = lin.ToUserInterface();
@@ -190,11 +207,11 @@ namespace BScrip.BSDevice {
             lin.WaitFor(LEVEL3_MARK_STR);
 
 
-            lin.Send(CONFIGURATION_STR);
-            string sessionLog = lin.Read().TrimEnd();
+            lin.Send(com);
+            string message = lin.Read().TrimEnd();
 
-            while (!sessionLog.Contains(CONFIGEND_MARK_STR)) {
-                sessionLog += lin.Read().TrimEnd();
+            while (!message.Contains(end)) {
+                message += lin.Read().TrimEnd();
             }
 
             lin.Send(CONFIGURATION_MODE_STR);
@@ -207,16 +224,37 @@ namespace BScrip.BSDevice {
             lin.WaitFor(LEVEL3_MARK_STR);
             lin.Send(QUIT_STR);
             lin.WaitFor(LEVEL3_MARK_STR);
-            return sessionLog;
+            return message;
         }
 
-        protected override string GetMessage(string com) {
-            throw new NotImplementedException();
-        }
+        public override DeviceBaseInfo GetBaseInfo() {
+            string txt = GetVersion();
+            Stream txtstr = new MemoryStream(ASCIIEncoding.Default.GetBytes(txt));
+            StreamReader txtreader = new StreamReader(txtstr);
+            string txtline;
+            string runtime = "uptime is ";
+            string softw = "software ";
+            string model = null;
 
-        public override string GetVersion() {
-            throw new NotImplementedException();
+            while (!txtreader.EndOfStream) {
+                txtline = txtreader.ReadLine();
+                int flag = txtline.IndexOf(softw);
+                if (flag > 0)
+                    baseInfo.softver = txtline.Substring(flag + softw.Length).Trim();
+
+                flag = txtline.IndexOf(runtime);
+                if (flag > 0)
+                    baseInfo.runtime = txtline.Substring(flag + runtime.Length).Trim();
+
+                flag = txtline.IndexOf("processor");
+                if (flag > 0) {
+                    model = txtline.Substring(0, flag - 1).Trim();
+                    break;
+                }
+            }
+            string[] devarr = model.Split(' ');
+            baseInfo.model = devarr[0] + ' ' + devarr[1];
+            return baseInfo;
         }
     }
-
 }
