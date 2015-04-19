@@ -19,12 +19,30 @@ namespace BScrip.BSDevice {
         Cisco = 30
     }
 
+    public struct ResourcesUtilization {
+        public string slotname;
+        public int s5;
+        public int m1;
+        public int m5;
+        public int max;
+        public string maxtime;
+    }
+
     public class DeviceBaseInfo {
         public string brand;
         public string devicetype;
         public string model;
         public string softver;
         public string runtime;
+        public string other;
+
+        public override string ToString() {
+            StringBuilder strb = new StringBuilder();
+            strb.Append("厂商:").Append(brand).Append("\t型号:").Append(model)
+                .Append(Environment.NewLine).Append("系统版本:").Append(softver)
+                .Append("\t运行时间:").Append(runtime);
+            return strb.ToString();
+        }
     }
 
     public abstract class Device {
@@ -36,8 +54,9 @@ namespace BScrip.BSDevice {
         public string SuperPassWord = null;
         protected bool isSuper = false;
         public DeviceBaseInfo baseInfo;
+        public DataTable SoltInfo;
 
-        public Device(Linker _lin, Dictionary<string, string> _comdic, string brand, string model) {
+        public virtual void Init(Linker _lin, Dictionary<string, string> _comdic, string brand, string model){
             lin = _lin;
             baseInfo = new DeviceBaseInfo();
             baseInfo.brand = brand;
@@ -92,6 +111,9 @@ namespace BScrip.BSDevice {
         public string CONFIGURATION_MODE_STR {
             get { return comdic["CONFIGURATION_MODE_STR"]; }
         }
+        public string DEVICE_STR {
+            get { return comdic["DEVICE_STR"]; }
+        }
 
         public static Device DeviceFactory(Linker lin) {
             if (lin.Connect().Contains("User Access Verification"))
@@ -104,7 +126,13 @@ namespace BScrip.BSDevice {
 
         public virtual string GetConfiguration() { return GetMessage(CONFIGURATION_STR, CONFIGEND_MARK_STR); }
         public virtual string GetVersion() { return GetMessage(VERSION_STR, LEVEL3_MARK_STR); }
+        public virtual string GetDeviceInfo() { return GetMessage(DEVICE_STR, LEVEL3_MARK_STR); }
+        public virtual List<ResourcesUtilization> GetCpuUsage() { return null; }
+        public virtual List<ResourcesUtilization> GetMemUsage() { return null; }
+        public virtual DataTable GetInterfaceBrif() { return null; }
         public virtual void SuperMe() { }
+        public virtual DataTable GetSoltInfo() { return SoltInfo; }
+
         public virtual void Close() {
             lin.Close();
             lin = null;
@@ -112,8 +140,13 @@ namespace BScrip.BSDevice {
     }
 
     public class HuaweiDevice : Device {
-        public HuaweiDevice(Linker _lin, Dictionary<string, string> _comdic = null)
-            : base(_lin, _comdic, "HUAWEI", "BASE") { }
+        public HuaweiDevice(Linker _lin, Dictionary<string, string> _comdic = null){
+            Init(_lin, _comdic, "HUAWEI", "BASE");
+        }
+
+        public HuaweiDevice(Linker _lin, Dictionary<string, string> _comdic, string brand, string model) {
+            Init(_lin, _comdic, brand, model);
+        }
 
         protected override string GetMessage(string com, string end) {
             lin.Send(SYS_MARK_STR);
@@ -158,9 +191,7 @@ namespace BScrip.BSDevice {
         }
         
         public override DeviceBaseInfo GetBaseInfo() {
-            string txt = GetVersion();
-            Stream txtstr = new MemoryStream(ASCIIEncoding.Default.GetBytes(txt));
-            StreamReader txtreader = new StreamReader(txtstr);
+            StreamReader txtreader = StaticFun.StrToStream(GetVersion());
             string txtline;
             string runtime = "uptime is ";
             string softw = "software, Version ";
@@ -179,6 +210,9 @@ namespace BScrip.BSDevice {
                     break;
                 }
             }
+            while (!(txtline = txtreader.ReadLine()).Contains(LEVEL3_MARK_STR))
+                baseInfo.other += txtline;
+            
             string[] devarr = model.Split(' ');
             baseInfo.model = devarr[0] + ' ' + devarr[1];
             return baseInfo;
@@ -186,8 +220,9 @@ namespace BScrip.BSDevice {
     }
 
     public class CiscoDevice : Device {
-        public CiscoDevice(Linker _lin, Dictionary<string, string> _comdic = null)
-            : base(_lin, _comdic, "Cisco", "BASE") { }
+        public CiscoDevice(Linker _lin, Dictionary<string, string> _comdic = null){
+            Init(_lin, _comdic, "Cisco", "BASE");
+        }
 
         protected override string GetMessage(string com, string end) {
             lin.Send(SYS_MARK_STR);

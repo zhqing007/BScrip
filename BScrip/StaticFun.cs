@@ -114,6 +114,11 @@ namespace BScrip {
             return comtab.Rows[0]["class"].ToString();
         }
 
+        public static StreamReader StrToStream(string txt) {
+            Stream txtstr = new MemoryStream(ASCIIEncoding.Default.GetBytes(txt));
+            return new StreamReader(txtstr);
+        }
+
         public static BSDevice.Device HuaWeiFactory(Linker _linker) {
             if (_linker == null) return null;
             HuaweiDevice devhua = new HuaweiDevice(_linker);
