@@ -23,12 +23,11 @@ namespace BScrip.BSDevice {
             SoltInfo.Columns.Add("Primary", typeof(string));
 
             StreamReader devinfo = StaticFun.StrToStream(GetDeviceInfo());
-            devinfo.ReadLine();
-            devinfo.ReadLine();
-            devinfo.ReadLine();
+            while (!devinfo.ReadLine().Contains("- - - -")) ;
             string[] devstrs;
             while (!devinfo.EndOfStream) {
                 devstrs = devinfo.ReadLine().Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
+                if (devstrs[2].Length == 1 || devstrs[7].Length != 2) break;
                 SoltInfo.Rows.Add(devstrs);
             }
             return SoltInfo;
@@ -36,6 +35,7 @@ namespace BScrip.BSDevice {
 
         private ResourcesUtilization GetOneCpuUsage(string cpuu) {
             StreamReader strreader = StaticFun.StrToStream(cpuu);
+            strreader.ReadLine();
             strreader.ReadLine();
             string str = strreader.ReadLine();
             ResourcesUtilization ru = new ResourcesUtilization();
@@ -102,10 +102,10 @@ namespace BScrip.BSDevice {
             StreamReader devinforeader = StaticFun.StrToStream(GetMessage("display int brief", LEVEL3_MARK_STR));
             string str;
             while ((str = devinforeader.ReadLine()).IndexOf("Interface") < 0) ;
-            devinforeader.ReadLine();
             string[] intfarray;
             while (!devinforeader.EndOfStream) {
-                intfarray = devinforeader.ReadLine().Split(new char[] { ' ' }, 5, System.StringSplitOptions.RemoveEmptyEntries);
+                if ((str = devinforeader.ReadLine()).IndexOf(LEVEL3_MARK_STR) >= 0) break;                
+                intfarray = str.Split(new char[] { ' ' }, 5, System.StringSplitOptions.RemoveEmptyEntries);
                 intInfo.Rows.Add(intfarray);
             }
             return intInfo;

@@ -51,9 +51,26 @@ namespace BScrip.BSForms {
                     slotser.Legend = this.cpuresourceschart.Legends[0].Name;
                     slotser.Name = cpuu.slotname;
                     this.cpuresourceschart.Series.Add(slotser);
+                    slotser = new Series();
+                    slotser.BorderWidth = 3;
+                    slotser.ChartArea = this.cpuresourceschart.ChartAreas[0].Name;
+                    slotser.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                    slotser.Legend = this.cpuresourceschart.Legends[0].Name;
+                    slotser.Name = cpuu.slotname;
+                    this.memresourceschart.Series.Add(slotser);
                 }
 
                 RefreshData();
+                devbaseinfo.AppendText(dbi.ToString());
+
+                while (true) {
+                    Thread.Sleep(refreshtimespan);
+                    cpurulist = dev.GetCpuUsage();
+                    memrulist = dev.GetMemUsage();
+                    intfinfo = dev.GetInterfaceBrif();
+                    RefreshData();
+                }
+                
             }
             catch (Exception exc) {
                 //Addstr(_server, "导出配置出现异常：" + exc.StackTrace);
@@ -61,35 +78,25 @@ namespace BScrip.BSForms {
         }
 
         private void bGWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-            devbaseinfo.AppendText(dbi.ToString());
+            
         }
 
         private void refreshinfobg_DoWork(object sender, DoWorkEventArgs e) {
-            Thread.Sleep(refreshtimespan);
-            cpurulist = dev.GetCpuUsage();
-            memrulist = dev.GetMemUsage();
-            intfinfo = dev.GetInterfaceBrif();
-            foreach (ResourcesUtilization cpuu in cpurulist) {
-                //cpuresourceschart.Series[cpuu.slotname].Points.AddXY(cpuu.s5);
-                if (cpuresourceschart.Series[0].Points.Count > cpuresourceschart.ChartAreas[0].AxisX.Maximum)
-                    cpuresourceschart.Series[0].Points.RemoveAt(0);
-            }
             
-            
-
-
-
-            RefreshData();
         }
 
         private void RefreshData() {
-            foreach (ResourcesUtilization cpuu in cpurulist) {
+            for (int i = 0; i < cpurulist.Count; ++i) {
+                cpuresourceschart.Series[i].Points.AddY(cpurulist[i].s5);
+                if (cpuresourceschart.Series[i].Points.Count > cpuresourceschart.ChartAreas[0].AxisX.Maximum)
+                    cpuresourceschart.Series[i].Points.RemoveAt(0);
+            }
 
+            for (int i = 0; i < memrulist.Count; ++i) {
+                memresourceschart.Series[i].Points.AddY(memrulist[i].max);
+                if (memresourceschart.Series[i].Points.Count > memresourceschart.ChartAreas[0].AxisX.Maximum)
+                    memresourceschart.Series[i].Points.RemoveAt(0);
             }
         }
-
-
-
-
     }
 }

@@ -40,7 +40,7 @@ namespace BScrip.BSDevice {
             StringBuilder strb = new StringBuilder();
             strb.Append("厂商:").Append(brand).Append("\t型号:").Append(model)
                 .Append(Environment.NewLine).Append("系统版本:").Append(softver)
-                .Append("\t运行时间:").Append(runtime);
+                .Append(Environment.NewLine).Append("运行时间:").Append(runtime);
             return strb.ToString();
         }
     }
@@ -215,6 +215,7 @@ namespace BScrip.BSDevice {
             
             string[] devarr = model.Split(' ');
             baseInfo.model = devarr[0] + ' ' + devarr[1];
+            GetSoltInfo();
             return baseInfo;
         }
     }
