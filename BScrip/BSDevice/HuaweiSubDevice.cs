@@ -93,11 +93,11 @@ namespace BScrip.BSDevice {
 
         public override DataTable GetInterfaceBrif() {
             DataTable intInfo = new DataTable();
-            intInfo.Columns.Add("Interface", typeof(string));
-            intInfo.Columns.Add("PHY", typeof(string));
-            intInfo.Columns.Add("Protocol", typeof(string));
-            intInfo.Columns.Add("InUti", typeof(string));
-            intInfo.Columns.Add("OutUti", typeof(string));
+            intInfo.Columns.Add("端口", typeof(string));
+            intInfo.Columns.Add("物理链路", typeof(string));
+            intInfo.Columns.Add("数据链路", typeof(string));
+            intInfo.Columns.Add("输入流量", typeof(string));
+            intInfo.Columns.Add("输出流量", typeof(string));
 
             StreamReader devinforeader = StaticFun.StrToStream(GetMessage("display int brief", LEVEL3_MARK_STR));
             string str;
@@ -106,6 +106,7 @@ namespace BScrip.BSDevice {
             while (!devinforeader.EndOfStream) {
                 if ((str = devinforeader.ReadLine()).IndexOf(LEVEL3_MARK_STR) >= 0) break;                
                 intfarray = str.Split(new char[] { ' ' }, 5, System.StringSplitOptions.RemoveEmptyEntries);
+                intfarray[4] = intfarray[4].Substring(0, intfarray[4].IndexOf(' '));
                 intInfo.Rows.Add(intfarray);
             }
             return intInfo;

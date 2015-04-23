@@ -27,7 +27,6 @@
             this.HostView = new System.Windows.Forms.ListView();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToBackUp = new System.Windows.Forms.ToolStripMenuItem();
-            this.addToTimerB = new System.Windows.Forms.ToolStripMenuItem();
             this.hostDetails = new System.Windows.Forms.ToolStripMenuItem();
             this.selectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.modifyHost = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,62 +58,54 @@
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addToBackUp,
-            this.addToTimerB,
             this.hostDetails,
             this.selectAll,
             this.modifyHost,
             this.addHost,
             this.deleteHost});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(184, 172);
+            this.contextMenuStrip.Size = new System.Drawing.Size(169, 170);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // addToBackUp
             // 
             this.addToBackUp.Name = "addToBackUp";
-            this.addToBackUp.Size = new System.Drawing.Size(183, 24);
+            this.addToBackUp.Size = new System.Drawing.Size(168, 24);
             this.addToBackUp.Text = "添加到备份";
             this.addToBackUp.Click += new System.EventHandler(this.addToBackUp_Click);
-            // 
-            // addToTimerB
-            // 
-            this.addToTimerB.Name = "addToTimerB";
-            this.addToTimerB.Size = new System.Drawing.Size(183, 24);
-            this.addToTimerB.Text = "添加到定时备份";
-            this.addToTimerB.Click += new System.EventHandler(this.addToTimerB_Click);
             // 
             // hostDetails
             // 
             this.hostDetails.Name = "hostDetails";
-            this.hostDetails.Size = new System.Drawing.Size(183, 24);
+            this.hostDetails.Size = new System.Drawing.Size(168, 24);
             this.hostDetails.Text = "查看运行数据";
             this.hostDetails.Click += new System.EventHandler(this.showInfo_Click);
             // 
             // selectAll
             // 
             this.selectAll.Name = "selectAll";
-            this.selectAll.Size = new System.Drawing.Size(183, 24);
+            this.selectAll.Size = new System.Drawing.Size(168, 24);
             this.selectAll.Text = "全选";
             this.selectAll.Click += new System.EventHandler(this.selectAllHosts_Click);
             // 
             // modifyHost
             // 
             this.modifyHost.Name = "modifyHost";
-            this.modifyHost.Size = new System.Drawing.Size(183, 24);
+            this.modifyHost.Size = new System.Drawing.Size(168, 24);
             this.modifyHost.Text = "修改";
             this.modifyHost.Click += new System.EventHandler(this.modifyHost_Click);
             // 
             // addHost
             // 
             this.addHost.Name = "addHost";
-            this.addHost.Size = new System.Drawing.Size(183, 24);
+            this.addHost.Size = new System.Drawing.Size(168, 24);
             this.addHost.Text = "添加";
             this.addHost.Click += new System.EventHandler(this.add_Click);
             // 
             // deleteHost
             // 
             this.deleteHost.Name = "deleteHost";
-            this.deleteHost.Size = new System.Drawing.Size(183, 24);
+            this.deleteHost.Size = new System.Drawing.Size(168, 24);
             this.deleteHost.Text = "删除";
             this.deleteHost.Click += new System.EventHandler(this.del_Click);
             // 
@@ -199,6 +190,5 @@
         private System.Windows.Forms.ToolStripMenuItem modifyHost;
         private System.Windows.Forms.ToolStripMenuItem hostDetails;
         private System.Windows.Forms.ToolStripMenuItem addToBackUp;
-        private System.Windows.Forms.ToolStripMenuItem addToTimerB;
     }
 }

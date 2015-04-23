@@ -10,8 +10,7 @@ using System.Threading;
 
 namespace BScrip.BSForms {
     public partial class TimerBackUpForm : BSForm {
-        private System.Threading.Timer locTimer;
-        private System.Threading.Timer remoteTimer;
+        private System.Threading.Timer locTimer; 
 
         public TimerBackUpForm() {
             InitializeComponent();
@@ -27,6 +26,8 @@ namespace BScrip.BSForms {
                 remoser_re.Tag = dfs;
                 remoser_re.Text = dfs.hostname;
             }
+            EnableTimerItems(false);
+            EnableUploadItems(false);
         }
 
         private void moveRightB_t_Click(object sender, EventArgs e) {
@@ -81,14 +82,13 @@ namespace BScrip.BSForms {
             TimerConfGeter tgeter = new TimerConfGeter();
             TimerStruct ts = new TimerStruct();
             ts.hosts = hostlist;
-            ts.logbox = this.timerLogTBox;
             ts.upLoadServer = upserver;
 
             t = new System.Threading.Timer(new TimerCallback(tgeter.fun), ts, beginTime, span);
             return true;
         }
 
-        private void timerLocBu_Click(object sender, EventArgs e) {
+        private void GetConfiguration_Timer() {
             if (this.timerBackUpL.Items.Count <= 0) {
                 MessageBox.Show("没有要备份的主机！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -102,50 +102,49 @@ namespace BScrip.BSForms {
                 isbegin = BeginBackUp(ref this.locTimer, null);
             if (!isbegin) return;
             this.stopLocal.Enabled = true;
-            this.timerLocBu.Enabled = false;
+            this.getConfB.Enabled = false;
             SetLocalCircle(Color.Green);
         }
 
-        private void timerRemBu_Click(object sender, EventArgs e) {
-            if (this.timerBackUpL.Items.Count <= 0) {
-                MessageBox.Show("没有要备份的主机！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            FileTransfer tranHost = new FileTransfer();
-            tranHost.ShowDialog();
-            if (tranHost.DialogResult != DialogResult.OK) return;
+        //private void timerRemBu_Click(object sender, EventArgs e) {
+        //    if (this.timerBackUpL.Items.Count <= 0) {
+        //        MessageBox.Show("没有要备份的主机！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //        return;
+        //    }
+        //    FileTransfer tranHost = new FileTransfer();
+        //    tranHost.ShowDialog();
+        //    if (tranHost.DialogResult != DialogResult.OK) return;
 
-            if (!BeginBackUp(ref this.remoteTimer, tranHost.GetServer())) return;
-            this.stopRemote.Enabled = true;
-            this.timerRemBu.Enabled = false;
-            SetLocalCircle(Color.Green);
-        }
+        //    if (!BeginBackUp(ref this.remoteTimer, tranHost.GetServer())) return;
+        //    this.stopRemote.Enabled = true;
+        //    this.timerRemBu.Enabled = false;
+        //    SetLocalCircle(Color.Green);
+        //}
 
         private void stopLocal_Click(object sender, EventArgs e) {
             this.locTimer.Dispose();
             this.stopLocal.Enabled = false;
-            this.timerLocBu.Enabled = true;
+            this.getConfB.Enabled = true;
             SetLocalCircle(Color.Red);
         }
 
-        private void stopRemote_Click(object sender, EventArgs e) {
-            this.remoteTimer.Dispose();
-            this.stopRemote.Enabled = false;
-            this.timerRemBu.Enabled = true;
-            SetRemoteCircle(Color.Red);
-        }
+        //private void stopRemote_Click(object sender, EventArgs e) {
+        //    this.remoteTimer.Dispose();
+        //    this.stopRemote.Enabled = false;
+        //    this.timerRemBu.Enabled = true;
+        //    SetRemoteCircle(Color.Red);
+        //}
 
         private Color localColor = Color.Red;
-        private Color remoteColor = Color.Red;
         private void SetLocalCircle(Color c) {
             localColor = c;
             localIsRunningPic.Invalidate();
         }
 
-        private void SetRemoteCircle(Color c) {
-            remoteColor = c;
-            remoteIsRunningPic.Invalidate();
-        }
+        //private void SetRemoteCircle(Color c) {
+        //    remoteColor = c;
+        //    remoteIsRunningPic.Invalidate();
+        //}
 
         private void DrawPicBoxCircle(PictureBox pb, Graphics g, Color c) {
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -157,9 +156,9 @@ namespace BScrip.BSForms {
             DrawPicBoxCircle(sender as PictureBox, e.Graphics, localColor);
         }
 
-        private void remoteIsRunningPic_Paint(object sender, PaintEventArgs e) {
-            DrawPicBoxCircle(sender as PictureBox, e.Graphics, remoteColor);
-        }
+        //private void remoteIsRunningPic_Paint(object sender, PaintEventArgs e) {
+        //    DrawPicBoxCircle(sender as PictureBox, e.Graphics, remoteColor);
+        //}
 
         private void selserver_re_Click(object sender, EventArgs e) {
             FileTransfer tranHost = new FileTransfer();
@@ -170,22 +169,63 @@ namespace BScrip.BSForms {
             remoser_re.Text = ser.hostname;
         }
 
+        private void EnableUploadItems(bool en) {
+            label2.Enabled = en;
+            remoser_re.Enabled = en;
+            selserver_re.Enabled = en;
+        }
+
         private void isUpLoad_re_CheckedChanged(object sender, EventArgs e) {
             if (!(sender as CheckBox).Checked) {
-                selserver_re.Enabled = false;
+                EnableUploadItems(false);
                 return;
             }
-            selserver_re.Enabled = true;
+            EnableUploadItems(true);
             if (remoser_re.Tag != null) return;
             selserver_re_Click(sender, e);
             if (remoser_re.Tag == null)
                 isUpLoad_re.Checked = false;
         }
+
+        private void getConfB_Click(object sender, EventArgs e) {
+            if (isTimercheckbox.Checked)
+                GetConfiguration_Timer();
+            else
+                GetConfiguration();
+        }
+
+        private void GetConfiguration() {
+            if (timerBackUpL.Items.Count <= 0) {
+                MessageBox.Show("没有要备份的主机！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            List<Host> hostlist = new List<Host>();
+            foreach (object item in timerBackUpL.Items) {
+                hostlist.Add((item as ListViewItem).Tag as Host);
+            }
+            Host _server = null;
+            if (isUpLoad_re.Checked) _server = remoser_re.Tag as Host;
+            BSThread.ConfThread confth = new BSThread.ConfThread(hostlist, _server);
+            Thread logThread = new Thread(new ThreadStart(confth.GetConfInThread));
+            logThread.Start();
+        }
+
+        private void EnableTimerItems(bool en) {
+            this.label1.Enabled = en;
+            this.beginTimePicker.Enabled = en;
+            this.groupBox1.Enabled = en;
+            this.stopLocal.Enabled = en;
+            this.localIsRunningPic.Enabled = en;
+        }
+
+        private void isTimercheckbox_CheckedChanged(object sender, EventArgs e) {
+            EnableTimerItems((sender as CheckBox).Checked);
+        }
     }
 
     public class TimerStruct {
         public List<Host> hosts;
-        public TextBox logbox;
         public Host upLoadServer;
     }
 
@@ -200,8 +240,7 @@ namespace BScrip.BSForms {
             }
 
             TimerStruct ts = sender as TimerStruct;
-            BSThread.ConfThread conf = new BSThread.ConfThread(ts.logbox, ts.hosts);
-            conf.server = ts.upLoadServer;
+            BSThread.ConfThread conf = new BSThread.ConfThread(ts.hosts, ts.upLoadServer);
             conf.GetConfNoThread();
 
             lock (locker) {

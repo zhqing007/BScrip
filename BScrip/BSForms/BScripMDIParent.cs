@@ -12,17 +12,26 @@ namespace BScrip.BSForms {
         public static BScripMDIParent onlyOneMDI = null;
 
         private int childFormNumber = 0;
-        private BSForms.BackUpConfForm backUpMDIChild = null;
+        //private BSForms.BackUpConfForm backUpMDIChild = null;
         private TimerBackUpForm timerBUMDIChild = null;
         private BSForms.DeviceViewer switchCMDIChild = null;
 
         public BScripMDIParent() {
+            WelcomeForm fw = new WelcomeForm();
+            fw.ShowDialog();//show出欢迎窗口 
+
             InitializeComponent();
             HostsForm.allhostsform = new HostsForm();
             HostsForm.allhostsform.MdiParent = this;
             HostsForm.allhostsform.Parent = splitContainer1.Panel1;
             HostsForm.allhostsform.Dock = DockStyle.Fill;
             HostsForm.allhostsform.Show();
+            timerBackUp_Click(null, null);
+            LogMessageForm.logForm = new LogMessageForm();
+            LogMessageForm.logForm.MdiParent = this;
+            LogMessageForm.logForm.Parent = splitContainer2.Panel2;
+            LogMessageForm.logForm.Dock = DockStyle.Fill;
+            LogMessageForm.logForm.Show();
         }
 
         private void ShowNewForm(object sender, EventArgs e) {
@@ -93,31 +102,31 @@ namespace BScrip.BSForms {
             }
         }
 
-        private void BackUpConf_Click(object sender, EventArgs e) {
-            splitContainer1.Panel2.Controls.Clear();
-            if (backUpMDIChild == null || backUpMDIChild.IsDisposed) {
-                backUpMDIChild = new BSForms.BackUpConfForm();
-                backUpMDIChild.MdiParent = this;
-                backUpMDIChild.Parent = splitContainer1.Panel2;
-                backUpMDIChild.Dock = DockStyle.Fill;
-                backUpMDIChild.Show();
-            }
-            else
-                splitContainer1.Panel2.Controls.Add(backUpMDIChild);
+        //private void BackUpConf_Click(object sender, EventArgs e) {
+        //    splitContainer2.Panel1.Controls.Clear();
+        //    if (backUpMDIChild == null || backUpMDIChild.IsDisposed) {
+        //        backUpMDIChild = new BSForms.BackUpConfForm();
+        //        backUpMDIChild.MdiParent = this;
+        //        backUpMDIChild.Parent = splitContainer2.Panel1;
+        //        backUpMDIChild.Dock = DockStyle.Fill;
+        //        backUpMDIChild.Show();
+        //    }
+        //    else
+        //        splitContainer2.Panel1.Controls.Add(backUpMDIChild);
             
-        }
+        //}
 
         private void timerBackUp_Click(object sender, EventArgs e) {
-            splitContainer1.Panel2.Controls.Clear();
+            splitContainer2.Panel1.Controls.Clear();
             if (timerBUMDIChild == null || timerBUMDIChild.IsDisposed) {
                 timerBUMDIChild = new TimerBackUpForm();
                 timerBUMDIChild.MdiParent = this;
-                timerBUMDIChild.Parent = splitContainer1.Panel2;
+                timerBUMDIChild.Parent = splitContainer2.Panel1;
                 timerBUMDIChild.Dock = DockStyle.Fill;
                 timerBUMDIChild.Show();
             }
             else
-                splitContainer1.Panel2.Controls.Add(timerBUMDIChild);
+                splitContainer2.Panel1.Controls.Add(timerBUMDIChild);
         }
 
         private void showInfo_Click(object sender, EventArgs e) {
@@ -125,12 +134,10 @@ namespace BScrip.BSForms {
         }
 
         public void AddHost(Host h = null, bool timer = false) {
-            if (timer)
-                timerBackUp_Click(null, null);
-            else
-                BackUpConf_Click(null, null);
-            BSForm bsf = splitContainer1.Panel2.Controls[0] as BSForm;
-            bsf.AddHost(h);
+            timerBackUp_Click(null, null);
+            BSForm bsf = splitContainer2.Panel1.Controls[0] as BSForm;
+            if(bsf != null)
+                bsf.AddHost(h);
         }
 
         public void ShowSwitchInfo() {
@@ -150,7 +157,9 @@ namespace BScrip.BSForms {
             else
                 splitContainer1.Panel2.Controls.Add(switchCMDIChild);
         }
+    }
 
-
+    public abstract class BSForm : Form {
+        public abstract void AddHost(Host h = null);
     }
 }

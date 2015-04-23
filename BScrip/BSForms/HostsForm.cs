@@ -119,7 +119,6 @@ namespace BScrip.BSForms {
         }
 
         private void setMenuVisible(bool visible) {
-            addToTimerB.Visible = visible;
             addToBackUp.Visible = visible;
             deleteHost.Visible = visible;
             modifyHost.Visible = visible;
@@ -136,10 +135,6 @@ namespace BScrip.BSForms {
 
         private void addToBackUp_Click(object sender, EventArgs e) {
             BSForms.BScripMDIParent.onlyOneMDI.AddHost();
-        }
-
-        private void addToTimerB_Click(object sender, EventArgs e) {
-            BSForms.BScripMDIParent.onlyOneMDI.AddHost(null, true);
         }
     }
 }

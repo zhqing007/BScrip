@@ -11,36 +11,26 @@ using BScrip.BSDevice;
 namespace BScrip.BSThread {
     public class ConfThread {
         private List<Host> hosts;
-        private AutoResetEvent myResetEvent;
-        private TextBox tbox;
-        private LogForm logF;
-        public Host server;
+        private Host server;
         private List<string> filenames = new List<string>();
 
-        public ConfThread(LogForm logfo, TextBox logbox, AutoResetEvent loge, List<Host> hostl) {
-            logF = logfo;
-            tbox = logbox;
-            myResetEvent = loge;
+        public ConfThread(List<Host> hostl, Host _server = null) {
+            server = _server;
             hosts = hostl;
         }
 
-        public ConfThread(TextBox logbox, List<Host> hostl) {
-            tbox = logbox;
-            hosts = hostl;
-        }
-
-        private void Addstr(Host item, string str) {
-            StringBuilder strb = new StringBuilder();
-            if (item == null)
-                strb.Append(str).Append(System.Environment.NewLine);
-            else {
-                strb.Append(DateTime.Now.GetDateTimeFormats('g')[0].ToString());
-                if (item != null)
-                    strb.Append('：').Append(item.hostname).Append("--");
-                strb.Append(str).Append(System.Environment.NewLine);
-            }
-            tbox.AppendText(strb.ToString());
-        }
+        //private void LogMessageForm.logForm.AddLog(Host item, string str) {
+        //    StringBuilder strb = new StringBuilder();
+        //    if (item == null)
+        //        strb.Append(str).Append(System.Environment.NewLine);
+        //    else {
+        //        strb.Append(DateTime.Now.GetDateTimeFormats('g')[0].ToString());
+        //        if (item != null)
+        //            strb.Append('：').Append(item.hostname).Append("--");
+        //        strb.Append(str).Append(System.Environment.NewLine);
+        //    }
+        //    tbox.AppendText(strb.ToString());
+        //}
 
         public void GetConfNoThread() {
             Device dev = null;
@@ -48,18 +38,18 @@ namespace BScrip.BSThread {
                 try {
                     if (item.loginmode == 0) {
                         dev = Device.DeviceFactory(new TelnetLinker(item.ipaddress, item.loginname, item.password));
-                        Addstr(item, "Telnet登录");
+                        LogMessageForm.logForm.AddLog(item, "Telnet登录");
                     }
                     else {
                         dev = Device.DeviceFactory(new SSH2Linker(item.ipaddress, item.loginname, item.password));
-                        Addstr(item, "SSH2登录");
+                        LogMessageForm.logForm.AddLog(item, "SSH2登录");
                     }
                     dev.SuperPassWord = item.superpw;
                     string strConfiguration = dev.GetConfiguration();
                     if (strConfiguration != null && strConfiguration.Trim().Length > 0)
-                        Addstr(item, "导出配置成功");
+                        LogMessageForm.logForm.AddLog(item, "导出配置成功");
                     else {
-                        Addstr(item, "导出配置失败");
+                        LogMessageForm.logForm.AddLog(item, "导出配置失败");
                         continue;
                     }
                     StringBuilder fileN = new StringBuilder(item.hostname);
@@ -75,34 +65,34 @@ namespace BScrip.BSThread {
                     filenames.Add(filePath.ToString());
 
                     StreamWriter sw = File.CreateText(fileN.ToString());
-                    Addstr(item, "导出文件 " + fileN);
+                    LogMessageForm.logForm.AddLog(item, "导出文件 " + fileN);
                     sw.Write(strConfiguration);
                     sw.Close();
                     dev.Close();
-                    Addstr(item, "文件写入完成");
-                    Addstr(null, "******");
+                    LogMessageForm.logForm.AddLog(item, "文件写入完成");
+                    LogMessageForm.logForm.AddLog(null, "******");
                 }
                 catch (Exception exc) {
-                    Addstr(item, "导出配置出现异常：" + exc.StackTrace);
+                    LogMessageForm.logForm.AddLog(item, "导出配置出现异常：" + exc.StackTrace);
                 }
             }
             if (server == null) return;
             try {
                 SshFileTransfer.PutFileListSFTP(server, filenames);
-                Addstr(server, "上传文件完成");
+                LogMessageForm.logForm.AddLog(server, "上传文件完成");
                 foreach (string file in filenames) {
                     File.Delete(file.Substring(1));
                 }
             }
             catch (Exception exc) {
-                Addstr(server, "上传文件出现异常：" + exc.StackTrace);
+                LogMessageForm.logForm.AddLog(server, "上传文件出现异常：" + exc.StackTrace);
             }
         }
 
         public void GetConfInThread() {
-            myResetEvent.WaitOne();
+            //myResetEvent.WaitOne();
             GetConfNoThread();
-            logF.ReDoButtons(true);
+            //logF.ReDoButtons(true);
         }
     }
 }

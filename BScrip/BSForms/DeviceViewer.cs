@@ -16,7 +16,7 @@ namespace BScrip.BSForms {
         private DeviceBaseInfo dbi;
         private List<ResourcesUtilization> cpurulist;
         private List<ResourcesUtilization> memrulist;
-        private DataTable intfinfo;
+        private DataTable intfinfo = null;
         private TimeSpan refreshtimespan;
         private Device dev;
 
@@ -59,7 +59,8 @@ namespace BScrip.BSForms {
                     slotser.Name = cpuu.slotname;
                     this.memresourceschart.Series.Add(slotser);
                 }
-
+                
+                DisplayInterfaceInfo();
                 RefreshData();
                 devbaseinfo.AppendText(dbi.ToString());
 
@@ -67,7 +68,7 @@ namespace BScrip.BSForms {
                     Thread.Sleep(refreshtimespan);
                     cpurulist = dev.GetCpuUsage();
                     memrulist = dev.GetMemUsage();
-                    intfinfo = dev.GetInterfaceBrif();
+                    //intfinfo = dev.GetInterfaceBrif();
                     RefreshData();
                 }
                 
@@ -96,6 +97,24 @@ namespace BScrip.BSForms {
                 memresourceschart.Series[i].Points.AddY(memrulist[i].max);
                 if (memresourceschart.Series[i].Points.Count > memresourceschart.ChartAreas[0].AxisX.Maximum)
                     memresourceschart.Series[i].Points.RemoveAt(0);
+            }
+        }
+
+        private void DisplayInterfaceInfo() {
+            if(intfinfo != null)
+                interfaceGridView.DataSource = intfinfo;
+        }
+
+        private void interfaceGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e) {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 3) {
+                //Rectangle aaa = new Rectangle(e.CellBounds.X + 9, e.CellBounds.Y + 9, e.CellBounds.Width - 20,
+                //    e.CellBounds.Height - 20);
+                Brush brush = new SolidBrush(Color.LightBlue);//填充的颜色
+                e.Graphics.FillEllipse(brush, e.CellBounds);
+                e.Graphics.DrawString("sfasdfasd", e.CellStyle.Font, Brushes.Crimson,
+                            e.CellBounds.Left + 20, e.CellBounds.Top + 5, StringFormat.GenericDefault);
+
+                e.Handled = true;
             }
         }
     }

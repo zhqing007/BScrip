@@ -13,7 +13,7 @@ using Tamir.SharpSsh;
 using System.Threading;
 
 namespace BScrip.BSForms {
-    public partial class BackUpConfForm : BSForm {
+    public partial class BackUpConfForm : Form {
         //public Configuration cfa;
         //private XMLHelper xhelper;
 
@@ -69,14 +69,9 @@ namespace BScrip.BSForms {
                 hostlist.Add((item as ListViewItem).Tag as Host);
             }
 
-            AutoResetEvent logevent = new AutoResetEvent(false);
-            LogForm logd = new LogForm(logevent);
-            logd.ReDoButtons(false);
-            BSThread.ConfThread confth = new BSThread.ConfThread(logd, logd.GetLogBox(), logevent, hostlist);
-            confth.server = _server;
+            BSThread.ConfThread confth = new BSThread.ConfThread(hostlist, _server);
             Thread logThread = new Thread(new ThreadStart(confth.GetConfInThread));
             logThread.Start();
-            logd.ShowDialog();
         }
 
             //Process p = new Process();

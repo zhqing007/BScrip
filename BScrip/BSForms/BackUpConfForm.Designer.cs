@@ -44,7 +44,7 @@ namespace BScrip.BSForms
             // getConfB_Local
             // 
             this.getConfB_Local.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.getConfB_Local.Location = new System.Drawing.Point(157, 466);
+            this.getConfB_Local.Location = new System.Drawing.Point(157, 359);
             this.getConfB_Local.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.getConfB_Local.Name = "getConfB_Local";
             this.getConfB_Local.Size = new System.Drawing.Size(99, 30);
@@ -62,7 +62,7 @@ namespace BScrip.BSForms
             this.DownHosts.Location = new System.Drawing.Point(52, 27);
             this.DownHosts.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.DownHosts.Name = "DownHosts";
-            this.DownHosts.Size = new System.Drawing.Size(621, 422);
+            this.DownHosts.Size = new System.Drawing.Size(288, 318);
             this.DownHosts.TabIndex = 10;
             this.DownHosts.UseCompatibleStateImageBehavior = false;
             this.DownHosts.View = System.Windows.Forms.View.Details;
@@ -92,7 +92,7 @@ namespace BScrip.BSForms
             // selectAllHost
             // 
             this.selectAllHost.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.selectAllHost.Location = new System.Drawing.Point(52, 466);
+            this.selectAllHost.Location = new System.Drawing.Point(52, 359);
             this.selectAllHost.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.selectAllHost.Name = "selectAllHost";
             this.selectAllHost.Size = new System.Drawing.Size(99, 30);
@@ -114,7 +114,7 @@ namespace BScrip.BSForms
             // 
             this.selserver.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.selserver.Enabled = false;
-            this.selserver.Location = new System.Drawing.Point(633, 466);
+            this.selserver.Location = new System.Drawing.Point(820, 359);
             this.selserver.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.selserver.Name = "selserver";
             this.selserver.Size = new System.Drawing.Size(40, 30);
@@ -127,7 +127,7 @@ namespace BScrip.BSForms
             // 
             this.isUpLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.isUpLoad.AutoSize = true;
-            this.isUpLoad.Location = new System.Drawing.Point(285, 473);
+            this.isUpLoad.Location = new System.Drawing.Point(472, 366);
             this.isUpLoad.Name = "isUpLoad";
             this.isUpLoad.Size = new System.Drawing.Size(104, 19);
             this.isUpLoad.TabIndex = 19;
@@ -138,7 +138,7 @@ namespace BScrip.BSForms
             // remoser
             // 
             this.remoser.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remoser.Location = new System.Drawing.Point(395, 468);
+            this.remoser.Location = new System.Drawing.Point(582, 361);
             this.remoser.Name = "remoser";
             this.remoser.ReadOnly = true;
             this.remoser.Size = new System.Drawing.Size(238, 25);
@@ -148,7 +148,7 @@ namespace BScrip.BSForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(685, 507);
+            this.ClientSize = new System.Drawing.Size(872, 595);
             this.Controls.Add(this.remoser);
             this.Controls.Add(this.isUpLoad);
             this.Controls.Add(this.selserver);

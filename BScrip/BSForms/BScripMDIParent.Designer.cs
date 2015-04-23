@@ -76,16 +76,20 @@
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.BackUpConf = new System.Windows.Forms.ToolStripButton();
             this.timerBackUp = new System.Windows.Forms.ToolStripButton();
+            this.showInfo = new System.Windows.Forms.ToolStripButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.showInfo = new System.Windows.Forms.ToolStripButton();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip
@@ -101,7 +105,7 @@
             this.menuStrip.MdiWindowListItem = this.windowsMenu;
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-            this.menuStrip.Size = new System.Drawing.Size(1221, 28);
+            this.menuStrip.Size = new System.Drawing.Size(1129, 28);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "MenuStrip";
             // 
@@ -449,7 +453,7 @@
             this.showInfo});
             this.toolStrip.Location = new System.Drawing.Point(0, 28);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(1221, 25);
+            this.toolStrip.Size = new System.Drawing.Size(1129, 25);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "ToolStrip";
             // 
@@ -535,7 +539,7 @@
             this.BackUpConf.Name = "BackUpConf";
             this.BackUpConf.Size = new System.Drawing.Size(23, 22);
             this.BackUpConf.Text = "配置备份";
-            this.BackUpConf.Click += new System.EventHandler(this.BackUpConf_Click);
+            this.BackUpConf.Visible = false;
             // 
             // timerBackUp
             // 
@@ -547,14 +551,24 @@
             this.timerBackUp.Text = "定时备份";
             this.timerBackUp.Click += new System.EventHandler(this.timerBackUp_Click);
             // 
+            // showInfo
+            // 
+            this.showInfo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.showInfo.Image = ((System.Drawing.Image)(resources.GetObject("showInfo.Image")));
+            this.showInfo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.showInfo.Name = "showInfo";
+            this.showInfo.Size = new System.Drawing.Size(23, 22);
+            this.showInfo.Text = "toolStripButton1";
+            this.showInfo.Click += new System.EventHandler(this.showInfo_Click);
+            // 
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 676);
+            this.statusStrip.Location = new System.Drawing.Point(0, 732);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
-            this.statusStrip.Size = new System.Drawing.Size(1221, 25);
+            this.statusStrip.Size = new System.Drawing.Size(1129, 25);
             this.statusStrip.TabIndex = 2;
             this.statusStrip.Text = "StatusStrip";
             // 
@@ -570,25 +584,29 @@
             this.splitContainer1.Location = new System.Drawing.Point(0, 53);
             this.splitContainer1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Size = new System.Drawing.Size(1221, 623);
-            this.splitContainer1.SplitterDistance = 355;
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
+            this.splitContainer1.Size = new System.Drawing.Size(1129, 679);
+            this.splitContainer1.SplitterDistance = 328;
             this.splitContainer1.TabIndex = 4;
             // 
-            // showInfo
+            // splitContainer2
             // 
-            this.showInfo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.showInfo.Image = ((System.Drawing.Image)(resources.GetObject("showInfo.Image")));
-            this.showInfo.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.showInfo.Name = "showInfo";
-            this.showInfo.Size = new System.Drawing.Size(23, 22);
-            this.showInfo.Text = "toolStripButton1";
-            this.showInfo.Click += new System.EventHandler(this.showInfo_Click);
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.splitContainer2.Size = new System.Drawing.Size(797, 679);
+            this.splitContainer2.SplitterDistance = 490;
+            this.splitContainer2.TabIndex = 0;
             // 
             // BScripMDIParent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1221, 701);
+            this.ClientSize = new System.Drawing.Size(1129, 757);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.toolStrip);
@@ -597,6 +615,7 @@
             this.MainMenuStrip = this.menuStrip;
             this.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.Name = "BScripMDIParent";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "BScripMDIParent";
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
@@ -604,8 +623,11 @@
             this.toolStrip.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
+            this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -669,6 +691,7 @@
         private System.Windows.Forms.ToolStripButton timerBackUp;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ToolStripButton showInfo;
+        private System.Windows.Forms.SplitContainer splitContainer2;
     }
 }
 

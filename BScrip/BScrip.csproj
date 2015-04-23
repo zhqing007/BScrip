@@ -83,15 +83,21 @@
     <Compile Include="BSForms\BScripMDIParent.Designer.cs">
       <DependentUpon>BScripMDIParent.cs</DependentUpon>
     </Compile>
+    <Compile Include="BSForms\LogMessageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BSForms\LogMessageForm.Designer.cs">
+      <DependentUpon>LogMessageForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BSForms\WelcomeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BSForms\WelcomeForm.Designer.cs">
+      <DependentUpon>WelcomeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="BSmenu\RightKeyMenu.cs" />
     <Compile Include="DBhelper.cs" />
     <Compile Include="EncodeAndDecode.cs" />
-    <Compile Include="BSForms\BackUpConfForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BSForms\BackUpConfForm.Designer.cs">
-      <DependentUpon>BackUpConfForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="BSForms\HostInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,12 +109,6 @@
     </Compile>
     <Compile Include="BSForms\HostsForm.Designer.cs">
       <DependentUpon>HostsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="BSForms\LogForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BSForms\LogForm.Designer.cs">
-      <DependentUpon>LogForm.cs</DependentUpon>
     </Compile>
     <Compile Include="BSForms\DeviceViewer.cs">
       <SubType>Form</SubType>
@@ -138,20 +138,20 @@
     <EmbeddedResource Include="BSForms\BScripMDIParent.resx">
       <DependentUpon>BScripMDIParent.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BSForms\BackUpConfForm.resx">
-      <DependentUpon>BackUpConfForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="BSForms\HostInfo.resx">
       <DependentUpon>HostInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BSForms\HostsForm.resx">
       <DependentUpon>HostsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BSForms\LogForm.resx">
-      <DependentUpon>LogForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="BSForms\DeviceViewer.resx">
       <DependentUpon>DeviceViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BSForms\LogMessageForm.resx">
+      <DependentUpon>LogMessageForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BSForms\WelcomeForm.resx">
+      <DependentUpon>WelcomeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
