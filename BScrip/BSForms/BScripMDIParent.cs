@@ -146,16 +146,17 @@ namespace BScrip.BSForms {
                 MessageBox.Show("没有选择设备！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            splitContainer1.Panel2.Controls.Clear();
+            splitContainer2.Panel1.Controls.Clear();
             if (switchCMDIChild == null || switchCMDIChild.IsDisposed) {
-                switchCMDIChild = new BSForms.DeviceViewer(selecthosts[0]);
+                switchCMDIChild = new BSForms.DeviceViewer();                
                 switchCMDIChild.MdiParent = this;
-                switchCMDIChild.Parent = splitContainer1.Panel2;
+                switchCMDIChild.Parent = splitContainer2.Panel1;
                 switchCMDIChild.Dock = DockStyle.Fill;
                 switchCMDIChild.Show();
+                switchCMDIChild.SetDevice(selecthosts[0]);
             }
             else
-                splitContainer1.Panel2.Controls.Add(switchCMDIChild);
+                splitContainer2.Panel1.Controls.Add(switchCMDIChild);
         }
     }
 

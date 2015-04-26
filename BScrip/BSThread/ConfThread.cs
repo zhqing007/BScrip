@@ -70,7 +70,6 @@ namespace BScrip.BSThread {
                     sw.Close();
                     dev.Close();
                     LogMessageForm.logForm.AddLog(item, "文件写入完成");
-                    LogMessageForm.logForm.AddLog(null, "******");
                 }
                 catch (Exception exc) {
                     LogMessageForm.logForm.AddLog(item, "导出配置出现异常：" + exc.StackTrace);

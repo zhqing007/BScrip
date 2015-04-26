@@ -49,6 +49,7 @@ namespace BScrip.BSDevice {
         //public DeviceType TYPE;
         //public string VERSION;//型号
         //public BrandType BRAND;
+        protected static string End = "BScrip_End";
         public Dictionary<string, string> comdic = new Dictionary<string, string>();
         protected Linker lin = null;
         public string SuperPassWord = null;

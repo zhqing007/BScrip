@@ -20,12 +20,8 @@ namespace BScrip.BSForms {
         private TimeSpan refreshtimespan;
         private Device dev;
 
-
-        public DeviceViewer(Host sw) {
+        public DeviceViewer() {
             InitializeComponent();
-            devicehost = sw;
-            refreshtimespan = new TimeSpan(0, 0, 5);
-            loadbasebg.RunWorkerAsync();
         }
 
         private void bGWorker_DoWork(object sender, DoWorkEventArgs e) {
@@ -38,11 +34,23 @@ namespace BScrip.BSForms {
                     dev = Device.DeviceFactory(new SSH2Linker(devicehost.ipaddress, devicehost.loginname, devicehost.password));
                     //Addstr(_server, "SSH2登录");
                 }
+                byte a = (byte)0x03;
+                a.ToString();
                 dev.SuperPassWord = devicehost.superpw;
+                LogMessageForm.logForm.AddLog(devicehost, "正在读取设备基本信息");
                 dbi = dev.GetBaseInfo();
-                cpurulist = dev.GetCpuUsage();
-                memrulist = dev.GetMemUsage();
+                LogMessageForm.logForm.AddLog(devicehost, "读取设备基本信息结束");
+                devbaseinfo.AppendText(dbi.ToString());
+                LogMessageForm.logForm.AddLog(devicehost, "正在读取接口状态信息");
                 intfinfo = dev.GetInterfaceBrif();
+                LogMessageForm.logForm.AddLog(devicehost, "读取接口状态信息结束");
+                DisplayInterfaceInfo();
+                LogMessageForm.logForm.AddLog(devicehost, "正在读取设备CPU占用率");
+                cpurulist = dev.GetCpuUsage();
+                LogMessageForm.logForm.AddLog(devicehost, "读取设备CPU占用率结束");
+                LogMessageForm.logForm.AddLog(devicehost, "正在读取设备内存占用率");
+                memrulist = dev.GetMemUsage();
+                LogMessageForm.logForm.AddLog(devicehost, "读取设备内存占用率结束");
                 foreach (ResourcesUtilization cpuu in cpurulist) {
                     Series slotser = new Series();
                     slotser.BorderWidth = 3;
@@ -59,22 +67,23 @@ namespace BScrip.BSForms {
                     slotser.Name = cpuu.slotname;
                     this.memresourceschart.Series.Add(slotser);
                 }
-                
-                DisplayInterfaceInfo();
-                RefreshData();
-                devbaseinfo.AppendText(dbi.ToString());
+                RefreshData();                
 
                 while (true) {
                     Thread.Sleep(refreshtimespan);
+                    LogMessageForm.logForm.AddLog(devicehost, "正在读取设备CPU占用率");
                     cpurulist = dev.GetCpuUsage();
+                    LogMessageForm.logForm.AddLog(devicehost, "读取设备CPU占用率结束");
+                    LogMessageForm.logForm.AddLog(devicehost, "正在读取设备内存占用率");
                     memrulist = dev.GetMemUsage();
+                    LogMessageForm.logForm.AddLog(devicehost, "读取设备内存占用率结束");
                     //intfinfo = dev.GetInterfaceBrif();
                     RefreshData();
                 }
                 
             }
             catch (Exception exc) {
-                //Addstr(_server, "导出配置出现异常：" + exc.StackTrace);
+                LogMessageForm.logForm.AddLog(devicehost, "操作出现异常：" + exc.ToString());
             }
         }
 
@@ -106,16 +115,39 @@ namespace BScrip.BSForms {
         }
 
         private void interfaceGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e) {
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 3) {
-                //Rectangle aaa = new Rectangle(e.CellBounds.X + 9, e.CellBounds.Y + 9, e.CellBounds.Width - 20,
-                //    e.CellBounds.Height - 20);
-                Brush brush = new SolidBrush(Color.LightBlue);//填充的颜色
-                e.Graphics.FillEllipse(brush, e.CellBounds);
-                e.Graphics.DrawString("sfasdfasd", e.CellStyle.Font, Brushes.Crimson,
-                            e.CellBounds.Left + 20, e.CellBounds.Top + 5, StringFormat.GenericDefault);
+            if (e.Value.ToString().Contains('%')) {
+                e.Graphics.FillRectangle(new SolidBrush(Color.White), e.CellBounds);
+                string percent = e.Value.ToString().Trim();
+                float wightpercent = Int32.Parse(percent.Substring(0, percent.Length - 1));
+                Rectangle percentrect = new Rectangle(e.CellBounds.X + 2, e.CellBounds.Y + 2
+                    , (int)((e.CellBounds.Width - 4) * wightpercent / 100)
+                    , e.CellBounds.Height - 4);
+                Color bc;
+                if(wightpercent <= 50)
+                    bc = Color.FromArgb(0, (int)(wightpercent/50*255), (int)((1-wightpercent/50)*255));
+                else
+                    bc = Color.FromArgb((int)((wightpercent/50-1)*255), (int)((2-wightpercent/50)*255), 0);
+
+                Brush brush = new SolidBrush(bc);//填充的颜色
+                e.Graphics.FillRectangle(brush, percentrect);
+                e.Graphics.DrawString(percent, e.CellStyle.Font, Brushes.Black,
+                            e.CellBounds.Left + 5, e.CellBounds.Top + 5, StringFormat.GenericDefault);
 
                 e.Handled = true;
             }
+        }
+
+        public void SetDevice(Host sw, TimeSpan span = new TimeSpan()) {
+            devicehost = sw;
+            if (span.Equals(TimeSpan.Zero))
+                refreshtimespan = new TimeSpan(0, 0, 5);
+            else
+                refreshtimespan = span;
+            //loadbasebg.RunWorkerAsync();
+        }
+
+        public void SetTimeSpan(TimeSpan span) {
+            
         }
     }
 }

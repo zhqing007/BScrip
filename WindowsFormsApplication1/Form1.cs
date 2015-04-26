@@ -27,14 +27,10 @@ namespace WindowsFormsApplication1 {
             Random ra = new Random();
             for (int i = 0; i < 50; ++i) {
                 yvalue = ra.NextDouble() * 100;
-                chart1.Series[0].Points.AddY(yvalue);
+                chart1.Series[0].Points.AddXY(DateTime.Now.ToLongTimeString(), yvalue);
                 if (chart1.Series[0].Points.Count > chart1.ChartAreas[0].AxisX.Maximum)
                     chart1.Series[0].Points.RemoveAt(0);
             }
-
-            
-
-
         }
 
         private void Form1_Activated(object sender, EventArgs e) {
@@ -68,12 +64,22 @@ namespace WindowsFormsApplication1 {
             if (e.RowIndex >= 0 && e.ColumnIndex == 1) {
                 if (this.dataGridView1.Rows[e.RowIndex].Cells[1].Value == DBNull.Value)
                     return;
-                Rectangle aaa = new Rectangle(e.CellBounds.X + 9, e.CellBounds.Y + 9, e.CellBounds.Width - 20,
-                    e.CellBounds.Height - 20);
-                Brush brush = new SolidBrush(Color.LightBlue);//填充的颜色
-                e.Graphics.FillEllipse(brush, aaa);
-                e.Graphics.DrawString("sfasdfasd", e.CellStyle.Font, Brushes.Crimson,
-                            e.CellBounds.Left + 20, e.CellBounds.Top + 5, StringFormat.GenericDefault);
+                Random ra = new Random();
+                Color bc;
+                float wightpercent = ra.Next(101);
+                Rectangle aaa = new Rectangle(e.CellBounds.X + 2, e.CellBounds.Y + 2, (int)((e.CellBounds.Width - 4) * wightpercent / 100),
+                    e.CellBounds.Height - 4);
+
+                e.Graphics.FillRectangle(new SolidBrush(Color.White), e.CellBounds);
+                if (wightpercent <= 50)
+                    bc = Color.FromArgb(0, (int)(wightpercent / 50 * 255), (int)((1 - wightpercent / 50) * 255));
+                else
+                    bc = Color.FromArgb((int)((wightpercent / 50 - 1) * 255), (int)((2 - wightpercent / 50) * 255), 0);
+
+                Brush brush = new SolidBrush(bc);//填充的颜色
+                e.Graphics.FillRectangle(brush, aaa);
+                e.Graphics.DrawString("sfasdfasd", e.CellStyle.Font, Brushes.Black,
+                            e.CellBounds.Left + 5, e.CellBounds.Top + 5, StringFormat.GenericDefault);
 
                 e.Handled = true;
             }
@@ -84,9 +90,25 @@ namespace WindowsFormsApplication1 {
 
 
         private void button3_Click(object sender, EventArgs e) {
-            listView1.Items.Add("abc");
-            listView1.Items.Add("dfg");
-            listView1.Items.Add("aerebc");
+            byte a = (byte)0x03;
+            MessageBox.Show( a.ToString());
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e) {
+            MessageBox.Show("code:" + e.KeyCode.ToString() + System.Environment.NewLine
+                + "value:" + e.KeyValue + System.Environment.NewLine
+                + "data:" + e.KeyData);
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e) {
+            if (e.Control && e.KeyCode == Keys.C) {
+                MessageBox.Show("ctrl + c");
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e) {
+            //SendKeys.Send("{Ctrl}+{C}");
+            MessageBox.Show("{Ctrl}+{C}");
         }
 
 
