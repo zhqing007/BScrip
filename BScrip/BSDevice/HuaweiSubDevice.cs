@@ -27,7 +27,7 @@ namespace BScrip.BSDevice {
             string[] devstrs;
             while (!devinfo.EndOfStream) {
                 devstrs = devinfo.ReadLine().Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
-                if (devstrs[2].Length == 1 || devstrs[7].Length != 2) continue;
+                if (devstrs.Length < 8 || devstrs[2].Length == 1 || devstrs[7].Length != 2) continue;
                 SoltInfo.Rows.Add(devstrs);
             }
             return SoltInfo;
@@ -35,9 +35,8 @@ namespace BScrip.BSDevice {
 
         private ResourcesUtilization GetOneCpuUsage(string cpuu) {
             StreamReader strreader = StaticFun.StrToStream(cpuu);
-            strreader.ReadLine();
-            strreader.ReadLine();
-            string str = strreader.ReadLine();
+            string str;
+            while (!(str = strreader.ReadLine()).Contains("Max:")) ;
             ResourcesUtilization ru = new ResourcesUtilization();
             ru.max = Int32.Parse(str.Substring(str.IndexOf("Max:") + 4, 3).Trim());
             strreader.ReadLine();
@@ -53,63 +52,113 @@ namespace BScrip.BSDevice {
         private ResourcesUtilization GetOneMemUsage(string memu) {
             StreamReader strreader = StaticFun.StrToStream(memu);
             string str;
-            while ((str = strreader.ReadLine()).IndexOf('%') < 0) ;
+            Console.Write("++++++++++++++++++++++++++");
+
+
+            while (true) {
+                str = strreader.ReadLine();
+                if (str == null) {
+                    Console.WriteLine("");
+                }
+                if (str.IndexOf('%') >= 0) break;
+                Console.WriteLine(str);
+            }
             ResourcesUtilization ru = new ResourcesUtilization();
             ru.max = Int32.Parse(str.Substring(str.IndexOf('%') - 3, 3).Trim());
             return ru;
         }
 
         public override List<ResourcesUtilization> GetCpuUsage() {
-            List<ResourcesUtilization> rulist = new List<ResourcesUtilization>();
-            ResourcesUtilization ru = GetOneCpuUsage(GetMessage("dis cpu-usage", LEVEL3_MARK_STR));
-            ru.slotname = "Main";
-            rulist.Add(ru);
+            try {
+                List<ResourcesUtilization> rulist = new List<ResourcesUtilization>();
+                StringBuilder comdb = new StringBuilder();
+                comdb.Append("dis cpu-usage").Append(System.Environment.NewLine)
+                    .Append('q').Append(System.Environment.NewLine);
 
-            DataTable solts = GetSoltInfo();
-            foreach (DataRow solt in solts.Rows) {
-                ru = GetOneCpuUsage(GetMessage("dis cpu-usage slot " + solt["Slot"].ToString(), LEVEL3_MARK_STR));
-                ru.slotname = solt["Slot"].ToString() + '-' + solt["Type"].ToString();
+                DataTable solts = GetSoltInfo();
+                foreach (DataRow solt in solts.Rows)
+                    comdb.Append("dis cpu-usage slot ").Append(solt["Slot"].ToString())
+                        .Append(System.Environment.NewLine)
+                        .Append('q');
+
+                string rm = GetMessage(comdb.ToString(), 5);
+                ResourcesUtilization ru = GetOneCpuUsage(rm);
+                ru.slotname = "Main";
                 rulist.Add(ru);
+
+                foreach (DataRow solt in solts.Rows) {
+                    rm = rm.Substring(rm.IndexOf("slot " + solt["Slot"]));
+                    ru = GetOneCpuUsage(rm);
+                    ru.slotname = solt["Slot"].ToString() + '-' + solt["Type"].ToString();
+                    rulist.Add(ru);
+                }
+
+                return rulist;
+            }
+            catch (Exception exc) {
+                throw exc;
             }
 
-            return rulist;
         }
 
         public override List<ResourcesUtilization> GetMemUsage() {
-            List<ResourcesUtilization> rulist = new List<ResourcesUtilization>();
-            ResourcesUtilization ru = GetOneMemUsage(GetMessage("display memory-usage", LEVEL3_MARK_STR));
-            ru.slotname = "Main";
-            rulist.Add(ru);
+            try {
+                List<ResourcesUtilization> rulist = new List<ResourcesUtilization>();
+                StringBuilder comdb = new StringBuilder();
+                comdb.Append("dis memory-usage");
 
-            DataTable solts = GetSoltInfo();
-            foreach (DataRow solt in solts.Rows) {
-                ru = GetOneMemUsage(GetMessage("display memory-usage slot " + solt["Slot"].ToString(), LEVEL3_MARK_STR));
-                ru.slotname = solt["Slot"].ToString() + '-' + solt["Type"].ToString();
+                DataTable solts = GetSoltInfo();
+                foreach (DataRow solt in solts.Rows)
+                    comdb.Append(System.Environment.NewLine).Append("dis memory-usage slot ")
+                        .Append(solt["Slot"].ToString());
+                Console.WriteLine("******************************************");
+                string rm = GetMessage(comdb.ToString());
+                ResourcesUtilization ru = GetOneMemUsage(rm);
+                ru.slotname = "Main";
                 rulist.Add(ru);
+                Console.WriteLine("******************************************");
+                foreach (DataRow solt in solts.Rows) {
+                    rm = rm.Substring(rm.IndexOf("slot " + solt["Slot"]));
+                    ru = GetOneMemUsage(rm);
+                    ru.slotname = solt["Slot"].ToString() + '-' + solt["Type"].ToString();
+                    rulist.Add(ru);
+                }
+                return rulist;
             }
-
-            return rulist;
+            catch (Exception exc) {
+                throw exc;
+            }
         }
 
         public override DataTable GetInterfaceBrif() {
-            DataTable intInfo = new DataTable();
-            intInfo.Columns.Add("端口", typeof(string));
-            intInfo.Columns.Add("物理链路", typeof(string));
-            intInfo.Columns.Add("数据链路", typeof(string));
-            intInfo.Columns.Add("输入流量", typeof(string));
-            intInfo.Columns.Add("输出流量", typeof(string));
+            try {
+                DataTable intInfo = new DataTable();
+                intInfo.Columns.Add("端口", typeof(string));
+                intInfo.Columns.Add("物理链路", typeof(string));
+                intInfo.Columns.Add("数据链路", typeof(string));
+                intInfo.Columns.Add("输入流量", typeof(string));
+                intInfo.Columns.Add("输出流量", typeof(string));
 
-            StreamReader devinforeader = StaticFun.StrToStream(GetMessage("display int brief", LEVEL3_MARK_STR));
-            string str;
-            while ((str = devinforeader.ReadLine()).IndexOf("Interface") < 0) ;
-            string[] intfarray;
-            while (!devinforeader.EndOfStream) {
-                if ((str = devinforeader.ReadLine()).IndexOf(LEVEL3_MARK_STR) >= 0) break;                
-                intfarray = str.Split(new char[] { ' ' }, 5, System.StringSplitOptions.RemoveEmptyEntries);
-                intfarray[4] = intfarray[4].Substring(0, intfarray[4].IndexOf(' '));
-                intInfo.Rows.Add(intfarray);
+                string abc = GetMessage("display int brief");
+                Console.WriteLine("********   " + abc);
+                Console.WriteLine("--------------------------");
+                StreamReader devinforeader = StaticFun.StrToStream(abc);
+                string str;
+                while ((str = devinforeader.ReadLine()).IndexOf("Interface") < 0) ;
+                Console.WriteLine("********   " + str);
+                string[] intfarray;
+                while (!devinforeader.EndOfStream) {
+                    if ((str = devinforeader.ReadLine()).IndexOf(LEVEL3_MARK_STR) >= 0) break;
+                    Console.WriteLine("********   " + str);
+                    intfarray = str.Split(new char[] { ' ' }, 5, System.StringSplitOptions.RemoveEmptyEntries);
+                    intfarray[4] = intfarray[4].Substring(0, intfarray[4].IndexOf(' '));
+                    intInfo.Rows.Add(intfarray);
+                }
+                return intInfo;
             }
-            return intInfo;
+            catch(Exception exc) {
+                throw exc;
+            }
         }
     }
 
@@ -139,7 +188,7 @@ namespace BScrip.BSDevice {
 
         public override List<ResourcesUtilization> GetCpuUsage() {
             List<ResourcesUtilization> rulist = new List<ResourcesUtilization>();
-            string cpuu = GetMessage("dis cpu", LEVEL3_MARK_STR);
+            string cpuu = GetMessage("dis cpu");
             StreamReader strreader = StaticFun.StrToStream(cpuu);
             DataTable solts = GetSoltInfo();
             foreach (DataRow row in solts.Rows) {
@@ -167,7 +216,7 @@ namespace BScrip.BSDevice {
             }
             comstrb.Append(Device.End);
 
-            string meminfo = GetMessage(comstrb.ToString(), Device.End);
+            string meminfo = GetMessage(comstrb.ToString());
             StreamReader strreader = StaticFun.StrToStream(meminfo);
             string str;
             foreach (DataRow solt in solts.Rows) {
@@ -190,7 +239,7 @@ namespace BScrip.BSDevice {
             intInfo.Columns.Add("PVID", typeof(string));
             intInfo.Columns.Add("描述", typeof(string));
 
-            StreamReader devinforeader = StaticFun.StrToStream(GetMessage("dis bri int", LEVEL3_MARK_STR));
+            StreamReader devinforeader = StaticFun.StrToStream(GetMessage("dis bri int"));
             string str;
             while ((str = devinforeader.ReadLine()).IndexOf("------------") < 0) ;
             string[] intfarray;

@@ -19,6 +19,7 @@ namespace BScrip.BSForms {
         private DataTable intfinfo = null;
         private TimeSpan refreshtimespan;
         private Device dev;
+        private delegate void UpdateDataView();
 
         public DeviceViewer() {
             InitializeComponent();
@@ -34,8 +35,7 @@ namespace BScrip.BSForms {
                     dev = Device.DeviceFactory(new SSH2Linker(devicehost.ipaddress, devicehost.loginname, devicehost.password));
                     //Addstr(_server, "SSH2登录");
                 }
-                byte a = (byte)0x03;
-                a.ToString();
+
                 dev.SuperPassWord = devicehost.superpw;
                 LogMessageForm.logForm.AddLog(devicehost, "正在读取设备基本信息");
                 dbi = dev.GetBaseInfo();
@@ -44,7 +44,10 @@ namespace BScrip.BSForms {
                 LogMessageForm.logForm.AddLog(devicehost, "正在读取接口状态信息");
                 intfinfo = dev.GetInterfaceBrif();
                 LogMessageForm.logForm.AddLog(devicehost, "读取接口状态信息结束");
-                DisplayInterfaceInfo();
+                
+                UpdateDataView fc = new UpdateDataView(DisplayInterfaceInfo);
+                interfaceGridView.Invoke(fc);
+
                 LogMessageForm.logForm.AddLog(devicehost, "正在读取设备CPU占用率");
                 cpurulist = dev.GetCpuUsage();
                 LogMessageForm.logForm.AddLog(devicehost, "读取设备CPU占用率结束");
@@ -115,7 +118,7 @@ namespace BScrip.BSForms {
         }
 
         private void interfaceGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e) {
-            if (e.Value.ToString().Contains('%')) {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && e.Value.ToString().Contains('%')) {
                 e.Graphics.FillRectangle(new SolidBrush(Color.White), e.CellBounds);
                 string percent = e.Value.ToString().Trim();
                 float wightpercent = Int32.Parse(percent.Substring(0, percent.Length - 1));
@@ -123,16 +126,15 @@ namespace BScrip.BSForms {
                     , (int)((e.CellBounds.Width - 4) * wightpercent / 100)
                     , e.CellBounds.Height - 4);
                 Color bc;
-                if(wightpercent <= 50)
-                    bc = Color.FromArgb(0, (int)(wightpercent/50*255), (int)((1-wightpercent/50)*255));
+                if (wightpercent <= 50)
+                    bc = Color.FromArgb(0, (int)(wightpercent / 50 * 255), (int)((1 - wightpercent / 50) * 255));
                 else
-                    bc = Color.FromArgb((int)((wightpercent/50-1)*255), (int)((2-wightpercent/50)*255), 0);
+                    bc = Color.FromArgb((int)((wightpercent / 50 - 1) * 255), (int)((2 - wightpercent / 50) * 255), 0);
 
                 Brush brush = new SolidBrush(bc);//填充的颜色
                 e.Graphics.FillRectangle(brush, percentrect);
-                e.Graphics.DrawString(percent, e.CellStyle.Font, Brushes.Black,
+                e.Graphics.DrawString("sdfgsdgsd", e.CellStyle.Font, Brushes.Black,
                             e.CellBounds.Left + 5, e.CellBounds.Top + 5, StringFormat.GenericDefault);
-
                 e.Handled = true;
             }
         }
@@ -140,10 +142,10 @@ namespace BScrip.BSForms {
         public void SetDevice(Host sw, TimeSpan span = new TimeSpan()) {
             devicehost = sw;
             if (span.Equals(TimeSpan.Zero))
-                refreshtimespan = new TimeSpan(0, 0, 5);
+                refreshtimespan = new TimeSpan(0, 0, 10);
             else
                 refreshtimespan = span;
-            //loadbasebg.RunWorkerAsync();
+            loadbasebg.RunWorkerAsync();
         }
 
         public void SetTimeSpan(TimeSpan span) {

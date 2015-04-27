@@ -76,8 +76,8 @@ namespace BScrip.BSDevice {
         public string USERVTY_STR {
             get { return comdic["USERVTY_STR"]; }
         }
-        public string SCRLEN0_STR {
-            get { return comdic["SCRLEN0_STR"]; }
+        public string SCRLEN_STR {
+            get { return comdic["SCRLEN_STR"]; }
         }
         public string UNDOSCRLEN_STR {
             get { return comdic["UNDOSCRLEN_STR"]; }
@@ -122,12 +122,12 @@ namespace BScrip.BSDevice {
             return StaticFun.HuaWeiFactory(lin);
         }
 
-        protected abstract string GetMessage(string com, string end);
+        protected abstract string GetMessage(string com, int line = 0);
         public abstract DeviceBaseInfo GetBaseInfo();
 
-        public virtual string GetConfiguration() { return GetMessage(CONFIGURATION_STR, CONFIGEND_MARK_STR); }
-        public virtual string GetVersion() { return GetMessage(VERSION_STR, LEVEL3_MARK_STR); }
-        public virtual string GetDeviceInfo() { return GetMessage(DEVICE_STR, LEVEL3_MARK_STR); }
+        public virtual string GetConfiguration() { return GetMessage(CONFIGURATION_STR); }
+        public virtual string GetVersion() { return GetMessage(VERSION_STR,7); }
+        public virtual string GetDeviceInfo() { return GetMessage(DEVICE_STR); }
         public virtual List<ResourcesUtilization> GetCpuUsage() { return null; }
         public virtual List<ResourcesUtilization> GetMemUsage() { return null; }
         public virtual DataTable GetInterfaceBrif() { return null; }
@@ -149,28 +149,42 @@ namespace BScrip.BSDevice {
             Init(_lin, _comdic, brand, model);
         }
 
-        protected override string GetMessage(string com, string end) {
-            lin.Send(SYS_MARK_STR);
-            lin.Read();
-            string r = lin.ToSuperUserInterface();
-            if (!r.TrimEnd().EndsWith(LEVEL3_MARK_STR))
-                throw new Exception("Failed WaitFor: " + LEVEL3_MARK_STR);
-            lin.Send(USERVTY_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
-            lin.Send(SCRLEN0_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
-            lin.Send(com);
+        protected override string GetMessage(string com, int line = 0) {
+            StringBuilder comb = new StringBuilder();
+            comb.Append(SYS_MARK_STR).Append(System.Environment.NewLine)
+                .Append(USERVTY_STR).Append(System.Environment.NewLine)
+                .Append(SCRLEN_STR).Append(' ').Append(line).Append(System.Environment.NewLine)
+                .Append(com).Append(System.Environment.NewLine)
+                .Append(Device.End).Append(Device.End);
+            //lin.Send(SYS_MARK_STR);
+            //lin.Read();
+            //string r = lin.ToSuperUserInterface();
+            //if (!r.TrimEnd().EndsWith(LEVEL3_MARK_STR))
+            //    throw new Exception("Failed WaitFor: " + LEVEL3_MARK_STR);
+            //lin.Send(USERVTY_STR);
+            //lin.WaitFor(LEVEL3_MARK_STR);
+            //lin.Send(SCRLEN_STR);
+            //lin.WaitFor(LEVEL3_MARK_STR);
+            lin.Send(comb.ToString());
             string message = lin.Read().TrimEnd();
-
-            while (!message.Contains(end)) {
+            while (!message.Contains(Device.End)) {
                 message += lin.Read().TrimEnd();
             }
 
-            lin.Send(UNDOSCRLEN_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
-            lin.Send(QUIT_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
+            comb.Clear();
+            comb.Append(UNDOSCRLEN_STR).Append(System.Environment.NewLine)
+                .Append(QUIT_STR);
+            lin.Send(comb.ToString());
+            lin.ToUserInterface();
+
+            Console.WriteLine(message);
             return message;
+
+            //lin.Send(UNDOSCRLEN_STR);
+            //lin.WaitFor(LEVEL3_MARK_STR);
+            //lin.Send(QUIT_STR);
+            //lin.WaitFor(LEVEL3_MARK_STR);
+            //return message;
         }
 
         public override void SuperMe() {
@@ -226,7 +240,7 @@ namespace BScrip.BSDevice {
             Init(_lin, _comdic, "Cisco", "BASE");
         }
 
-        protected override string GetMessage(string com, string end) {
+        protected override string GetMessage(string com, int line = 0) {
             lin.Send(SYS_MARK_STR);
             lin.Read();
             string r = lin.ToUserInterface();
@@ -236,7 +250,7 @@ namespace BScrip.BSDevice {
             lin.WaitFor(LEVEL3_MARK_STR);
             lin.Send(USERVTY_STR);
             lin.WaitFor(LEVEL3_MARK_STR);
-            lin.Send(SCRLEN0_STR);
+            lin.Send(SCRLEN_STR);
             lin.WaitFor(LEVEL3_MARK_STR);
             lin.Send(QUIT_STR);
             lin.WaitFor(LEVEL3_MARK_STR);
@@ -247,7 +261,7 @@ namespace BScrip.BSDevice {
             lin.Send(com);
             string message = lin.Read().TrimEnd();
 
-            while (!message.Contains(end)) {
+            while (!message.Contains(Device.End)) {
                 message += lin.Read().TrimEnd();
             }
 

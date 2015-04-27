@@ -53,9 +53,24 @@ namespace WindowsFormsApplication1 {
             gra.FillEllipse(brush, 0, 0, pictureBox1.Size.Width, pictureBox1.Size.Height);//画填充椭圆的方法，x坐标、y坐标、宽、高，如果是100，则半径为50
             DataTable dt = new DataTable();
             dt.Columns.Add("name", typeof(string));
-            dt.Columns.Add("int1", typeof(int));
+            dt.Columns.Add("int1", typeof(string));
             dt.Rows.Add(new string[] { "low", "15" });
             dt.Rows.Add(new string[] { "height", "75" });
+            dt.Rows.Add(new string[] { "low", "15" });
+            dt.Rows.Add(new string[] { "height", "75" });
+            dt.Rows.Add(new string[] { "low", "15" });
+            dt.Rows.Add(new string[] { "height", "75" });
+            dt.Rows.Add(new string[] { "low", "15" });
+            dt.Rows.Add(new string[] { "height", "75" });
+            dt.Rows.Add(new string[] { "low", "15" });
+            dt.Rows.Add(new string[] { "height", "75" });
+            dt.Rows.Add(new string[] { "low", "15" });
+            dt.Rows.Add(new string[] { "height", "75" });
+            dt.Rows.Add(new string[] { "low", "15" });
+            dt.Rows.Add(new string[] { "height", "75" });
+            dt.Rows.Add(new string[] { "low", "15" });
+            dt.Rows.Add(new string[] { "height", "75" });
+
             dataGridView1.DataSource = dt;
             
         }
@@ -107,8 +122,12 @@ namespace WindowsFormsApplication1 {
         }
 
         private void button4_Click(object sender, EventArgs e) {
-            //SendKeys.Send("{Ctrl}+{C}");
-            MessageBox.Show("{Ctrl}+{C}");
+            string te = "";
+            //te += "efg" + System.Environment.NewLine;
+            //te += "345676";
+
+            int lo = te.IndexOf("456");
+            MessageBox.Show(te);
         }
 
 
