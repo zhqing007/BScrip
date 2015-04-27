@@ -122,12 +122,7 @@ namespace WindowsFormsApplication1 {
         }
 
         private void button4_Click(object sender, EventArgs e) {
-            string te = "";
-            //te += "efg" + System.Environment.NewLine;
-            //te += "345676";
-
-            int lo = te.IndexOf("456");
-            MessageBox.Show(te);
+            MessageBox.Show(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
         }
 
 

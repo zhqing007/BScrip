@@ -27,6 +27,14 @@ namespace BScrip {
                 value + "' where key='" + key + "'");
         }
 
+
+        public static void SaveDeviceConfiguration(Host h, string conf) {
+            SQLiteParameter[] p = {new SQLiteParameter("@hn", h.hostname)
+                                      , new SQLiteParameter("@st", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
+                                      , new SQLiteParameter("@co", conf)};
+            DBhelper.ExecuteSQL("insert into deviceconfiguration (hostname, savetime, configuration) values (@hn, @st, @co)", p);
+        }
+
         public static Host GetDefaultUpLoadServer() {
             string hostName = GetConfiguration("default_upload_server") as string;
             if(hostName == null) return null;

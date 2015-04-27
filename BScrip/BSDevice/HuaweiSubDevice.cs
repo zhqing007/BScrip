@@ -52,17 +52,7 @@ namespace BScrip.BSDevice {
         private ResourcesUtilization GetOneMemUsage(string memu) {
             StreamReader strreader = StaticFun.StrToStream(memu);
             string str;
-            Console.Write("++++++++++++++++++++++++++");
-
-
-            while (true) {
-                str = strreader.ReadLine();
-                if (str == null) {
-                    Console.WriteLine("");
-                }
-                if (str.IndexOf('%') >= 0) break;
-                Console.WriteLine(str);
-            }
+            while (!(str = strreader.ReadLine()).Contains('%'));
             ResourcesUtilization ru = new ResourcesUtilization();
             ru.max = Int32.Parse(str.Substring(str.IndexOf('%') - 3, 3).Trim());
             return ru;
@@ -111,12 +101,12 @@ namespace BScrip.BSDevice {
                 foreach (DataRow solt in solts.Rows)
                     comdb.Append(System.Environment.NewLine).Append("dis memory-usage slot ")
                         .Append(solt["Slot"].ToString());
-                Console.WriteLine("******************************************");
+                //Console.WriteLine("******************************************");
                 string rm = GetMessage(comdb.ToString());
                 ResourcesUtilization ru = GetOneMemUsage(rm);
                 ru.slotname = "Main";
                 rulist.Add(ru);
-                Console.WriteLine("******************************************");
+                //Console.WriteLine("******************************************");
                 foreach (DataRow solt in solts.Rows) {
                     rm = rm.Substring(rm.IndexOf("slot " + solt["Slot"]));
                     ru = GetOneMemUsage(rm);
@@ -138,22 +128,31 @@ namespace BScrip.BSDevice {
                 intInfo.Columns.Add("数据链路", typeof(string));
                 intInfo.Columns.Add("输入流量", typeof(string));
                 intInfo.Columns.Add("输出流量", typeof(string));
+                //intInfo.Columns.Add("备注", typeof(string));
 
-                string abc = GetMessage("display int brief");
-                Console.WriteLine("********   " + abc);
-                Console.WriteLine("--------------------------");
-                StreamReader devinforeader = StaticFun.StrToStream(abc);
+                string intmsg = GetMessage("display int brief");
+                StreamReader devinforeader = StaticFun.StrToStream(intmsg);
                 string str;
-                while ((str = devinforeader.ReadLine()).IndexOf("Interface") < 0) ;
-                Console.WriteLine("********   " + str);
+                while ((str = devinforeader.ReadLine()).IndexOf("Interface") < 0);
                 string[] intfarray;
                 while (!devinforeader.EndOfStream) {
                     if ((str = devinforeader.ReadLine()).IndexOf(LEVEL3_MARK_STR) >= 0) break;
-                    Console.WriteLine("********   " + str);
                     intfarray = str.Split(new char[] { ' ' }, 5, System.StringSplitOptions.RemoveEmptyEntries);
                     intfarray[4] = intfarray[4].Substring(0, intfarray[4].IndexOf(' '));
                     intInfo.Rows.Add(intfarray);
                 }
+
+                //intmsg = GetMessage("display int description ");
+                //devinforeader = StaticFun.StrToStream(intmsg);
+                //while ((str = devinforeader.ReadLine()).IndexOf("Interface") < 0);
+                //while (!devinforeader.EndOfStream) {
+                //    if ((str = devinforeader.ReadLine()).IndexOf(LEVEL3_MARK_STR) >= 0) break;
+                //    intfarray = str.Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
+
+                //    intfarray[4] = intfarray[4].Substring(0, intfarray[4].IndexOf(' '));
+                //    intInfo.Rows.Add(intfarray);
+                //}
+
                 return intInfo;
             }
             catch(Exception exc) {
@@ -214,13 +213,12 @@ namespace BScrip.BSDevice {
                 comstrb.Append("dis memory solt ").Append(solt["Slot"].ToString())
                     .Append(System.Environment.NewLine);
             }
-            comstrb.Append(Device.End);
 
             string meminfo = GetMessage(comstrb.ToString());
             StreamReader strreader = StaticFun.StrToStream(meminfo);
             string str;
             foreach (DataRow solt in solts.Rows) {
-                while (!(str = strreader.ReadLine()).Contains('%')) ;
+                while (!(str = strreader.ReadLine()).Contains('%'));
                 ResourcesUtilization ru = new ResourcesUtilization();
                 ru.slotname = solt["Slot"].ToString() + '-' + solt["Type"].ToString();
                 ru.max = Int32.Parse(str.Substring(str.IndexOf('%') - 3, 3).Trim());

@@ -52,6 +52,10 @@ namespace BScrip.BSThread {
                         LogMessageForm.logForm.AddLog(item, "导出配置失败");
                         continue;
                     }
+
+                    DBhelper.SaveDeviceConfiguration(item, strConfiguration);
+                    if (server == null) continue;
+
                     StringBuilder fileN = new StringBuilder(item.hostname);
                     fileN.Append('_').Append(item.ipaddress.Replace('.', '_'));
                     StringBuilder filePath = new StringBuilder("/");
@@ -70,6 +74,7 @@ namespace BScrip.BSThread {
                     sw.Close();
                     dev.Close();
                     LogMessageForm.logForm.AddLog(item, "文件写入完成");
+                    
                 }
                 catch (Exception exc) {
                     LogMessageForm.logForm.AddLog(item, "导出配置出现异常：" + exc.StackTrace);
