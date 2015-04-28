@@ -50,6 +50,7 @@ namespace BScrip.BSDevice {
         //public string VERSION;//型号
         //public BrandType BRAND;
         protected static string End = "BScrip_End";
+        protected static string Begin = "BScrip_Begin";
         public Dictionary<string, string> comdic = new Dictionary<string, string>();
         protected Linker lin = null;
         public string SuperPassWord = null;
@@ -116,10 +117,10 @@ namespace BScrip.BSDevice {
             get { return comdic["DEVICE_STR"]; }
         }
 
-        public static Device DeviceFactory(Linker lin) {
+        public static Device DeviceFactory(Linker lin, string spw) {
             if (lin.Connect().Contains("User Access Verification"))
-                return StaticFun.CiscoFactory(lin);
-            return StaticFun.HuaWeiFactory(lin);
+                return StaticFun.CiscoFactory(lin, spw);
+            return StaticFun.HuaWeiFactory(lin, spw);
         }
 
         protected abstract string GetMessage(string com, int line = 0);
@@ -154,6 +155,8 @@ namespace BScrip.BSDevice {
             comb.Append(SYS_MARK_STR).Append(System.Environment.NewLine)
                 .Append(USERVTY_STR).Append(System.Environment.NewLine)
                 .Append(SCRLEN_STR).Append(' ').Append(line).Append(System.Environment.NewLine)
+                .Append(QUIT_STR).Append(System.Environment.NewLine)
+                .Append(Device.Begin).Append(System.Environment.NewLine)
                 .Append(com).Append(System.Environment.NewLine)
                 .Append(Device.End).Append(Device.End);
             //lin.Send(SYS_MARK_STR);
@@ -172,13 +175,14 @@ namespace BScrip.BSDevice {
             }
 
             comb.Clear();
-            comb.Append(UNDOSCRLEN_STR).Append(System.Environment.NewLine)
-                .Append(QUIT_STR);
+            comb.Append(USERVTY_STR).Append(System.Environment.NewLine)
+                .Append(UNDOSCRLEN_STR).Append(System.Environment.NewLine)
+                .Append(QUIT_STR).Append(System.Environment.NewLine)
+                .Append(QUIT_STR).Append(System.Environment.NewLine);
             lin.Send(comb.ToString());
             lin.ToUserInterface();
 
-            Console.WriteLine(message);
-            return message;
+            return message.Substring(message.IndexOf(Device.Begin));
 
             //lin.Send(UNDOSCRLEN_STR);
             //lin.WaitFor(LEVEL3_MARK_STR);
@@ -193,15 +197,11 @@ namespace BScrip.BSDevice {
             if (SuperPassWord == null || SuperPassWord.Length == 0) return;
             if (isSuper) return;
 
-            lin.Send(SUPERPW_MARK_STR);
-            string r = lin.Read();
-            if (!r.TrimEnd().EndsWith(PASSWORD_MARK_STR))
-                throw new Exception("Failed WaitFor: " + PASSWORD_MARK_STR);
-            lin.Send(SuperPassWord);
-            r = lin.Read();
-            if (!r.TrimEnd().EndsWith(LEVEL1_MARK_STR)
-                && !r.TrimEnd().EndsWith(LEVEL3_MARK_STR))
-                throw new Exception("Failed WaitFor: LEVEL_MARK_STR");
+            StringBuilder comb = new StringBuilder();
+            comb.Append(SUPERPW_MARK_STR).Append('\n')
+                .Append(SuperPassWord);
+            lin.Send(comb.ToString());
+            while (!lin.Read().Contains("Privilege note:"));
             isSuper = true;
         }
         
@@ -221,7 +221,7 @@ namespace BScrip.BSDevice {
                 flag = txtline.IndexOf(runtime);
                 if (flag > 0) {
                     model = txtline.Substring(0, flag - 1).Trim();
-                    baseInfo.runtime = txtline.Substring(flag + runtime.Length);
+                    baseInfo.runtime = txtline.Substring(flag + runtime.Length, 37);
                     break;
                 }
             }
@@ -241,42 +241,34 @@ namespace BScrip.BSDevice {
         }
 
         protected override string GetMessage(string com, int line = 0) {
-            lin.Send(SYS_MARK_STR);
-            lin.Read();
-            string r = lin.ToUserInterface();
-            if (!r.TrimEnd().EndsWith(LEVEL3_MARK_STR))
-                throw new Exception("Failed WaitFor: " + LEVEL3_MARK_STR);
-            lin.Send(CONFIGURATION_MODE_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
-            lin.Send(USERVTY_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
-            lin.Send(SCRLEN_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
-            lin.Send(QUIT_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
-            lin.Send(QUIT_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
+            StringBuilder comb = new StringBuilder();
+            comb.Append(SYS_MARK_STR).Append(System.Environment.NewLine)
+                .Append(CONFIGURATION_MODE_STR).Append(System.Environment.NewLine)
+                .Append(USERVTY_STR).Append(System.Environment.NewLine)
+                .Append(SCRLEN_STR).Append(' ').Append(line).Append(System.Environment.NewLine)
+                .Append(QUIT_STR).Append(System.Environment.NewLine)
+                .Append(QUIT_STR).Append(System.Environment.NewLine)
+                .Append(com).Append(System.Environment.NewLine)
+                .Append(Device.End).Append(Device.End);
 
-
-            lin.Send(com);
+            lin.Send(comb.ToString());
             string message = lin.Read().TrimEnd();
-
             while (!message.Contains(Device.End)) {
                 message += lin.Read().TrimEnd();
             }
 
-            lin.Send(CONFIGURATION_MODE_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
-            lin.Send(USERVTY_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
-            lin.Send(UNDOSCRLEN_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
-            lin.Send(QUIT_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
-            lin.Send(QUIT_STR);
-            lin.WaitFor(LEVEL3_MARK_STR);
-            return message;
+            comb.Clear();
+            comb.Append(CONFIGURATION_MODE_STR).Append(System.Environment.NewLine)
+                .Append(USERVTY_STR).Append(System.Environment.NewLine)
+                .Append(UNDOSCRLEN_STR).Append(line).Append(System.Environment.NewLine)
+                .Append(QUIT_STR).Append(System.Environment.NewLine)
+                .Append(QUIT_STR).Append(System.Environment.NewLine);
+            lin.Send(comb.ToString());
+            lin.ToUserInterface();
+            return message.Substring(message.IndexOf(com));
         }
+
+        public override string GetVersion() { return GetMessage(VERSION_STR); }
 
         public override DeviceBaseInfo GetBaseInfo() {
             string txt = GetVersion();
@@ -284,8 +276,8 @@ namespace BScrip.BSDevice {
             StreamReader txtreader = new StreamReader(txtstr);
             string txtline;
             string runtime = "uptime is ";
-            string softw = "software ";
-            string model = null;
+            string softw = "Software ";
+            string model = " processor";
 
             while (!txtreader.EndOfStream) {
                 txtline = txtreader.ReadLine();
@@ -297,14 +289,12 @@ namespace BScrip.BSDevice {
                 if (flag > 0)
                     baseInfo.runtime = txtline.Substring(flag + runtime.Length).Trim();
 
-                flag = txtline.IndexOf("processor");
+                flag = txtline.IndexOf(model);
                 if (flag > 0) {
-                    model = txtline.Substring(0, flag - 1).Trim();
+                    baseInfo.model = txtline.Substring(0, txtline.IndexOf(' ', txtline.IndexOf(' ') + 1)).Trim();
                     break;
                 }
             }
-            string[] devarr = model.Split(' ');
-            baseInfo.model = devarr[0] + ' ' + devarr[1];
             return baseInfo;
         }
     }

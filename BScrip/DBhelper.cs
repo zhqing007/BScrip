@@ -103,7 +103,7 @@ namespace BScrip {
                 h.loginname = row["loginname"].ToString();
                 h.loginmode = Int32.Parse(row["loginmode"].ToString());
                 h.password = row["password"].ToString();
-                h.superpw = data.Rows[0]["superpw"] as String;
+                h.superpw = row["superpw"] as String;
 
                 hosts.Add(h);
             }

@@ -125,17 +125,17 @@ namespace BScrip.BSForms {
             this.locTimer.Dispose();
             this.stopLocal.Enabled = false;
             this.getConfB.Enabled = true;
-            SetLocalCircle(Color.Red);
+            SetLocalCircle(SystemColors.Control);
         }
 
         //private void stopRemote_Click(object sender, EventArgs e) {
         //    this.remoteTimer.Dispose();
         //    this.stopRemote.Enabled = false;
         //    this.timerRemBu.Enabled = true;
-        //    SetRemoteCircle(Color.Red);
+        //    SetRemoteCircle(SystemColors.Control);
         //}
 
-        private Color localColor = Color.Red;
+        private Color localColor = SystemColors.Control;
         private void SetLocalCircle(Color c) {
             localColor = c;
             localIsRunningPic.Invalidate();

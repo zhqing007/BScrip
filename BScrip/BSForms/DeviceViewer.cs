@@ -28,11 +28,13 @@ namespace BScrip.BSForms {
         private void bGWorker_DoWork(object sender, DoWorkEventArgs e) {
             try {
                 if (devicehost.loginmode == 0) {
-                    dev = Device.DeviceFactory(new TelnetLinker(devicehost.ipaddress, devicehost.loginname, devicehost.password));
+                    dev = Device.DeviceFactory(new TelnetLinker(devicehost.ipaddress, devicehost.loginname, devicehost.password)
+                        , devicehost.superpw);
                     //Addstr(_server, "Telnet登录");
                 }
                 else {
-                    dev = Device.DeviceFactory(new SSH2Linker(devicehost.ipaddress, devicehost.loginname, devicehost.password));
+                    dev = Device.DeviceFactory(new SSH2Linker(devicehost.ipaddress, devicehost.loginname, devicehost.password)
+                        , devicehost.superpw);
                     //Addstr(_server, "SSH2登录");
                 }
 

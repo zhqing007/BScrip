@@ -179,7 +179,7 @@ namespace BScrip.BSDevice {
             string[] devstrs;
             while (!devinfo.EndOfStream) {
                 devstrs = devinfo.ReadLine().Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
-                if (devstrs[2].Equals("Absent")) continue;
+                if (devstrs.Length != 5 || devstrs[2].Equals("Absent")) continue;
                 SoltInfo.Rows.Add(devstrs);
             }
             return SoltInfo;
@@ -210,13 +210,14 @@ namespace BScrip.BSDevice {
             DataTable solts = GetSoltInfo();
             StringBuilder comstrb = new StringBuilder();
             foreach (DataRow solt in solts.Rows) {
-                comstrb.Append("dis memory solt ").Append(solt["Slot"].ToString())
+                comstrb.Append("dis memory slot ").Append(solt["Slot"].ToString())
                     .Append(System.Environment.NewLine);
             }
 
             string meminfo = GetMessage(comstrb.ToString());
             StreamReader strreader = StaticFun.StrToStream(meminfo);
             string str;
+            while (!strreader.ReadLine().Contains("slot"));
             foreach (DataRow solt in solts.Rows) {
                 while (!(str = strreader.ReadLine()).Contains('%'));
                 ResourcesUtilization ru = new ResourcesUtilization();
@@ -243,7 +244,8 @@ namespace BScrip.BSDevice {
             string[] intfarray;
             while (!devinforeader.EndOfStream) {
                 if ((str = devinforeader.ReadLine()).Contains(LEVEL3_MARK_STR)) break;
-                intfarray = str.Split(new char[] { ' ' }, 7, System.StringSplitOptions.RemoveEmptyEntries);
+                intfarray = (str + " -").Split(new char[] { ' ' }, 7, System.StringSplitOptions.RemoveEmptyEntries);
+                intfarray[6] = intfarray[6].Substring(0, intfarray[6].Length - 1).Trim();
                 intInfo.Rows.Add(intfarray);
             }
             return intInfo;

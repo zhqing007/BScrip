@@ -37,14 +37,15 @@ namespace BScrip.BSThread {
             foreach (Host item in hosts) {
                 try {
                     if (item.loginmode == 0) {
-                        dev = Device.DeviceFactory(new TelnetLinker(item.ipaddress, item.loginname, item.password));
+                        dev = Device.DeviceFactory(new TelnetLinker(item.ipaddress, item.loginname, item.password)
+                            , item.superpw);
                         LogMessageForm.logForm.AddLog(item, "Telnet登录");
                     }
                     else {
-                        dev = Device.DeviceFactory(new SSH2Linker(item.ipaddress, item.loginname, item.password));
+                        dev = Device.DeviceFactory(new SSH2Linker(item.ipaddress, item.loginname, item.password)
+                            , item.superpw);
                         LogMessageForm.logForm.AddLog(item, "SSH2登录");
                     }
-                    dev.SuperPassWord = item.superpw;
                     string strConfiguration = dev.GetConfiguration();
                     if (strConfiguration != null && strConfiguration.Trim().Length > 0)
                         LogMessageForm.logForm.AddLog(item, "导出配置成功");
@@ -52,7 +53,7 @@ namespace BScrip.BSThread {
                         LogMessageForm.logForm.AddLog(item, "导出配置失败");
                         continue;
                     }
-
+                    
                     DBhelper.SaveDeviceConfiguration(item, strConfiguration);
                     if (server == null) continue;
 

@@ -119,25 +119,27 @@ namespace BScrip {
             return new StreamReader(txtstr);
         }
 
-        public static BSDevice.Device HuaWeiFactory(Linker _linker) {
+        public static BSDevice.Device HuaWeiFactory(Linker _linker, string spw) {
             if (_linker == null) return null;
             HuaweiDevice devhua = new HuaweiDevice(_linker);
+            devhua.SuperPassWord = spw;
+            devhua.SuperMe();
             DeviceBaseInfo devinfo = devhua.GetBaseInfo();
 
             Type type = Type.GetType(GetClassName(devinfo.brand, devinfo.model));
             Device dev = System.Activator.CreateInstance(type, new object[] { _linker, devhua.comdic }) as Device;
-            dev.SuperMe();
             return dev;
         }
 
-        public static BSDevice.Device CiscoFactory(Linker _linker) {
+        public static BSDevice.Device CiscoFactory(Linker _linker, string spw) {
             if (_linker == null) return null;
             CiscoDevice devcisco = new CiscoDevice(_linker);
+            devcisco.SuperPassWord = spw;
+            devcisco.SuperMe();
             DeviceBaseInfo devinfo = devcisco.GetBaseInfo();
 
             Type type = Type.GetType(GetClassName(devinfo.brand, devinfo.model));
-            Device dev = System.Activator.CreateInstance(type, new object[] { _linker, devcisco.comdic }) as Device;
-            dev.SuperMe();
+            Device dev = System.Activator.CreateInstance(type, new object[] { _linker, devcisco.comdic }) as Device;            
             return dev;
         }
     }
