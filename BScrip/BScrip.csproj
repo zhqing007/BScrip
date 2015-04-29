@@ -69,6 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BSDevice\CiscoSubDevice.cs" />
     <Compile Include="BSDevice\device.cs" />
     <Compile Include="BSDevice\HuaweiSubDevice.cs" />
     <Compile Include="BSForms\FileTransfer.cs">
