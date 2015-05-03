@@ -85,7 +85,7 @@
             // 
             // devbaseinfo
             // 
-            this.devbaseinfo.BackColor = System.Drawing.SystemColors.Control;
+            this.devbaseinfo.BackColor = StaticFun.BSColor;
             this.devbaseinfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.devbaseinfo.Cursor = System.Windows.Forms.Cursors.Default;
             this.devbaseinfo.Location = new System.Drawing.Point(3, 36);
@@ -142,7 +142,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage1.BackColor = StaticFun.BSColor;
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.interfaceGridView);
             this.tabPage1.Controls.Add(this.label1);
@@ -192,7 +192,7 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage2.BackColor = StaticFun.BSColor;
             this.tabPage2.Controls.Add(this.cpuresourceschart);
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -204,7 +204,7 @@
             // 
             // tabPage3
             // 
-            this.tabPage3.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage3.BackColor = StaticFun.BSColor;
             this.tabPage3.Controls.Add(this.memresourceschart);
             this.tabPage3.Location = new System.Drawing.Point(4, 25);
             this.tabPage3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);

@@ -15,6 +15,7 @@ namespace BScrip.BSForms {
         //private BSForms.BackUpConfForm backUpMDIChild = null;
         private TimerBackUpForm timerBUMDIChild = null;
         private BSForms.DeviceViewer switchCMDIChild = null;
+        private BSForms.ConfViewer confViewerCMDIChild = null;
 
         public BScripMDIParent() {
             WelcomeForm fw = new WelcomeForm();
@@ -153,14 +154,49 @@ namespace BScrip.BSForms {
                 switchCMDIChild.Parent = splitContainer2.Panel1;
                 switchCMDIChild.Dock = DockStyle.Fill;
                 switchCMDIChild.Show();
-                switchCMDIChild.SetDevice(selecthosts[0]);
+                switchCMDIChild.AddHost(selecthosts[0]);
             }
             else
                 splitContainer2.Panel1.Controls.Add(switchCMDIChild);
         }
+
+        public void confviewer_Click(object sender, EventArgs e) {
+            List<Host> selecthosts = HostsForm.allhostsform.GetSelectHosts();
+            if (selecthosts.Count <= 0) {
+                MessageBox.Show("没有选择设备！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            splitContainer2.Panel1.Controls.Clear();
+            if (confViewerCMDIChild == null || confViewerCMDIChild.IsDisposed) {
+                confViewerCMDIChild = new BSForms.ConfViewer(selecthosts[0]);
+                confViewerCMDIChild.MdiParent = this;
+                confViewerCMDIChild.Parent = splitContainer2.Panel1;
+                confViewerCMDIChild.Dock = DockStyle.Fill;
+                confViewerCMDIChild.Show();
+            }
+            else {
+                confViewerCMDIChild.AddHost(selecthosts[0]);
+                splitContainer2.Panel1.Controls.Add(confViewerCMDIChild);
+            }
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e) {
+            MessageBox.Show("该功能尚未开放！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     public abstract class BSForm : Form {
+        public BSForm(){
+            this.BackColor = StaticFun.BSColor;
+        }
+
         public abstract void AddHost(Host h = null);
+        protected override void WndProc(ref Message m) {
+            if (m.Msg == 0x00A1 && m.WParam.ToInt32() == 2) {
+                m.Msg = 0x0201;
+                m.LParam = IntPtr.Zero;
+            }
+            base.WndProc(ref m);            
+        }
     }
 }

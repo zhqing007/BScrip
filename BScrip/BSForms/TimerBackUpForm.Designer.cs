@@ -314,13 +314,14 @@
             // localIsRunningPic
             // 
             this.localIsRunningPic.BackColor = System.Drawing.SystemColors.Control;
+            this.localIsRunningPic.Image = global::BScrip.Properties.Resources.norun;
             this.localIsRunningPic.Location = new System.Drawing.Point(352, 85);
             this.localIsRunningPic.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.localIsRunningPic.Name = "localIsRunningPic";
             this.localIsRunningPic.Size = new System.Drawing.Size(100, 30);
+            this.localIsRunningPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.localIsRunningPic.TabIndex = 33;
             this.localIsRunningPic.TabStop = false;
-            this.localIsRunningPic.Paint += new System.Windows.Forms.PaintEventHandler(this.localIsRunningPic_Paint);
             // 
             // getConfB
             // 

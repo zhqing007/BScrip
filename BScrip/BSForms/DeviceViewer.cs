@@ -11,7 +11,7 @@ using BScrip.BSDevice;
 using System.Windows.Forms.DataVisualization.Charting;
 
 namespace BScrip.BSForms {
-    public partial class DeviceViewer : Form {
+    public partial class DeviceViewer : BSForm {
         private Host devicehost = null;
         private DeviceBaseInfo dbi;
         private List<ResourcesUtilization> cpurulist;
@@ -141,17 +141,15 @@ namespace BScrip.BSForms {
             }
         }
 
-        public void SetDevice(Host sw, TimeSpan span = new TimeSpan()) {
-            devicehost = sw;
-            if (span.Equals(TimeSpan.Zero))
-                refreshtimespan = new TimeSpan(0, 0, 10);
-            else
-                refreshtimespan = span;
-            loadbasebg.RunWorkerAsync();
+        public void SetTimeSpan(TimeSpan span) {
+            refreshtimespan = span;
         }
 
-        public void SetTimeSpan(TimeSpan span) {
-            
+        public override void AddHost(Host sw = null) {
+            devicehost = sw;
+            if (refreshtimespan.Equals(TimeSpan.Zero))
+                refreshtimespan = new TimeSpan(0, 0, 10);
+            loadbasebg.RunWorkerAsync();
         }
     }
 }

@@ -123,11 +123,11 @@
             this.label4.TabIndex = 8;
             this.label4.Text = "密码：";
             // 
-            // CancelButton
+            // CButton
             // 
             this.CButton.Location = new System.Drawing.Point(302, 280);
             this.CButton.Margin = new System.Windows.Forms.Padding(4);
-            this.CButton.Name = "CancelButton";
+            this.CButton.Name = "CButton";
             this.CButton.Size = new System.Drawing.Size(99, 35);
             this.CButton.TabIndex = 9;
             this.CButton.Text = "取消";
@@ -176,6 +176,7 @@
             this.MinimizeBox = false;
             this.Name = "FileTransfer";
             this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "输入服务器信息";
             this.ResumeLayout(false);
             this.PerformLayout();

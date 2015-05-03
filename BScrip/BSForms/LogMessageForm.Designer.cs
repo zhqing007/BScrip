@@ -23,30 +23,32 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
             this.loglist = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.LogFCopyB = new System.Windows.Forms.Button();
-            this.LogFSaveB = new System.Windows.Forms.Button();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.copy = new System.Windows.Forms.ToolStripMenuItem();
+            this.save = new System.Windows.Forms.ToolStripMenuItem();
+            this.clear = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // loglist
             // 
-            this.loglist.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.loglist.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4});
+            this.loglist.Dock = System.Windows.Forms.DockStyle.Fill;
             this.loglist.FullRowSelect = true;
             this.loglist.Location = new System.Drawing.Point(0, 0);
-            this.loglist.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.loglist.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.loglist.Name = "loglist";
-            this.loglist.Size = new System.Drawing.Size(505, 108);
+            this.loglist.Size = new System.Drawing.Size(672, 168);
             this.loglist.TabIndex = 0;
             this.loglist.UseCompatibleStateImageBehavior = false;
             this.loglist.View = System.Windows.Forms.View.Details;
@@ -71,41 +73,49 @@
             this.columnHeader4.Text = "消息";
             this.columnHeader4.Width = 309;
             // 
-            // LogFCopyB
+            // contextMenuStrip1
             // 
-            this.LogFCopyB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.LogFCopyB.Location = new System.Drawing.Point(443, 113);
-            this.LogFCopyB.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.LogFCopyB.Name = "LogFCopyB";
-            this.LogFCopyB.Size = new System.Drawing.Size(61, 20);
-            this.LogFCopyB.TabIndex = 5;
-            this.LogFCopyB.Text = "复制";
-            this.LogFCopyB.UseVisualStyleBackColor = true;
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copy,
+            this.save,
+            this.clear});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(169, 98);
             // 
-            // LogFSaveB
+            // copy
             // 
-            this.LogFSaveB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.LogFSaveB.Location = new System.Drawing.Point(378, 113);
-            this.LogFSaveB.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.LogFSaveB.Name = "LogFSaveB";
-            this.LogFSaveB.Size = new System.Drawing.Size(61, 20);
-            this.LogFSaveB.TabIndex = 4;
-            this.LogFSaveB.Text = "保存...";
-            this.LogFSaveB.UseVisualStyleBackColor = true;
+            this.copy.Name = "copy";
+            this.copy.Size = new System.Drawing.Size(168, 24);
+            this.copy.Text = "复制到剪贴板";
+            this.copy.Click += new System.EventHandler(this.copy_Click);
+            // 
+            // save
+            // 
+            this.save.Name = "save";
+            this.save.Size = new System.Drawing.Size(168, 24);
+            this.save.Text = "保存到文件";
+            this.save.Click += new System.EventHandler(this.save_Click);
+            // 
+            // clear
+            // 
+            this.clear.Name = "clear";
+            this.clear.Size = new System.Drawing.Size(168, 24);
+            this.clear.Text = "清除";
+            this.clear.Click += new System.EventHandler(this.clear_Click);
             // 
             // LogMessageForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(504, 134);
-            this.Controls.Add(this.LogFCopyB);
-            this.Controls.Add(this.LogFSaveB);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(230)))), ((int)(((byte)(245)))));
+            this.ClientSize = new System.Drawing.Size(672, 168);
             this.Controls.Add(this.loglist);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "LogMessageForm";
             this.ShowInTaskbar = false;
             this.Text = "日志";
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -113,11 +123,13 @@
         #endregion
 
         private System.Windows.Forms.ListView loglist;
-        private System.Windows.Forms.Button LogFCopyB;
-        private System.Windows.Forms.Button LogFSaveB;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem copy;
+        private System.Windows.Forms.ToolStripMenuItem save;
+        private System.Windows.Forms.ToolStripMenuItem clear;
     }
 }

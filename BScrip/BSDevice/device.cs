@@ -240,6 +240,10 @@ namespace BScrip.BSDevice {
             Init(_lin, _comdic, "Cisco", "BASE");
         }
 
+        public CiscoDevice(Linker _lin, Dictionary<string, string> _comdic, string brand, string model) {
+            Init(_lin, _comdic, brand, model);
+        }
+
         protected override string GetMessage(string com, int line = 0) {
             StringBuilder comb = new StringBuilder();
             comb.Append(SYS_MARK_STR).Append(System.Environment.NewLine)

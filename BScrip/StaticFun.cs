@@ -6,9 +6,12 @@ using System.Windows.Forms;
 using System.Data;
 using BScrip.BSDevice;
 using System.IO;
+using System.Drawing;
 
 namespace BScrip {
     public class StaticFun {
+        public static Color BSColor = Color.FromArgb(220, 230, 245);
+
         public static void SelectAll_ListView(ListView lv) {
             foreach (ListViewItem h in lv.Items)
                 h.Selected = true;

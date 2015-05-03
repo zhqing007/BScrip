@@ -103,7 +103,7 @@ namespace BScrip.BSForms {
             if (!isbegin) return;
             this.stopLocal.Enabled = true;
             this.getConfB.Enabled = false;
-            SetLocalCircle(Color.Green);
+            SetPicSta(true);
         }
 
         //private void timerRemBu_Click(object sender, EventArgs e) {
@@ -125,7 +125,7 @@ namespace BScrip.BSForms {
             this.locTimer.Dispose();
             this.stopLocal.Enabled = false;
             this.getConfB.Enabled = true;
-            SetLocalCircle(SystemColors.Control);
+            SetPicSta(false);
         }
 
         //private void stopRemote_Click(object sender, EventArgs e) {
@@ -135,10 +135,11 @@ namespace BScrip.BSForms {
         //    SetRemoteCircle(SystemColors.Control);
         //}
 
-        private Color localColor = SystemColors.Control;
-        private void SetLocalCircle(Color c) {
-            localColor = c;
-            localIsRunningPic.Invalidate();
+
+        private void SetPicSta(bool dis) {
+            this.localIsRunningPic.Image =
+                dis ? global::BScrip.Properties.Resources.run
+                : global::BScrip.Properties.Resources.norun;
         }
 
         //private void SetRemoteCircle(Color c) {
@@ -152,9 +153,7 @@ namespace BScrip.BSForms {
             g.FillEllipse(bush, 0, 0, pb.Size.Width - 1, pb.Size.Height - 1);
         }
 
-        private void localIsRunningPic_Paint(object sender, PaintEventArgs e) {
-            DrawPicBoxCircle(sender as PictureBox, e.Graphics, localColor);
-        }
+
 
         //private void remoteIsRunningPic_Paint(object sender, PaintEventArgs e) {
         //    DrawPicBoxCircle(sender as PictureBox, e.Graphics, remoteColor);
@@ -207,7 +206,7 @@ namespace BScrip.BSForms {
             Host _server = null;
             if (isUpLoad_re.Checked) _server = remoser_re.Tag as Host;
             BSThread.ConfThread confth = new BSThread.ConfThread(hostlist, _server);
-            Thread logThread = new Thread(new ThreadStart(confth.GetConfInThread));
+            Thread logThread = new Thread(new ThreadStart(confth.GetConfNoThread));
             logThread.Start();
         }
 
@@ -216,7 +215,9 @@ namespace BScrip.BSForms {
             this.beginTimePicker.Enabled = en;
             this.groupBox1.Enabled = en;
             this.stopLocal.Enabled = en;
-            this.localIsRunningPic.Enabled = en;
+            //this.localIsRunningPic.Image =
+            //    en ? global::BScrip.Properties.Resources.run
+            //    : global::BScrip.Properties.Resources.norun;
         }
 
         private void isTimercheckbox_CheckedChanged(object sender, EventArgs e) {

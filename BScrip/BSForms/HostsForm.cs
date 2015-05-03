@@ -123,6 +123,7 @@ namespace BScrip.BSForms {
             deleteHost.Visible = visible;
             modifyHost.Visible = visible;
             hostDetails.Visible = visible;
+            confviewer.Visible = visible;
         }
 
         private void contextMenuStrip_Opening(object sender, CancelEventArgs e) {
@@ -135,6 +136,18 @@ namespace BScrip.BSForms {
 
         private void addToBackUp_Click(object sender, EventArgs e) {
             BSForms.BScripMDIParent.onlyOneMDI.AddHost();
+        }
+
+        private void confviewer_Click(object sender, EventArgs e) {
+            BSForms.BScripMDIParent.onlyOneMDI.confviewer_Click(null, null);
+        }
+
+        protected override void WndProc(ref Message m) {
+            if (m.Msg == 0x00A1 && m.WParam.ToInt32() == 2) {
+                m.Msg = 0x0201;
+                m.LParam = IntPtr.Zero;
+            }
+            base.WndProc(ref m);
         }
     }
 }

@@ -72,6 +72,18 @@
     <Compile Include="BSDevice\CiscoSubDevice.cs" />
     <Compile Include="BSDevice\device.cs" />
     <Compile Include="BSDevice\HuaweiSubDevice.cs" />
+    <Compile Include="BSForms\ConfShower.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BSForms\ConfShower.Designer.cs">
+      <DependentUpon>ConfShower.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BSForms\ConfViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BSForms\ConfViewer.Designer.cs">
+      <DependentUpon>ConfViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="BSForms\FileTransfer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,6 +145,12 @@
     <Compile Include="Util.cs" />
     <Compile Include="XMLHelper.cs" />
     <Compile Include="XmlHelper_S.cs" />
+    <EmbeddedResource Include="BSForms\ConfShower.resx">
+      <DependentUpon>ConfShower.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BSForms\ConfViewer.resx">
+      <DependentUpon>ConfViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BSForms\FileTransfer.resx">
       <DependentUpon>FileTransfer.cs</DependentUpon>
     </EmbeddedResource>
@@ -196,8 +214,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\RedCircle.png" />
-    <None Include="Resources\Image1.jpg" />
+    <None Include="Resources\18.ico" />
+    <None Include="Resources\norun.jpg" />
+    <None Include="Resources\run.gif" />
     <Content Include="SQLite.Interop.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

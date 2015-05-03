@@ -27,12 +27,31 @@ namespace BScrip {
                 value + "' where key='" + key + "'");
         }
 
-
         public static void SaveDeviceConfiguration(Host h, string conf) {
             SQLiteParameter[] p = {new SQLiteParameter("@hn", h.hostname)
                                       , new SQLiteParameter("@st", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
                                       , new SQLiteParameter("@co", conf)};
             DBhelper.ExecuteSQL("insert into deviceconfiguration (hostname, savetime, configuration) values (@hn, @st, @co)", p);
+        }
+
+        public static DataTable GetDeviceConfTime(string hostname, DateTime begin, DateTime end) {
+            SQLiteParameter[] p = {new SQLiteParameter("@hn", hostname)
+                                      , new SQLiteParameter("@begin", begin.ToString("yyyy-MM-dd HH:mm:ss"))
+                                      , new SQLiteParameter("@end", end.ToString("yyyy-MM-dd HH:mm:ss"))};
+            DataTable deconf = ExecuteDataTable(
+                "select savetime from deviceconfiguration where hostname=@hn and savetime>=@begin and savetime<=@end"
+                , p);
+            return deconf;
+        }
+
+        public static string GetDeviceConfiguration(string hostname, DateTime save) {
+            SQLiteParameter[] p = {new SQLiteParameter("@hn", hostname)
+                                      , new SQLiteParameter("@save", save.ToString("yyyy-MM-dd HH:mm:ss"))};
+            DataTable deconf = ExecuteDataTable(
+                "select configuration from deviceconfiguration where hostname=@hn and savetime=@save"
+                , p);
+            if (deconf.Rows.Count <= 0) return null;
+            return deconf.Rows[0][0].ToString();
         }
 
         public static Host GetDefaultUpLoadServer() {

@@ -27,6 +27,7 @@
             this.HostView = new System.Windows.Forms.ListView();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToBackUp = new System.Windows.Forms.ToolStripMenuItem();
+            this.confviewer = new System.Windows.Forms.ToolStripMenuItem();
             this.hostDetails = new System.Windows.Forms.ToolStripMenuItem();
             this.selectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.modifyHost = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,13 +59,14 @@
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addToBackUp,
+            this.confviewer,
             this.hostDetails,
             this.selectAll,
             this.modifyHost,
             this.addHost,
             this.deleteHost});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(169, 170);
+            this.contextMenuStrip.Size = new System.Drawing.Size(169, 172);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // addToBackUp
@@ -73,6 +75,13 @@
             this.addToBackUp.Size = new System.Drawing.Size(168, 24);
             this.addToBackUp.Text = "添加到备份";
             this.addToBackUp.Click += new System.EventHandler(this.addToBackUp_Click);
+            // 
+            // confviewer
+            // 
+            this.confviewer.Name = "confviewer";
+            this.confviewer.Size = new System.Drawing.Size(168, 24);
+            this.confviewer.Text = "配置查询";
+            this.confviewer.Click += new System.EventHandler(this.confviewer_Click);
             // 
             // hostDetails
             // 
@@ -161,6 +170,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = StaticFun.BSColor;
             this.ClientSize = new System.Drawing.Size(355, 664);
             this.ControlBox = false;
             this.Controls.Add(this.HostView);
@@ -190,5 +200,6 @@
         private System.Windows.Forms.ToolStripMenuItem modifyHost;
         private System.Windows.Forms.ToolStripMenuItem hostDetails;
         private System.Windows.Forms.ToolStripMenuItem addToBackUp;
+        private System.Windows.Forms.ToolStripMenuItem confviewer;
     }
 }

@@ -34,6 +34,7 @@ namespace BScrip.BSThread {
 
         public void GetConfNoThread() {
             Device dev = null;
+            List<HostConfigStruct> hcList = new List<HostConfigStruct>();
             foreach (Host item in hosts) {
                 try {
                     if (item.loginmode == 0) {
@@ -46,58 +47,88 @@ namespace BScrip.BSThread {
                             , item.superpw);
                         LogMessageForm.logForm.AddLog(item, "SSH2登录");
                     }
-                    string strConfiguration = dev.GetConfiguration();
-                    if (strConfiguration != null && strConfiguration.Trim().Length > 0)
+
+                    HostConfigStruct hc = new HostConfigStruct();
+                    hc.device = item;
+                    hc.config = dev.GetConfiguration();
+                    if (hc.config != null && hc.config.Trim().Length > 0)
                         LogMessageForm.logForm.AddLog(item, "导出配置成功");
                     else {
                         LogMessageForm.logForm.AddLog(item, "导出配置失败");
                         continue;
                     }
-                    
-                    DBhelper.SaveDeviceConfiguration(item, strConfiguration);
+
+                    DBhelper.SaveDeviceConfiguration(item, hc.config);
+
                     if (server == null) continue;
-
-                    StringBuilder fileN = new StringBuilder(item.hostname);
-                    fileN.Append('_').Append(item.ipaddress.Replace('.', '_'));
-                    StringBuilder filePath = new StringBuilder("/");
-                    filePath.Append(fileN.ToString());
-                    if (!Directory.Exists(fileN.ToString()))
-                        Directory.CreateDirectory(fileN.ToString());
-                    fileN = new StringBuilder(Path.GetFullPath(fileN.ToString()));
-                    string filename = DateTime.Now.ToString("yyyyMMddHHmm") + ".log";
-                    fileN.Append('\\').Append(filename);
-                    filePath.Append('/').Append(filename);
-                    filenames.Add(filePath.ToString());
-
-                    StreamWriter sw = File.CreateText(fileN.ToString());
-                    LogMessageForm.logForm.AddLog(item, "导出文件 " + fileN);
-                    sw.Write(strConfiguration);
-                    sw.Close();
-                    dev.Close();
-                    LogMessageForm.logForm.AddLog(item, "文件写入完成");
-                    
+                    hcList.Add(hc);                    
                 }
                 catch (Exception exc) {
                     LogMessageForm.logForm.AddLog(item, "导出配置出现异常：" + exc.StackTrace);
                 }
+                if(dev != null)
+                    dev.Close();
             }
-            if (server == null) return;
+            if (hcList.Count == 0) return;
+            UploadToServer(server, hcList);
+        }
+
+        public class HostConfigStruct {
+            public Host device;
+            public string config;
+            public string filename;
+        }
+
+        public static bool UploadAConfigToServer(Host server, HostConfigStruct config) {
+            List<HostConfigStruct> configlist = new List<HostConfigStruct>();
+            configlist.Add(config);
+
+            return UploadToServer(server, configlist);
+        }
+
+
+        public static bool UploadToServer(Host server, List<HostConfigStruct> configlist) {
+            List<string> filenames = new List<string>();
             try {
+                foreach (HostConfigStruct con in configlist) {
+                    StringBuilder fileN = new StringBuilder(con.device.hostname);
+                    fileN.Append('_').Append(con.device.ipaddress.Replace('.', '_'));
+                    StringBuilder filePath = new StringBuilder("/");
+                    filePath.Append(fileN.ToString());
+                    if (!Directory.Exists(fileN.ToString())) 
+                        Directory.CreateDirectory(fileN.ToString());
+                    fileN = new StringBuilder(Path.GetFullPath(fileN.ToString()));
+                    if(con.filename == null)
+                        con.filename = DateTime.Now.ToString("yyyyMMddHHmm") + ".txt";
+                    fileN.Append('\\').Append(con.filename);
+                    filePath.Append('/').Append(con.filename);
+                    filenames.Add(filePath.ToString());
+
+                    StreamWriter sw = File.CreateText(fileN.ToString());
+                    LogMessageForm.logForm.AddLog(con.device, "写入文件 " + fileN);
+                    sw.Write(con.config);
+                    sw.Close();
+                    LogMessageForm.logForm.AddLog(con.device, "文件写入完成");
+                }
                 SshFileTransfer.PutFileListSFTP(server, filenames);
                 LogMessageForm.logForm.AddLog(server, "上传文件完成");
                 foreach (string file in filenames) {
                     File.Delete(file.Substring(1));
                 }
+                LogMessageForm.logForm.AddLog(server, "本地文件已删除");
+                return true;
             }
-            catch (Exception exc) {
-                LogMessageForm.logForm.AddLog(server, "上传文件出现异常：" + exc.StackTrace);
+            catch (Exception ex) {
+                Console.Write(ex.StackTrace);
+                LogMessageForm.logForm.AddLog(server, "上传文件失败");
+                return false;
             }
         }
 
-        public void GetConfInThread() {
-            //myResetEvent.WaitOne();
-            GetConfNoThread();
-            //logF.ReDoButtons(true);
-        }
+        //public void GetConfInThread() {
+        //    //myResetEvent.WaitOne();
+        //    GetConfNoThread();
+        //    //logF.ReDoButtons(true);
+        //}
     }
 }
