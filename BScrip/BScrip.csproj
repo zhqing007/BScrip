@@ -217,6 +217,7 @@
     <None Include="Resources\18.ico" />
     <None Include="Resources\norun.jpg" />
     <None Include="Resources\run.gif" />
+    <None Include="Resources\0.ico" />
     <Content Include="SQLite.Interop.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

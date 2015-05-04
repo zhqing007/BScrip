@@ -19,10 +19,20 @@ namespace BScrip.BSForms {
         private DataTable intfinfo = null;
         private TimeSpan refreshtimespan;
         private Device dev;
-        private delegate void UpdateDataView();
+        private delegate void UpdateDelegate();
+        private List<UpdateDelegate> tasklist = new List<UpdateDelegate>();
+        
+        private static object locker = new object();
+        private static object timelocker = new object();
+        private bool quit = false;
+        UpdateDelegate refresh_c;
+        UpdateDelegate refresh_m;
+        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
 
         public DeviceViewer() {
             InitializeComponent();
+            refresh_c = new UpdateDelegate(RefreshCpuUsage);
+            refresh_m = new UpdateDelegate(RefreshMemUsage);
         }
 
         private void bGWorker_DoWork(object sender, DoWorkEventArgs e) {
@@ -43,52 +53,28 @@ namespace BScrip.BSForms {
                 dbi = dev.GetBaseInfo();
                 LogMessageForm.logForm.AddLog(devicehost, "读取设备基本信息结束");
                 devbaseinfo.AppendText(dbi.ToString());
-                LogMessageForm.logForm.AddLog(devicehost, "正在读取接口状态信息");
-                intfinfo = dev.GetInterfaceBrif();
-                LogMessageForm.logForm.AddLog(devicehost, "读取接口状态信息结束");
-                
-                UpdateDataView fc = new UpdateDataView(DisplayInterfaceInfo);
-                interfaceGridView.Invoke(fc);
 
-                LogMessageForm.logForm.AddLog(devicehost, "正在读取设备CPU占用率");
-                cpurulist = dev.GetCpuUsage();
-                LogMessageForm.logForm.AddLog(devicehost, "读取设备CPU占用率结束");
-                LogMessageForm.logForm.AddLog(devicehost, "正在读取设备内存占用率");
-                memrulist = dev.GetMemUsage();
-                LogMessageForm.logForm.AddLog(devicehost, "读取设备内存占用率结束");
-                foreach (ResourcesUtilization cpuu in cpurulist) {
-                    Series slotser = new Series();
-                    slotser.BorderWidth = 3;
-                    slotser.ChartArea = this.cpuresourceschart.ChartAreas[0].Name;
-                    slotser.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-                    slotser.Legend = this.cpuresourceschart.Legends[0].Name;
-                    slotser.Name = cpuu.slotname;
-                    this.cpuresourceschart.Series.Add(slotser);
-                }
+                refresh_Click(null, null);//读取接口信息
 
-                foreach (ResourcesUtilization memu in memrulist) {
-                    Series slotser = new Series();
-                    slotser.BorderWidth = 3;
-                    slotser.ChartArea = this.cpuresourceschart.ChartAreas[0].Name;
-                    slotser.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-                    slotser.Legend = this.cpuresourceschart.Legends[0].Name;
-                    slotser.Name = memu.slotname;
-                    this.memresourceschart.Series.Add(slotser);
-                }
-                RefreshData();                
 
-                while (true) {
-                    Thread.Sleep(refreshtimespan);
-                    LogMessageForm.logForm.AddLog(devicehost, "正在读取设备CPU占用率");
-                    cpurulist = dev.GetCpuUsage();
-                    LogMessageForm.logForm.AddLog(devicehost, "读取设备CPU占用率结束");
-                    LogMessageForm.logForm.AddLog(devicehost, "正在读取设备内存占用率");
-                    memrulist = dev.GetMemUsage();
-                    LogMessageForm.logForm.AddLog(devicehost, "读取设备内存占用率结束");
-                    //intfinfo = dev.GetInterfaceBrif();
-                    RefreshData();
+                while (true) {                    
+                    lock (locker) {
+                        foreach (UpdateDelegate task in tasklist) {
+                            task();
+                        }
+                    }
+                    if (quit) return;
+                    sw.Restart();
+                    while (true) {
+                        Thread.Sleep(1000);
+                        lock (timelocker) {
+                            if (sw.Elapsed >= refreshtimespan) {
+                                sw.Stop();
+                                break;
+                            }
+                        }
+                    }
                 }
-                
             }
             catch (Exception exc) {
                 LogMessageForm.logForm.AddLog(devicehost, "操作出现异常：" + exc.ToString());
@@ -101,20 +87,6 @@ namespace BScrip.BSForms {
 
         private void refreshinfobg_DoWork(object sender, DoWorkEventArgs e) {
             
-        }
-
-        private void RefreshData() {
-            for (int i = 0; i < cpurulist.Count; ++i) {
-                cpuresourceschart.Series[i].Points.AddY(cpurulist[i].s5);
-                if (cpuresourceschart.Series[i].Points.Count > cpuresourceschart.ChartAreas[0].AxisX.Maximum)
-                    cpuresourceschart.Series[i].Points.RemoveAt(0);
-            }
-
-            for (int i = 0; i < memrulist.Count; ++i) {
-                memresourceschart.Series[i].Points.AddY(memrulist[i].max);
-                if (memresourceschart.Series[i].Points.Count > memresourceschart.ChartAreas[0].AxisX.Maximum)
-                    memresourceschart.Series[i].Points.RemoveAt(0);
-            }
         }
 
         private void DisplayInterfaceInfo() {
@@ -145,7 +117,9 @@ namespace BScrip.BSForms {
         }
 
         public void SetTimeSpan(TimeSpan span) {
-            refreshtimespan = span;
+            lock (timelocker) {
+                refreshtimespan = span;
+            }
         }
 
         public override void AddHost(Host sw = null) {
@@ -153,6 +127,88 @@ namespace BScrip.BSForms {
             if (refreshtimespan.Equals(TimeSpan.Zero))
                 refreshtimespan = new TimeSpan(0, 0, 10);
             loadbasebg.RunWorkerAsync();
+        }
+
+        private void refresh_Click(object sender, EventArgs e) {
+            LogMessageForm.logForm.AddLog(devicehost, "正在读取接口状态信息");
+            intfinfo = dev.GetInterfaceBrif();
+            LogMessageForm.logForm.AddLog(devicehost, "读取接口状态信息结束");
+            UpdateDelegate fc = new UpdateDelegate(DisplayInterfaceInfo);
+            interfaceGridView.Invoke(fc);
+        }
+
+        private void RefreshCpuUsage() {
+            LogMessageForm.logForm.AddLog(devicehost, "正在读取设备CPU占用率");
+            cpurulist = dev.GetCpuUsage();
+            LogMessageForm.logForm.AddLog(devicehost, "读取设备CPU占用率结束");
+
+            if (this.cpuresourceschart.Series.Count == 0)
+                foreach (ResourcesUtilization cpuu in cpurulist) {
+                    Series slotser = new Series();
+                    slotser.BorderWidth = 3;
+                    slotser.ChartArea = this.cpuresourceschart.ChartAreas[0].Name;
+                    slotser.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                    slotser.Legend = this.cpuresourceschart.Legends[0].Name;
+                    slotser.Name = cpuu.slotname;
+                    this.cpuresourceschart.Series.Add(slotser);
+                }
+
+            for (int i = 0; i < cpurulist.Count; ++i) {
+                cpuresourceschart.Series[i].Points.AddY(cpurulist[i].s5);
+                if (cpuresourceschart.Series[i].Points.Count > cpuresourceschart.ChartAreas[0].AxisX.Maximum)
+                    cpuresourceschart.Series[i].Points.RemoveAt(0);
+            }
+        }
+
+        private void RefreshMemUsage() {
+            LogMessageForm.logForm.AddLog(devicehost, "正在读取设备内存占用率");
+            memrulist = dev.GetMemUsage();
+            LogMessageForm.logForm.AddLog(devicehost, "读取设备内存占用率结束");
+
+            if (memresourceschart.Series.Count == 0)
+                foreach (ResourcesUtilization memu in memrulist) {
+                    Series slotser = new Series();
+                    slotser.BorderWidth = 3;
+                    slotser.ChartArea = this.cpuresourceschart.ChartAreas[0].Name;
+                    slotser.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                    slotser.Legend = this.cpuresourceschart.Legends[0].Name;
+                    slotser.Name = memu.slotname;
+                    this.memresourceschart.Series.Add(slotser);
+                }
+
+            for (int i = 0; i < memrulist.Count; ++i) {
+                memresourceschart.Series[i].Points.AddY(memrulist[i].max);
+                if (memresourceschart.Series[i].Points.Count > memresourceschart.ChartAreas[0].AxisX.Maximum)
+                    memresourceschart.Series[i].Points.RemoveAt(0);
+            }
+        }
+
+        private void begin_cpu_Click(object sender, EventArgs e) {
+            lock (locker) {                
+                tasklist.Add(refresh_c);
+            }
+            begin_cpu.Enabled = false;
+        }
+
+        private void stop_cpu_Click(object sender, EventArgs e) {
+            lock (locker) {
+                tasklist.Remove(refresh_c);
+            }
+            begin_cpu.Enabled = true;
+        }
+
+        private void begin_mem_Click(object sender, EventArgs e) {
+            lock (locker) {
+                tasklist.Add(refresh_m);
+            }
+            begin_mem.Enabled = false;
+        }
+
+        private void stop_mem_Click(object sender, EventArgs e) {
+            lock (locker) {
+                tasklist.Remove(refresh_m);
+            }
+            begin_mem.Enabled = true;
         }
     }
 }

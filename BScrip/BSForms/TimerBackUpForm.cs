@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace BScrip.BSForms {
     public partial class TimerBackUpForm : BSForm {
-        private System.Threading.Timer locTimer; 
+        private System.Threading.Timer locTimer = null; 
 
         public TimerBackUpForm() {
             InitializeComponent();
@@ -122,6 +122,7 @@ namespace BScrip.BSForms {
         //}
 
         private void stopLocal_Click(object sender, EventArgs e) {
+            if (locTimer == null) return;
             this.locTimer.Dispose();
             this.stopLocal.Enabled = false;
             this.getConfB.Enabled = true;
@@ -214,7 +215,7 @@ namespace BScrip.BSForms {
             this.label1.Enabled = en;
             this.beginTimePicker.Enabled = en;
             this.groupBox1.Enabled = en;
-            this.stopLocal.Enabled = en;
+            this.stopLocal.Enabled = false;
             //this.localIsRunningPic.Image =
             //    en ? global::BScrip.Properties.Resources.run
             //    : global::BScrip.Properties.Resources.norun;

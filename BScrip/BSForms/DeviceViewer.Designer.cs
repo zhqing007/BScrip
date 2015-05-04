@@ -33,11 +33,16 @@
             this.memresourceschart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.devicebasemsg = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.refresh = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.interfaceGridView = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.stop_cpu = new System.Windows.Forms.Button();
+            this.begin_cpu = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.stop_mem = new System.Windows.Forms.Button();
+            this.begin_mem = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.cpuresourceschart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.memresourceschart)).BeginInit();
             this.devicebasemsg.SuspendLayout();
@@ -85,15 +90,15 @@
             // 
             // devbaseinfo
             // 
-            this.devbaseinfo.BackColor = StaticFun.BSColor;
+            this.devbaseinfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(230)))), ((int)(((byte)(245)))));
             this.devbaseinfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.devbaseinfo.Cursor = System.Windows.Forms.Cursors.Default;
-            this.devbaseinfo.Location = new System.Drawing.Point(3, 36);
+            this.devbaseinfo.Location = new System.Drawing.Point(11, 31);
             this.devbaseinfo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.devbaseinfo.Multiline = true;
             this.devbaseinfo.Name = "devbaseinfo";
             this.devbaseinfo.ReadOnly = true;
-            this.devbaseinfo.Size = new System.Drawing.Size(778, 120);
+            this.devbaseinfo.Size = new System.Drawing.Size(756, 120);
             this.devbaseinfo.TabIndex = 1;
             // 
             // memresourceschart
@@ -142,7 +147,8 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.BackColor = StaticFun.BSColor;
+            this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(230)))), ((int)(((byte)(245)))));
+            this.tabPage1.Controls.Add(this.refresh);
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.interfaceGridView);
             this.tabPage1.Controls.Add(this.label1);
@@ -155,10 +161,21 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "基本信息";
             // 
+            // refresh
+            // 
+            this.refresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.refresh.Location = new System.Drawing.Point(725, 161);
+            this.refresh.Name = "refresh";
+            this.refresh.Size = new System.Drawing.Size(56, 23);
+            this.refresh.TabIndex = 5;
+            this.refresh.Text = "刷新";
+            this.refresh.UseVisualStyleBackColor = true;
+            this.refresh.Click += new System.EventHandler(this.refresh_Click);
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 171);
+            this.label2.Location = new System.Drawing.Point(8, 165);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(82, 15);
             this.label2.TabIndex = 4;
@@ -192,7 +209,9 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.BackColor = StaticFun.BSColor;
+            this.tabPage2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(230)))), ((int)(((byte)(245)))));
+            this.tabPage2.Controls.Add(this.stop_cpu);
+            this.tabPage2.Controls.Add(this.begin_cpu);
             this.tabPage2.Controls.Add(this.cpuresourceschart);
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -202,9 +221,33 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "CPU占用率";
             // 
+            // stop_cpu
+            // 
+            this.stop_cpu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.stop_cpu.Location = new System.Drawing.Point(697, 417);
+            this.stop_cpu.Name = "stop_cpu";
+            this.stop_cpu.Size = new System.Drawing.Size(84, 30);
+            this.stop_cpu.TabIndex = 2;
+            this.stop_cpu.Text = "停止监控";
+            this.stop_cpu.UseVisualStyleBackColor = true;
+            this.stop_cpu.Click += new System.EventHandler(this.stop_cpu_Click);
+            // 
+            // begin_cpu
+            // 
+            this.begin_cpu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.begin_cpu.Location = new System.Drawing.Point(697, 373);
+            this.begin_cpu.Name = "begin_cpu";
+            this.begin_cpu.Size = new System.Drawing.Size(84, 30);
+            this.begin_cpu.TabIndex = 1;
+            this.begin_cpu.Text = "开始监控";
+            this.begin_cpu.UseVisualStyleBackColor = true;
+            this.begin_cpu.Click += new System.EventHandler(this.begin_cpu_Click);
+            // 
             // tabPage3
             // 
-            this.tabPage3.BackColor = StaticFun.BSColor;
+            this.tabPage3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(230)))), ((int)(((byte)(245)))));
+            this.tabPage3.Controls.Add(this.stop_mem);
+            this.tabPage3.Controls.Add(this.begin_mem);
             this.tabPage3.Controls.Add(this.memresourceschart);
             this.tabPage3.Location = new System.Drawing.Point(4, 25);
             this.tabPage3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -213,6 +256,28 @@
             this.tabPage3.Size = new System.Drawing.Size(789, 465);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "内存占用率";
+            // 
+            // stop_mem
+            // 
+            this.stop_mem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.stop_mem.Location = new System.Drawing.Point(697, 417);
+            this.stop_mem.Name = "stop_mem";
+            this.stop_mem.Size = new System.Drawing.Size(84, 30);
+            this.stop_mem.TabIndex = 4;
+            this.stop_mem.Text = "停止监控";
+            this.stop_mem.UseVisualStyleBackColor = true;
+            this.stop_mem.Click += new System.EventHandler(this.stop_mem_Click);
+            // 
+            // begin_mem
+            // 
+            this.begin_mem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.begin_mem.Location = new System.Drawing.Point(697, 373);
+            this.begin_mem.Name = "begin_mem";
+            this.begin_mem.Size = new System.Drawing.Size(84, 30);
+            this.begin_mem.TabIndex = 3;
+            this.begin_mem.Text = "开始监控";
+            this.begin_mem.UseVisualStyleBackColor = true;
+            this.begin_mem.Click += new System.EventHandler(this.begin_mem_Click);
             // 
             // DeviceViewer
             // 
@@ -249,6 +314,11 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button refresh;
+        private System.Windows.Forms.Button begin_cpu;
+        private System.Windows.Forms.Button stop_cpu;
+        private System.Windows.Forms.Button stop_mem;
+        private System.Windows.Forms.Button begin_mem;
 
     }
 }
