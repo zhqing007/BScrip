@@ -136,7 +136,7 @@ namespace BScrip.BSDevice {
                 while ((str = devinforeader.ReadLine()).IndexOf("Interface") < 0);
                 string[] intfarray;
                 while (!devinforeader.EndOfStream) {
-                    if ((str = devinforeader.ReadLine()).IndexOf(LEVEL3_MARK_STR) >= 0) break;
+                    if ((str = devinforeader.ReadLine()).Contains(Device.End)) break;
                     intfarray = str.Split(new char[] { ' ' }, 5, System.StringSplitOptions.RemoveEmptyEntries);
                     intfarray[4] = intfarray[4].Substring(0, intfarray[4].IndexOf(' '));
                     intInfo.Rows.Add(intfarray);
@@ -243,7 +243,7 @@ namespace BScrip.BSDevice {
             while ((str = devinforeader.ReadLine()).IndexOf("------------") < 0) ;
             string[] intfarray;
             while (!devinforeader.EndOfStream) {
-                if ((str = devinforeader.ReadLine()).Contains(LEVEL3_MARK_STR)) break;
+                if ((str = devinforeader.ReadLine()).Contains(Device.End)) break;
                 intfarray = (str + " -").Split(new char[] { ' ' }, 7, System.StringSplitOptions.RemoveEmptyEntries);
                 intfarray[6] = intfarray[6].Substring(0, intfarray[6].Length - 1).Trim();
                 intInfo.Rows.Add(intfarray);

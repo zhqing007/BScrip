@@ -64,12 +64,15 @@ namespace BScrip.BSForms {
                     slotser.Legend = this.cpuresourceschart.Legends[0].Name;
                     slotser.Name = cpuu.slotname;
                     this.cpuresourceschart.Series.Add(slotser);
-                    slotser = new Series();
+                }
+
+                foreach (ResourcesUtilization memu in memrulist) {
+                    Series slotser = new Series();
                     slotser.BorderWidth = 3;
                     slotser.ChartArea = this.cpuresourceschart.ChartAreas[0].Name;
                     slotser.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
                     slotser.Legend = this.cpuresourceschart.Legends[0].Name;
-                    slotser.Name = cpuu.slotname;
+                    slotser.Name = memu.slotname;
                     this.memresourceschart.Series.Add(slotser);
                 }
                 RefreshData();                

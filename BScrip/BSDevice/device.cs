@@ -252,6 +252,7 @@ namespace BScrip.BSDevice {
                 .Append(SCRLEN_STR).Append(' ').Append(line).Append(System.Environment.NewLine)
                 .Append(QUIT_STR).Append(System.Environment.NewLine)
                 .Append(QUIT_STR).Append(System.Environment.NewLine)
+                .Append(Device.Begin).Append(System.Environment.NewLine)
                 .Append(com).Append(System.Environment.NewLine)
                 .Append(Device.End).Append(Device.End);
 
@@ -264,12 +265,13 @@ namespace BScrip.BSDevice {
             comb.Clear();
             comb.Append(CONFIGURATION_MODE_STR).Append(System.Environment.NewLine)
                 .Append(USERVTY_STR).Append(System.Environment.NewLine)
-                .Append(UNDOSCRLEN_STR).Append(line).Append(System.Environment.NewLine)
+                .Append(UNDOSCRLEN_STR).Append(' ').Append(line).Append(System.Environment.NewLine)
                 .Append(QUIT_STR).Append(System.Environment.NewLine)
                 .Append(QUIT_STR).Append(System.Environment.NewLine);
             lin.Send(comb.ToString());
             lin.ToUserInterface();
-            return message.Substring(message.IndexOf(com));
+
+            return message.Substring(message.IndexOf(Device.Begin));
         }
 
         public override string GetVersion() { return GetMessage(VERSION_STR); }
@@ -281,7 +283,7 @@ namespace BScrip.BSDevice {
             string txtline;
             string runtime = "uptime is ";
             string softw = "Software ";
-            string model = " processor";
+            string model = "bytes of memory";
 
             while (!txtreader.EndOfStream) {
                 txtline = txtreader.ReadLine();
