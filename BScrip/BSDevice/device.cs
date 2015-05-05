@@ -116,6 +116,9 @@ namespace BScrip.BSDevice {
         public string DEVICE_STR {
             get { return comdic["DEVICE_STR"]; }
         }
+        public string BRIEFINT_STR {
+            get { return comdic["BRIEFINT_STR"]; }
+        }
 
         public static Device DeviceFactory(Linker lin, string spw) {
             if (lin.Connect().Contains("User Access Verification"))
@@ -206,10 +209,11 @@ namespace BScrip.BSDevice {
         }
         
         public override DeviceBaseInfo GetBaseInfo() {
+            if (baseInfo.runtime != null) return baseInfo;
             StreamReader txtreader = StaticFun.StrToStream(GetVersion());
             string txtline;
             string runtime = "uptime is ";
-            string softw = "software, Version ";
+            string softw = "oftware, Version ";
             string model = null;
 
             while (!txtreader.EndOfStream) {
@@ -221,7 +225,7 @@ namespace BScrip.BSDevice {
                 flag = txtline.IndexOf(runtime);
                 if (flag > 0) {
                     model = txtline.Substring(0, flag - 1).Trim();
-                    baseInfo.runtime = txtline.Substring(flag + runtime.Length, 37);
+                    baseInfo.runtime = txtline.Substring(flag + runtime.Length);
                     break;
                 }
             }

@@ -76,10 +76,10 @@
             legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Top;
             legend1.Name = "Legend1";
             this.cpuresourceschart.Legends.Add(legend1);
-            this.cpuresourceschart.Location = new System.Drawing.Point(3, 2);
-            this.cpuresourceschart.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cpuresourceschart.Location = new System.Drawing.Point(2, 2);
+            this.cpuresourceschart.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cpuresourceschart.Name = "cpuresourceschart";
-            this.cpuresourceschart.Size = new System.Drawing.Size(783, 366);
+            this.cpuresourceschart.Size = new System.Drawing.Size(586, 293);
             this.cpuresourceschart.TabIndex = 0;
             this.cpuresourceschart.Text = "chart1";
             // 
@@ -93,12 +93,12 @@
             this.devbaseinfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(230)))), ((int)(((byte)(245)))));
             this.devbaseinfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.devbaseinfo.Cursor = System.Windows.Forms.Cursors.Default;
-            this.devbaseinfo.Location = new System.Drawing.Point(11, 31);
-            this.devbaseinfo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.devbaseinfo.Location = new System.Drawing.Point(8, 25);
+            this.devbaseinfo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.devbaseinfo.Multiline = true;
             this.devbaseinfo.Name = "devbaseinfo";
             this.devbaseinfo.ReadOnly = true;
-            this.devbaseinfo.Size = new System.Drawing.Size(756, 120);
+            this.devbaseinfo.Size = new System.Drawing.Size(567, 69);
             this.devbaseinfo.TabIndex = 1;
             // 
             // memresourceschart
@@ -125,10 +125,10 @@
             legend2.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Top;
             legend2.Name = "Legend1";
             this.memresourceschart.Legends.Add(legend2);
-            this.memresourceschart.Location = new System.Drawing.Point(3, 2);
-            this.memresourceschart.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.memresourceschart.Location = new System.Drawing.Point(2, 2);
+            this.memresourceschart.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.memresourceschart.Name = "memresourceschart";
-            this.memresourceschart.Size = new System.Drawing.Size(783, 366);
+            this.memresourceschart.Size = new System.Drawing.Size(586, 293);
             this.memresourceschart.TabIndex = 2;
             this.memresourceschart.Text = "chart1";
             // 
@@ -139,10 +139,10 @@
             this.devicebasemsg.Controls.Add(this.tabPage3);
             this.devicebasemsg.Dock = System.Windows.Forms.DockStyle.Fill;
             this.devicebasemsg.Location = new System.Drawing.Point(0, 0);
-            this.devicebasemsg.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.devicebasemsg.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.devicebasemsg.Name = "devicebasemsg";
             this.devicebasemsg.SelectedIndex = 0;
-            this.devicebasemsg.Size = new System.Drawing.Size(797, 494);
+            this.devicebasemsg.Size = new System.Drawing.Size(598, 395);
             this.devicebasemsg.TabIndex = 3;
             // 
             // tabPage1
@@ -153,20 +153,21 @@
             this.tabPage1.Controls.Add(this.interfaceGridView);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.devbaseinfo);
-            this.tabPage1.Location = new System.Drawing.Point(4, 25);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPage1.Size = new System.Drawing.Size(789, 465);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Size = new System.Drawing.Size(590, 369);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "基本信息";
             // 
             // refresh
             // 
             this.refresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.refresh.Location = new System.Drawing.Point(725, 161);
+            this.refresh.Location = new System.Drawing.Point(534, 97);
+            this.refresh.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.refresh.Name = "refresh";
-            this.refresh.Size = new System.Drawing.Size(56, 23);
+            this.refresh.Size = new System.Drawing.Size(49, 27);
             this.refresh.TabIndex = 5;
             this.refresh.Text = "刷新";
             this.refresh.UseVisualStyleBackColor = true;
@@ -175,9 +176,10 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 165);
+            this.label2.Location = new System.Drawing.Point(4, 104);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(82, 15);
+            this.label2.Size = new System.Drawing.Size(65, 12);
             this.label2.TabIndex = 4;
             this.label2.Text = "接口信息：";
             // 
@@ -189,21 +191,22 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.interfaceGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.interfaceGridView.Location = new System.Drawing.Point(5, 189);
-            this.interfaceGridView.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.interfaceGridView.Location = new System.Drawing.Point(4, 128);
+            this.interfaceGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.interfaceGridView.Name = "interfaceGridView";
             this.interfaceGridView.ReadOnly = true;
             this.interfaceGridView.RowTemplate.Height = 27;
             this.interfaceGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.interfaceGridView.Size = new System.Drawing.Size(777, 270);
+            this.interfaceGridView.Size = new System.Drawing.Size(583, 239);
             this.interfaceGridView.TabIndex = 3;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 12);
+            this.label1.Location = new System.Drawing.Point(6, 10);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(112, 15);
+            this.label1.Size = new System.Drawing.Size(89, 12);
             this.label1.TabIndex = 2;
             this.label1.Text = "设备基本信息：";
             // 
@@ -213,20 +216,21 @@
             this.tabPage2.Controls.Add(this.stop_cpu);
             this.tabPage2.Controls.Add(this.begin_cpu);
             this.tabPage2.Controls.Add(this.cpuresourceschart);
-            this.tabPage2.Location = new System.Drawing.Point(4, 25);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPage2.Size = new System.Drawing.Size(789, 465);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Size = new System.Drawing.Size(590, 369);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "CPU占用率";
             // 
             // stop_cpu
             // 
             this.stop_cpu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.stop_cpu.Location = new System.Drawing.Point(697, 417);
+            this.stop_cpu.Location = new System.Drawing.Point(523, 334);
+            this.stop_cpu.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.stop_cpu.Name = "stop_cpu";
-            this.stop_cpu.Size = new System.Drawing.Size(84, 30);
+            this.stop_cpu.Size = new System.Drawing.Size(63, 24);
             this.stop_cpu.TabIndex = 2;
             this.stop_cpu.Text = "停止监控";
             this.stop_cpu.UseVisualStyleBackColor = true;
@@ -235,9 +239,10 @@
             // begin_cpu
             // 
             this.begin_cpu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.begin_cpu.Location = new System.Drawing.Point(697, 373);
+            this.begin_cpu.Location = new System.Drawing.Point(523, 298);
+            this.begin_cpu.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.begin_cpu.Name = "begin_cpu";
-            this.begin_cpu.Size = new System.Drawing.Size(84, 30);
+            this.begin_cpu.Size = new System.Drawing.Size(63, 24);
             this.begin_cpu.TabIndex = 1;
             this.begin_cpu.Text = "开始监控";
             this.begin_cpu.UseVisualStyleBackColor = true;
@@ -249,20 +254,21 @@
             this.tabPage3.Controls.Add(this.stop_mem);
             this.tabPage3.Controls.Add(this.begin_mem);
             this.tabPage3.Controls.Add(this.memresourceschart);
-            this.tabPage3.Location = new System.Drawing.Point(4, 25);
-            this.tabPage3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPage3.Size = new System.Drawing.Size(789, 465);
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage3.Size = new System.Drawing.Size(590, 369);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "内存占用率";
             // 
             // stop_mem
             // 
             this.stop_mem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.stop_mem.Location = new System.Drawing.Point(697, 417);
+            this.stop_mem.Location = new System.Drawing.Point(523, 334);
+            this.stop_mem.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.stop_mem.Name = "stop_mem";
-            this.stop_mem.Size = new System.Drawing.Size(84, 30);
+            this.stop_mem.Size = new System.Drawing.Size(63, 24);
             this.stop_mem.TabIndex = 4;
             this.stop_mem.Text = "停止监控";
             this.stop_mem.UseVisualStyleBackColor = true;
@@ -271,9 +277,10 @@
             // begin_mem
             // 
             this.begin_mem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.begin_mem.Location = new System.Drawing.Point(697, 373);
+            this.begin_mem.Location = new System.Drawing.Point(523, 298);
+            this.begin_mem.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.begin_mem.Name = "begin_mem";
-            this.begin_mem.Size = new System.Drawing.Size(84, 30);
+            this.begin_mem.Size = new System.Drawing.Size(63, 24);
             this.begin_mem.TabIndex = 3;
             this.begin_mem.Text = "开始监控";
             this.begin_mem.UseVisualStyleBackColor = true;
@@ -281,12 +288,12 @@
             // 
             // DeviceViewer
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(797, 494);
+            this.ClientSize = new System.Drawing.Size(598, 395);
             this.Controls.Add(this.devicebasemsg);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "DeviceViewer";
             this.Text = "设备信息及状态";
             ((System.ComponentModel.ISupportInitialize)(this.cpuresourceschart)).EndInit();

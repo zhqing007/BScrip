@@ -35,6 +35,10 @@ namespace BScrip.BSForms {
             refresh_m = new UpdateDelegate(RefreshMemUsage);
         }
 
+        public string GetDeviceName() {
+            return devicehost.hostname;
+        }
+
         private void bGWorker_DoWork(object sender, DoWorkEventArgs e) {
             try {
                 if (devicehost.loginmode == 0) {

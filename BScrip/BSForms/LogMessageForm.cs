@@ -10,6 +10,7 @@ using System.Windows.Forms;
 namespace BScrip.BSForms {
     public partial class LogMessageForm : Form {
         public static LogMessageForm logForm = null;
+        private uint itemnum = 0;
 
         public LogMessageForm() {
             InitializeComponent();
@@ -17,10 +18,11 @@ namespace BScrip.BSForms {
 
         public void AddLog(Host item, string str) {
             ListViewItem logitem = new ListViewItem();
-            logitem.Text = (loglist.Items.Count + 1).ToString();
+            logitem.Text = (++itemnum).ToString();
             logitem.SubItems.Add(DateTime.Now.GetDateTimeFormats('g')[0].ToString());
             logitem.SubItems.Add(item.ipaddress);
             logitem.SubItems.Add(str);
+            if (loglist.Items.Count > 200) loglist.Items.RemoveAt(200);
             this.loglist.Items.Insert(0, logitem);
             if (this.ContextMenuStrip == null)
                 this.ContextMenuStrip = contextMenuStrip1;
@@ -55,6 +57,7 @@ namespace BScrip.BSForms {
         private void clear_Click(object sender, EventArgs e) {
             loglist.Items.Clear();
             this.ContextMenuStrip = null;
+            itemnum = 0;
         }
     }
 }

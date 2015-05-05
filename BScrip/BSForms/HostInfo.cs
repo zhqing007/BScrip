@@ -84,7 +84,7 @@ namespace BScrip.BSForms {
 
         private void IPBox_TextChanged(object sender, EventArgs e) {
             string name = NameBox.Text.Trim();
-            if (name.Length == 0 || name.Substring(0, name.Length - 1) == IPBox.Text)
+            if (name.Length == 0 || name.Equals(IPBox.Text.Substring(0, IPBox.Text.Length - 1)))
                 NameBox.Text = IPBox.Text;
         }
 

@@ -10,6 +10,9 @@ namespace BScrip.BSDevice {
         public HuaweiDeviceS9700(Linker _lin, Dictionary<string, string> _comdic = null)
             : base(_lin, _comdic, "HUAWEI", "Quidway S9700"){ }
 
+        public HuaweiDeviceS9700(Linker _lin, Dictionary<string, string> _comdic, string brand, string model)
+            : base(_lin, _comdic, brand, model){ }
+
         public override DataTable GetSoltInfo() {
             if(SoltInfo != null) return SoltInfo;
             SoltInfo = new DataTable();
@@ -165,6 +168,9 @@ namespace BScrip.BSDevice {
         public HuaweiDeviceS8500(Linker _lin, Dictionary<string, string> _comdic = null)
             : base(_lin, _comdic, "HUAWEI", "Quidway S8500") { }
 
+        public HuaweiDeviceS8500(Linker _lin, Dictionary<string, string> _comdic, string brand, string model)
+            : base(_lin, _comdic, brand, model){ }
+
         public override DataTable GetSoltInfo() {
             if(SoltInfo != null) return SoltInfo;
             SoltInfo = new DataTable();
@@ -178,8 +184,9 @@ namespace BScrip.BSDevice {
             while (!devinfo.ReadLine().Contains("Slot No.")) ;
             string[] devstrs;
             while (!devinfo.EndOfStream) {
-                devstrs = devinfo.ReadLine().Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
-                if (devstrs.Length != 5 || devstrs[2].Equals("Absent")) continue;
+                devstrs = devinfo.ReadLine().Split(new char[] { ' ' }, 5,  System.StringSplitOptions.RemoveEmptyEntries);
+                if (devstrs.Length < 5 || devstrs[2].Equals("Absent")) continue;
+                if (devstrs[4].Contains(' ')) devstrs[4] = devstrs[4].Remove(devstrs[4].IndexOf(' '));
                 SoltInfo.Rows.Add(devstrs);
             }
             return SoltInfo;
@@ -243,7 +250,75 @@ namespace BScrip.BSDevice {
             while ((str = devinforeader.ReadLine()).IndexOf("------------") < 0) ;
             string[] intfarray;
             while (!devinforeader.EndOfStream) {
-                if ((str = devinforeader.ReadLine()).Contains(Device.End)) break;
+                str = devinforeader.ReadLine();
+                if (str.Contains(Device.End) || str.Contains(LEVEL3_MARK_STR)) break;
+                intfarray = (str + " -").Split(new char[] { ' ' }, 7, System.StringSplitOptions.RemoveEmptyEntries);
+                intfarray[6] = intfarray[6].Substring(0, intfarray[6].Length - 1).Trim();
+                intInfo.Rows.Add(intfarray);
+            }
+            return intInfo;
+        }
+    }
+
+    class HuaweiDeviceS5100 : HuaweiDevice {
+        public HuaweiDeviceS5100(Linker _lin, Dictionary<string, string> _comdic = null)
+            : base(_lin, _comdic, "HUAWEI", "H3C S5100") { }
+
+        public HuaweiDeviceS5100(Linker _lin, Dictionary<string, string> _comdic, string brand, string model)
+            : base(_lin, _comdic, brand, model){ }        
+
+        public override List<ResourcesUtilization> GetCpuUsage() {
+            List<ResourcesUtilization> rulist = new List<ResourcesUtilization>();
+            string cpuu = GetMessage("dis cpu");
+            StreamReader strreader = StaticFun.StrToStream(cpuu);
+            while (!strreader.ReadLine().Contains("CPU")) ;
+            ResourcesUtilization ru = new ResourcesUtilization();
+            ru.slotname = "main";
+            string str = strreader.ReadLine().Trim();
+            ru.s5 = Int32.Parse(str.Substring(0, str.IndexOf('%')));
+            str = strreader.ReadLine().Trim();
+            ru.m1 = Int32.Parse(str.Substring(0, str.IndexOf('%')));
+            str = strreader.ReadLine().Trim();
+            ru.m5 = Int32.Parse(str.Substring(0, str.IndexOf('%')));
+            rulist.Add(ru);
+            return rulist;
+        }
+
+        public override List<ResourcesUtilization> GetMemUsage() {
+            List<ResourcesUtilization> rulist = new List<ResourcesUtilization>();
+            StringBuilder comstrb = new StringBuilder();
+            string meminfo = GetMessage("dis mem");
+            StreamReader strreader = StaticFun.StrToStream(meminfo);
+            string str;
+            while (!(str = strreader.ReadLine()).Contains("Used Rate:")) ;
+            ResourcesUtilization ru = new ResourcesUtilization();
+            ru.slotname = "main";
+            ru.max = Int32.Parse(str.Substring(str.IndexOf('%') - 3, 3).Trim());
+            rulist.Add(ru);
+            return rulist;
+        }
+
+        public override DataTable GetInterfaceBrif() {
+            DataTable intInfo = new DataTable();
+            intInfo.Columns.Add("端口", typeof(string));
+            intInfo.Columns.Add("链路", typeof(string));
+            intInfo.Columns.Add("速度", typeof(string));
+            intInfo.Columns.Add("双工", typeof(string));
+            intInfo.Columns.Add("类型", typeof(string));
+            intInfo.Columns.Add("PVID", typeof(string));
+            intInfo.Columns.Add("描述", typeof(string));
+
+            StreamReader devinforeader = StaticFun.StrToStream(GetMessage(BRIEFINT_STR));
+            string str;
+            if(this.baseInfo.model.Contains("3100"))
+                while (!(str = devinforeader.ReadLine()).Contains("PVID"));
+            else
+                while (!(str = devinforeader.ReadLine()).Contains("---------------")) ;
+            
+            string[] intfarray;
+            while (!devinforeader.EndOfStream) {
+                str = devinforeader.ReadLine();
+                if (str.Contains(Device.End) || str.Contains(LEVEL3_MARK_STR)) break;
                 intfarray = (str + " -").Split(new char[] { ' ' }, 7, System.StringSplitOptions.RemoveEmptyEntries);
                 intfarray[6] = intfarray[6].Substring(0, intfarray[6].Length - 1).Trim();
                 intInfo.Rows.Add(intfarray);

@@ -130,7 +130,8 @@ namespace BScrip {
             DeviceBaseInfo devinfo = devhua.GetBaseInfo();
 
             Type type = Type.GetType(GetClassName(devinfo.brand, devinfo.model));
-            Device dev = System.Activator.CreateInstance(type, new object[] { _linker, devhua.comdic }) as Device;
+            Device dev = System.Activator.CreateInstance(
+                type, new object[] { _linker, devhua.comdic, devinfo.brand, devinfo.model}) as Device;
             return dev;
         }
 

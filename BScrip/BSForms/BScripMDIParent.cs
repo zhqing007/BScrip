@@ -33,6 +33,7 @@ namespace BScrip.BSForms {
             LogMessageForm.logForm.Parent = splitContainer2.Panel2;
             LogMessageForm.logForm.Dock = DockStyle.Fill;
             LogMessageForm.logForm.Show();
+
         }
 
         private void ShowNewForm(object sender, EventArgs e) {
