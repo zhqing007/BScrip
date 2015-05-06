@@ -111,6 +111,18 @@
     <Compile Include="BSForms\WelcomeForm.Designer.cs">
       <DependentUpon>WelcomeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="BSForms\FiveLittle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BSForms\FiveLittle.Designer.cs">
+      <DependentUpon>FiveLittle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BSForms\FiveLittleLogMessageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BSForms\FiveLittleLogMessageForm.Designer.cs">
+      <DependentUpon>FiveLittleLogMessageForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="BSmenu\RightKeyMenu.cs" />
     <Compile Include="DBhelper.cs" />
     <Compile Include="EncodeAndDecode.cs" />
@@ -174,6 +186,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="BSForms\WelcomeForm.resx">
       <DependentUpon>WelcomeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BSForms\FiveLittle.resx">
+      <DependentUpon>FiveLittle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BSForms\FiveLittleLogMessageForm.resx">
+      <DependentUpon>FiveLittleLogMessageForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
