@@ -41,63 +41,6 @@ namespace BScrip.BSForms {
             }
         }
 
-        private void AddHostToView(Host h) {
-            List<Host> lh = new List<Host>();
-            lh.Add(h);
-            AddHostToView(lh);
-        }
-
-        private void selectAllHosts_Click(object sender, EventArgs e) {
-            StaticFun.SelectAll_ListView(HostView);
-        }
-
-        private void add_Click(object sender, EventArgs e) {
-            HostInfo host = new HostInfo();
-            host.ShowDialog();
-            if (host.DialogResult.Equals(DialogResult.Cancel)) return;
-            Host h = host.GetHost();
-            h.Save();
-            AddHostToView(h);
-        }
-
-        private void del_Click(object sender, EventArgs e) {
-            if (HostView.SelectedItems.Count == 0) return;
-            if (MessageBox.Show("确认删除所选项么?", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                == DialogResult.No) return;
-            foreach (ListViewItem hostn in HostView.SelectedItems) {
-                Host h = hostn.Tag as Host;
-                h.Del();
-            }
-            LoadHostToListView();
-        }
-
-        private void modifyHost_Click(object sender, EventArgs e) {
-            Host h = HostView.SelectedItems[0].Tag as Host;
-            HostInfo hostDia = new HostInfo();
-            hostDia.SetNameBoxMode(true);
-
-            hostDia.SetHostName(h.hostname);
-            hostDia.SetIP(h.ipaddress);
-            hostDia.SetLoginName(h.loginname);
-            hostDia.SetPW(h.password);
-            hostDia.SetSPW(h.superpw);
-            hostDia.SetLoginMode(h.loginmode);
-
-            hostDia.ShowDialog();
-            if (hostDia.DialogResult == DialogResult.OK) {
-                Host sh = hostDia.GetHost();
-                if (sh.Update()) {
-                    HostView.SelectedItems[0].SubItems[1].Text = sh.ipaddress;
-                    if (sh.loginmode == 0)
-                        HostView.SelectedItems[0].SubItems[2].Text = "T";
-                    else
-                        HostView.SelectedItems[0].SubItems[2].Text = "S";
-                    HostView.SelectedItems[0].Tag = sh;
-                }
-            }
-        }
-
-
         public List<Host> GetSelectHosts() {
             List<Host> selectedhosts = new List<Host>();
             foreach (ListViewItem hostn in HostView.SelectedItems)
@@ -120,14 +63,18 @@ namespace BScrip.BSForms {
 
         private void button1_Click(object sender, EventArgs e) {
             List<Host> hostlist = new List<Host>();
-            foreach (object item in HostView.Items) {
-                hostlist.Add((item as ListViewItem).Tag as Host);
-            }
-            
             FiveLittleLogMessageForm msgform = new FiveLittleLogMessageForm();
-            FiveLittleConfThread confth = new FiveLittleConfThread(hostlist, msgform);
-            Thread logThread = new Thread(new ThreadStart(confth.GetConfNoThread));
-            logThread.Start();
+            FiveLittleConfThread thr = new FiveLittleConfThread(hostlist, msgform);
+            FiveLittleConfThread.threadnum = 3;
+            for (int i = 0; i < HostView.Items.Count; ++i) {
+                hostlist.Add(HostView.Items[i].Tag as Host);
+            }
+
+            Thread logThread;
+            for(int i = 0; i < FiveLittleConfThread.threadnum; ++i) {
+                logThread = new Thread(new ThreadStart(thr.GetConfNoThread));
+                logThread.Start();
+            }
             msgform.ShowDialog();
         }
     }
@@ -135,6 +82,8 @@ namespace BScrip.BSForms {
     public class FiveLittleConfThread {
         private List<Host> hosts;
         private FiveLittleLogMessageForm msgform;
+        public static int threadnum;
+        private static object locklist = new object();
 
         public FiveLittleConfThread(List<Host> hostl, FiveLittleLogMessageForm _msgform) {
             hosts = hostl;
@@ -145,7 +94,21 @@ namespace BScrip.BSForms {
             msgform.myEvent.WaitOne();
             Device dev = null;
             List<HostConfigStruct> hcList = new List<HostConfigStruct>();
-            foreach (Host item in hosts) {
+            Host item;
+
+            while (true) {
+                lock (locklist) {
+                    if (hosts.Count > 0) {
+                        item = hosts[0];
+                        hosts.RemoveAt(0);
+                    }
+                    else{
+                        if(--threadnum == 0)
+                            msgform.ok.Enabled = true;
+                        return;
+                    }
+                }
+
                 try {
                     if (item.loginmode == 0)
                         dev = Device.DeviceFactory(new TelnetLinker(item.ipaddress, item.loginname, item.password)
@@ -165,18 +128,18 @@ namespace BScrip.BSForms {
                         continue;
                     }
 
-                    StringBuilder fileN = new StringBuilder(hc.device.hostname);
-                    fileN.Append('_').Append(hc.device.ipaddress.Replace('.', '_'));
+                    StringBuilder fileN = new StringBuilder(DateTime.Now.ToString("yyyyMMdd"));
+
                     if (!Directory.Exists(fileN.ToString()))
                         Directory.CreateDirectory(fileN.ToString());
                     fileN = new StringBuilder(Path.GetFullPath(fileN.ToString()));
-                    if (hc.filename == null)
-                        hc.filename = DateTime.Now.ToString("yyyyMMddHHmm") + ".txt";
-                    fileN.Append('\\').Append(hc.filename);
+                    fileN.Append('\\').Append(hc.device.hostname).Append(".txt");
 
                     StreamWriter sw = File.CreateText(fileN.ToString());
                     msgform.AddLog(hc.device, "写入文件 " + fileN);
-                    sw.Write(hc.config);
+                    int strbegin = hc.config.IndexOf('[');
+                    int strlength = hc.config.IndexOf("return") - strbegin + 6;
+                    sw.Write(hc.config.Substring(strbegin, strlength));
                     sw.Close();
                     msgform.AddLog(hc.device, "文件写入完成");
                 }
@@ -186,8 +149,6 @@ namespace BScrip.BSForms {
                 if (dev != null)
                     dev.Close();
             }
-
-            msgform.ok.Enabled = true;
         }
 
         public class HostConfigStruct {

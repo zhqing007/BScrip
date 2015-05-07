@@ -10,22 +10,23 @@ using System.Windows.Forms;
 namespace BScrip.BSForms {
     public partial class FiveLittleLogMessageForm : Form {
         private uint itemnum = 0;
-        public System.Threading.AutoResetEvent myEvent = new System.Threading.AutoResetEvent(false);
+        public System.Threading.ManualResetEvent myEvent = new System.Threading.ManualResetEvent(false);
+        private static object locker = new object();
 
         public FiveLittleLogMessageForm() {
             InitializeComponent();
         }
 
         public void AddLog(Host item, string str) {
-            ListViewItem logitem = new ListViewItem();
-            logitem.Text = (++itemnum).ToString();
-            logitem.SubItems.Add(DateTime.Now.GetDateTimeFormats('g')[0].ToString());
-            logitem.SubItems.Add(item.ipaddress);
-            logitem.SubItems.Add(str);
-            if (loglist.Items.Count > 200) loglist.Items.RemoveAt(200);
-            this.loglist.Items.Insert(0, logitem);
-            if (this.ContextMenuStrip == null)
-                this.ContextMenuStrip = contextMenuStrip1;
+            lock (locker) {
+                ListViewItem logitem = new ListViewItem();
+                logitem.Text = (++itemnum).ToString();
+                logitem.SubItems.Add(DateTime.Now.GetDateTimeFormats('g')[0].ToString());
+                logitem.SubItems.Add(item.ipaddress);
+                logitem.SubItems.Add(str);
+                if (loglist.Items.Count > 200) loglist.Items.RemoveAt(200);
+                this.loglist.Items.Insert(0, logitem);
+            }
         }
 
         public string GetLog() {

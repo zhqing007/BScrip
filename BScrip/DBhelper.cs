@@ -114,7 +114,8 @@ namespace BScrip {
         
         //type: 0为交换机，1为服务器
         public static List<Host> GetAllHosts(int type) {
-            DataTable data = DBhelper.ExecuteDataTable("select * from hosts where type=" + type, null);
+            DataTable data = DBhelper.ExecuteDataTable("select * from hosts where type="
+                + type + " order by name", null);
             List<Host> hosts = new List<Host>();
             foreach (DataRow row in data.Rows) {
                 Host h = new Host(row["name"].ToString());

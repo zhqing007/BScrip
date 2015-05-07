@@ -49,9 +49,9 @@
             this.columnHeader4});
             this.loglist.FullRowSelect = true;
             this.loglist.Location = new System.Drawing.Point(0, 0);
-            this.loglist.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.loglist.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.loglist.Name = "loglist";
-            this.loglist.Size = new System.Drawing.Size(530, 238);
+            this.loglist.Size = new System.Drawing.Size(557, 260);
             this.loglist.TabIndex = 0;
             this.loglist.UseCompatibleStateImageBehavior = false;
             this.loglist.View = System.Windows.Forms.View.Details;
@@ -83,26 +83,26 @@
             this.save,
             this.clear});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(169, 76);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(149, 70);
             // 
             // copy
             // 
             this.copy.Name = "copy";
-            this.copy.Size = new System.Drawing.Size(168, 24);
+            this.copy.Size = new System.Drawing.Size(148, 22);
             this.copy.Text = "复制到剪贴板";
             this.copy.Click += new System.EventHandler(this.copy_Click);
             // 
             // save
             // 
             this.save.Name = "save";
-            this.save.Size = new System.Drawing.Size(168, 24);
+            this.save.Size = new System.Drawing.Size(148, 22);
             this.save.Text = "保存到文件";
             this.save.Click += new System.EventHandler(this.save_Click);
             // 
             // clear
             // 
             this.clear.Name = "clear";
-            this.clear.Size = new System.Drawing.Size(168, 24);
+            this.clear.Size = new System.Drawing.Size(148, 22);
             this.clear.Text = "清除";
             this.clear.Click += new System.EventHandler(this.clear_Click);
             // 
@@ -110,9 +110,10 @@
             // 
             this.ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ok.Enabled = false;
-            this.ok.Location = new System.Drawing.Point(419, 243);
+            this.ok.Location = new System.Drawing.Point(473, 263);
+            this.ok.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ok.Name = "ok";
-            this.ok.Size = new System.Drawing.Size(101, 36);
+            this.ok.Size = new System.Drawing.Size(76, 29);
             this.ok.TabIndex = 1;
             this.ok.Text = "确定";
             this.ok.UseVisualStyleBackColor = true;
@@ -120,15 +121,15 @@
             // 
             // FiveLittleLogMessageForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(532, 288);
+            this.ClientSize = new System.Drawing.Size(558, 299);
             this.ControlBox = false;
             this.Controls.Add(this.ok);
             this.Controls.Add(this.loglist);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "FiveLittleLogMessageForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

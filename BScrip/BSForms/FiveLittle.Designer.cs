@@ -34,21 +34,20 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.HostView.FullRowSelect = true;
             this.HostView.HideSelection = false;
-            this.HostView.Location = new System.Drawing.Point(0, 0);
-            this.HostView.Margin = new System.Windows.Forms.Padding(4);
+            this.HostView.Location = new System.Drawing.Point(2, 1);
             this.HostView.Name = "HostView";
-            this.HostView.Size = new System.Drawing.Size(355, 611);
+            this.HostView.Size = new System.Drawing.Size(509, 317);
             this.HostView.TabIndex = 23;
             this.HostView.UseCompatibleStateImageBehavior = false;
             this.HostView.View = System.Windows.Forms.View.Details;
-            this.HostView.DoubleClick += new System.EventHandler(this.modifyHost_Click);
             // 
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.Location = new System.Drawing.Point(12, 618);
+            this.button1.Location = new System.Drawing.Point(9, 322);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 34);
+            this.button1.Size = new System.Drawing.Size(75, 27);
             this.button1.TabIndex = 24;
             this.button1.Text = "备份配置";
             this.button1.UseVisualStyleBackColor = true;
@@ -56,12 +55,13 @@
             // 
             // FiveLittle
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(355, 664);
+            this.ClientSize = new System.Drawing.Size(513, 359);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.HostView);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FiveLittle";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "设备信息";
