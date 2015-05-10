@@ -54,6 +54,16 @@ namespace BScrip {
             return deconf.Rows[0][0].ToString();
         }
 
+        public static int GetDeviceBackUpCount(string hostname, DateTime begin, DateTime end) {
+            SQLiteParameter[] p = {new SQLiteParameter("@hn", hostname)
+                                      , new SQLiteParameter("@begin", begin.ToString("yyyy-MM-dd HH:mm:ss"))
+                                      , new SQLiteParameter("@end", end.ToString("yyyy-MM-dd HH:mm:ss"))};
+            DataTable deconf = ExecuteDataTable(
+                @"select count(*) as cou from deviceconfiguration where hostname=@hn 
+                    and savetime>=@begin and savetime<=@end", p);
+            return Int32.Parse(deconf.Rows[0][0].ToString());
+        }
+
         public static Host GetDefaultUpLoadServer() {
             string hostName = GetConfiguration("default_upload_server") as string;
             if(hostName == null) return null;

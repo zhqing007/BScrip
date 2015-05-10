@@ -16,6 +16,7 @@ namespace BScrip.BSForms {
         private TimerBackUpForm timerBUMDIChild = null;
         private BSForms.DeviceViewer switchCMDIChild = null;
         private BSForms.ConfViewer confViewerCMDIChild = null;
+        private BSForms.TableReport tabRCMDIChild = null;
 
         public BScripMDIParent() {
             WelcomeForm fw = new WelcomeForm();
@@ -33,7 +34,7 @@ namespace BScrip.BSForms {
             LogMessageForm.logForm.Parent = splitContainer2.Panel2;
             LogMessageForm.logForm.Dock = DockStyle.Fill;
             LogMessageForm.logForm.Show();
-
+            this.splitContainer2.SplitterDistance = (int)(splitContainer2.Size.Height * 0.8);
         }
 
         private void ShowNewForm(object sender, EventArgs e) {
@@ -182,7 +183,16 @@ namespace BScrip.BSForms {
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e) {
-            MessageBox.Show("该功能尚未开放！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            splitContainer2.Panel1.Controls.Clear();
+            if (tabRCMDIChild == null || tabRCMDIChild.IsDisposed) {
+                tabRCMDIChild = new TableReport();
+                tabRCMDIChild.MdiParent = this;
+                tabRCMDIChild.Parent = splitContainer2.Panel1;
+                tabRCMDIChild.Dock = DockStyle.Fill;
+                tabRCMDIChild.Show();
+            }
+            else
+                splitContainer2.Panel1.Controls.Add(tabRCMDIChild);
         }
     }
 
