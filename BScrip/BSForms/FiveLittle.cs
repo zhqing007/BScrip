@@ -62,12 +62,18 @@ namespace BScrip.BSForms {
         }
 
         private void button1_Click(object sender, EventArgs e) {
+            if (HostView.CheckedItems.Count == 0) {
+                MessageBox.Show("没有选定项！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             List<Host> hostlist = new List<Host>();
             FiveLittleLogMessageForm msgform = new FiveLittleLogMessageForm();
             FiveLittleConfThread thr = new FiveLittleConfThread(hostlist, msgform);
-            FiveLittleConfThread.threadnum = 3;
-            for (int i = 0; i < HostView.Items.Count; ++i) {
-                hostlist.Add(HostView.Items[i].Tag as Host);
+            FiveLittleConfThread.threadnum = 1;
+
+            foreach (ListViewItem downh in HostView.CheckedItems) {
+                hostlist.Add(downh.Tag as Host);
             }
 
             Thread logThread;
@@ -76,6 +82,18 @@ namespace BScrip.BSForms {
                 logThread.Start();
             }
             msgform.ShowDialog();
+        }
+
+        private void button2_Click(object sender, EventArgs e) {
+            foreach (ListViewItem downh in HostView.Items) {
+                downh.Checked = true;
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e) {
+            foreach (ListViewItem downh in HostView.Items) {
+                downh.Checked = false;
+            }
         }
     }
 
@@ -138,7 +156,11 @@ namespace BScrip.BSForms {
                     StreamWriter sw = File.CreateText(fileN.ToString());
                     msgform.AddLog(hc.device, "写入文件 " + fileN);
                     int strbegin = hc.config.IndexOf('[');
-                    int strlength = hc.config.IndexOf("return") - strbegin + 6;
+                    if (strbegin == -1) strbegin = hc.config.IndexOf('#');
+                    int strlength = hc.config.IndexOf("return");
+                    if (strlength == -1) strlength = hc.config.IndexOf("\nend") - strbegin + 4;
+                    else
+                        strlength = strlength -strbegin + 6;
                     sw.Write(hc.config.Substring(strbegin, strlength));
                     sw.Close();
                     msgform.AddLog(hc.device, "文件写入完成");
