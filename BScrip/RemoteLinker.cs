@@ -37,8 +37,10 @@ namespace BScrip {
 
         public virtual string ToUserInterface() {
             if (lastmessage == null) return null;
-            char[] userif = {'>', ']', '#'};
-            while (lastmessage.IndexOfAny(userif) < 0) {
+            string userif = ">]#";
+
+
+            while (userif.IndexOfAny(lastmessage[lastmessage.Length - 1]) < 0) {
                 lastmessage = Read();
             }
             return lastmessage;

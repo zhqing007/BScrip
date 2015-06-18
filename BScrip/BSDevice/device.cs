@@ -161,16 +161,8 @@ namespace BScrip.BSDevice {
                 .Append(QUIT_STR).Append(System.Environment.NewLine)
                 .Append(Device.Begin).Append(System.Environment.NewLine)
                 .Append(com).Append(System.Environment.NewLine)
-                .Append(Device.End).Append(Device.End);
-            //lin.Send(SYS_MARK_STR);
-            //lin.Read();
-            //string r = lin.ToSuperUserInterface();
-            //if (!r.TrimEnd().EndsWith(LEVEL3_MARK_STR))
-            //    throw new Exception("Failed WaitFor: " + LEVEL3_MARK_STR);
-            //lin.Send(USERVTY_STR);
-            //lin.WaitFor(LEVEL3_MARK_STR);
-            //lin.Send(SCRLEN_STR);
-            //lin.WaitFor(LEVEL3_MARK_STR);
+                .Append(Device.End).Append(Device.End).Append(System.Environment.NewLine);
+
             lin.Send(comb.ToString());
             string message = lin.Read().TrimEnd();
             while (!message.Contains(Device.End)) {
@@ -186,12 +178,6 @@ namespace BScrip.BSDevice {
             lin.ToUserInterface();
 
             return message.Substring(message.IndexOf(Device.Begin));
-
-            //lin.Send(UNDOSCRLEN_STR);
-            //lin.WaitFor(LEVEL3_MARK_STR);
-            //lin.Send(QUIT_STR);
-            //lin.WaitFor(LEVEL3_MARK_STR);
-            //return message;
         }
 
         public override void SuperMe() {
