@@ -146,5 +146,8 @@ namespace BScripServiceLibrary {
             Device dev = System.Activator.CreateInstance(type, new object[] { _linker, devcisco.comdic }) as Device;            
             return dev;
         }
+
+        public static void AddLog(Host item, string str) {
+        }
     }
 }

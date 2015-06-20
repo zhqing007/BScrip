@@ -36,23 +36,32 @@ namespace BScrip {
         }
 
         public virtual string ToUserInterface() {
-            if (lastmessage == null) return null;
-            string userif = ">]#";
-
-
-            while (userif.IndexOfAny(lastmessage[lastmessage.Length - 1]) < 0) {
-                lastmessage = Read();
+            string temp;
+            while ((temp = Read()).Length == 0) {
+                lastmessage = temp;
             }
+
             return lastmessage;
+            //
+            //string userif = ">]#";
+
+
+            //while (userif.IndexOfAny(lastmessage[lastmessage.Length - 1]) < 0) {
+            //    lastmessage = Read();
+            //}
+            //return lastmessage;
         }
 
         public virtual string ToSuperUserInterface() {
-            if (lastmessage == null) return null;
-            char[] userif = { ']', '#' };
-            while (lastmessage.IndexOfAny(userif) < 0) {
-                lastmessage = Read();
-            }
-            return lastmessage;
+            return ToUserInterface();
+
+
+            //if (lastmessage == null) return null;
+            //char[] userif = { ']', '#' };
+            //while (lastmessage.IndexOfAny(userif) < 0) {
+            //    lastmessage = Read();
+            //}
+            //return lastmessage;
         }
     }
 

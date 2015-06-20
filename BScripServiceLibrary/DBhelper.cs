@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data.SQLite;
 using System.Data;
+using System.Runtime.Serialization;
 
 namespace BScripServiceLibrary {
     public static class DBhelper {
@@ -10,7 +11,7 @@ namespace BScripServiceLibrary {
         private static SQLiteCommand sqlcmd;
 
         static DBhelper() {
-            sqlconn = new SQLiteConnection("Data Source=..\\..\\BScrip.db;Password=zhqing");
+            sqlconn = new SQLiteConnection("Data Source=D:\\WorkStation\\BScrip\\BScripServiceLibrary\\BScripServer.db;Password=zhqing");
             sqlconn.Open();
             sqlcmd = sqlconn.CreateCommand();
         }
@@ -108,20 +109,63 @@ namespace BScripServiceLibrary {
             return data;
         }
     }
-
+    
+    [DataContract]
     public class Host {
-        public string ipaddress;
-        public string hostname;
-        public string loginname;
-        public int loginmode;
-        public string password;
-        public string superpw;
-        public int type = 0;
+        private string _ipaddress;
+        private string _hostname;
+        private string _loginname;
+        private int _loginmode;
+        private string _password;
+        private string _superpw;
+        private int _type = 0;
 
         public Host(string name) {
             hostname = name;
         }
-        
+
+        [DataMember]
+        public string ipaddress {
+            get { return _ipaddress; }
+            set { _ipaddress = value; }
+        }
+
+        [DataMember]
+        public string hostname {
+            get { return _hostname; }
+            set { _hostname = value; }
+        }
+
+        [DataMember]
+        public string loginname {
+            get { return _loginname; }
+            set { _loginname = value; }
+        }
+
+        [DataMember]
+        public int loginmode {
+            get { return _loginmode; }
+            set { _loginmode = value; }
+        }
+
+        [DataMember]
+        public string password {
+            get { return _password; }
+            set { _password = value; }
+        }
+
+        [DataMember]
+        public string superpw {
+            get { return _superpw; }
+            set { _superpw = value; }
+        }
+
+        [DataMember]
+        public int type {
+            get { return _type; }
+            set { _type = value; }
+        }
+
         //type: 0为交换机，1为服务器
         public static List<Host> GetAllHosts(int type) {
             DataTable data = DBhelper.ExecuteDataTable("select * from hosts where type="

@@ -52,25 +52,29 @@
     <Compile Include="BSDevice\CiscoSubDevice.cs" />
     <Compile Include="BSDevice\device.cs" />
     <Compile Include="BSDevice\HuaweiSubDevice.cs" />
-    <Compile Include="BSFunction\LogBuilder.cs" />
     <Compile Include="BSThread\ConfThread.cs" />
     <Compile Include="DBhelper.cs" />
-    <Compile Include="IService1.cs" />
+    <Compile Include="IService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteFileTransfer.cs" />
     <Compile Include="RemoteLinker.cs" />
-    <Compile Include="Service1.cs" />
+    <Compile Include="Service.cs" />
     <Compile Include="StaticFun.cs" />
     <Compile Include="TelnetInterface.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="SQLite.Interop.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BSFunction\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

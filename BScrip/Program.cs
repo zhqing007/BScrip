@@ -14,10 +14,10 @@ namespace BScrip
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //BSForms.BScripMDIParent.onlyOneMDI = new BSForms.BScripMDIParent();
-            //Application.Run(BSForms.BScripMDIParent.onlyOneMDI);
+            BSForms.BScripMDIParent.onlyOneMDI = new BSForms.BScripMDIParent();
+            Application.Run(BSForms.BScripMDIParent.onlyOneMDI);
 
-            Application.Run(new BScrip.BSForms.FiveLittle());
+            //Application.Run(new BScrip.BSForms.FiveLittle());
         }
     }
 }

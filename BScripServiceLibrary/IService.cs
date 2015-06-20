@@ -10,10 +10,19 @@ namespace BScripServiceLibrary {
     [ServiceContract]
     public interface IBSService {
         [OperationContract]
-        string GetData(int value);
+        string GetPath();
+
+        [OperationContract]
+        void GetConf(Host tar);
 
         [OperationContract]
         CompositeType GetDataUsingDataContract(CompositeType composite);
+
+        [OperationContract]
+        int GetInt();
+
+        [OperationContract]
+        void SetInt(int value);
 
         // TODO: 在此添加您的服务操作
     }
