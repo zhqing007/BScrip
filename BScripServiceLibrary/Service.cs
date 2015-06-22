@@ -10,22 +10,13 @@ namespace BScripServiceLibrary {
     // 注意: 使用“重构”菜单上的“重命名”命令，可以同时更改代码和配置文件中的类名“Service1”。
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class BSService : IBSService {
-        private int init;
 
         public BSService() {
-            init = -12;
+
         }
 
         public string GetPath(){
             return System.IO.Directory.GetCurrentDirectory();
-        }
-
-        public void SetInt(int a) {
-            init = a;
-        }
-
-        public int GetInt() {
-            return init;
         }
 
         public CompositeType GetDataUsingDataContract(CompositeType composite) {
@@ -38,12 +29,19 @@ namespace BScripServiceLibrary {
             return composite;
         }
 
-        public void GetConf(Host tar) {
+        public void SaveConf(string[] hostnames) {
             List<Host> hostlist = new List<Host>();
-            hostlist.Add(tar);
+            foreach (string hostname in hostnames) {
+                Host h = new Host(hostname);
+                h.GetFromName();
+                hostlist.Add(h);
+            }
             BSThread.ConfThread confth = new BSThread.ConfThread(hostlist);
             Thread logThread = new Thread(new ThreadStart(confth.GetConfNoThread));
             logThread.Start();
+        }
+
+        public void SaveConfTime(string hostname, TimeSpan span) {
         }
     }
 }

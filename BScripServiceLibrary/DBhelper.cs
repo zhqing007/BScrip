@@ -110,66 +110,63 @@ namespace BScripServiceLibrary {
         }
     }
     
-    [DataContract]
     public class Host {
-        private string _ipaddress;
-        private string _hostname;
-        private string _loginname;
-        private int _loginmode;
-        private string _password;
-        private string _superpw;
-        private int _type = 0;
+        public string ipaddress;
+        public string hostname;
+        public string loginname;
+        public int loginmode;
+        public string password;
+        public string superpw;
+        public int type = 0;
+        public long tspan = 0;
 
         public Host(string name) {
             hostname = name;
         }
 
-        [DataMember]
-        public string ipaddress {
-            get { return _ipaddress; }
-            set { _ipaddress = value; }
-        }
+        //public string ipaddress {
+        //    get { return _ipaddress; }
+        //    set { _ipaddress = value; }
+        //}
 
-        [DataMember]
-        public string hostname {
-            get { return _hostname; }
-            set { _hostname = value; }
-        }
+        //[DataMember]
+        //public string hostname {
+        //    get { return _hostname; }
+        //    set { _hostname = value; }
+        //}
 
-        [DataMember]
-        public string loginname {
-            get { return _loginname; }
-            set { _loginname = value; }
-        }
+        //[DataMember]
+        //public string loginname {
+        //    get { return _loginname; }
+        //    set { _loginname = value; }
+        //}
 
-        [DataMember]
-        public int loginmode {
-            get { return _loginmode; }
-            set { _loginmode = value; }
-        }
+        //[DataMember]
+        //public int loginmode {
+        //    get { return _loginmode; }
+        //    set { _loginmode = value; }
+        //}
 
-        [DataMember]
-        public string password {
-            get { return _password; }
-            set { _password = value; }
-        }
+        //[DataMember]
+        //public string password {
+        //    get { return _password; }
+        //    set { _password = value; }
+        //}
 
-        [DataMember]
-        public string superpw {
-            get { return _superpw; }
-            set { _superpw = value; }
-        }
+        //[DataMember]
+        //public string superpw {
+        //    get { return _superpw; }
+        //    set { _superpw = value; }
+        //}
 
-        [DataMember]
-        public int type {
-            get { return _type; }
-            set { _type = value; }
-        }
+        //[DataMember]
+        //public int type {
+        //    get { return _type; }
+        //    set { _type = value; }
+        //}
 
-        //type: 0为交换机，1为服务器
-        public static List<Host> GetAllHosts(int type) {
-            DataTable data = DBhelper.ExecuteDataTable("select * from hosts where type="
-                + type + " order by name", null);
+        private static List<Host> GetHostsFromSQL(string sql) {
+            DataTable data = DBhelper.ExecuteDataTable(sql, null);
             List<Host> hosts = new List<Host>();
             foreach (DataRow row in data.Rows) {
                 Host h = new Host(row["name"].ToString());
@@ -178,10 +175,20 @@ namespace BScripServiceLibrary {
                 h.loginmode = Int32.Parse(row["loginmode"].ToString());
                 h.password = row["password"].ToString();
                 h.superpw = row["superpw"] as String;
-
+                h.tspan = Int64.Parse(row["timespan"].ToString());
                 hosts.Add(h);
             }
             return hosts;
+        }
+
+        //type: 0为交换机，1为服务器
+        public static List<Host> GetAllHosts(int type) {
+            return GetHostsFromSQL("select * from hosts where type="
+                + type + " order by name");
+        }
+
+        public static List<Host> GetTimeHosts() {
+            return GetHostsFromSQL("select * from hosts where timespan!=0");
         }
         
         public static List<Host> GetAllHosts() {
@@ -194,16 +201,16 @@ namespace BScripServiceLibrary {
 
         public bool GetFromName() {
             if (hostname == null || hostname.Trim().Length == 0) return false;
-            DataTable data = DBhelper.ExecuteDataTable("select * from hosts where name='" + hostname + 
-                "' and type=0", null);
-            if (data.Rows.Count == 0) return false;
+            List<Host> hosts = GetHostsFromSQL("select * from hosts where name='" + hostname +
+                "' and type=0");
+            if (hosts.Count == 0) return false;
 
-            ipaddress = data.Rows[0]["ipaddress"].ToString();
-            loginname = data.Rows[0]["loginname"].ToString();
-            loginmode = Int32.Parse(data.Rows[0]["loginmode"].ToString());
-            password = data.Rows[0]["password"].ToString();
-            superpw = data.Rows[0]["superpw"] as String;
-
+            ipaddress = hosts[0].ipaddress;
+            loginname = hosts[0].loginname;
+            loginmode = hosts[0].loginmode;
+            password = hosts[0].password;
+            superpw = hosts[0].superpw;
+            tspan = hosts[0].tspan;
             return true;
         }
 
@@ -226,11 +233,12 @@ namespace BScripServiceLibrary {
                                       , new SQLiteParameter("@mode", loginmode)
                                       , new SQLiteParameter("@pw", password)
                                       , new SQLiteParameter("@spw", superpw)
-                                      , new SQLiteParameter("@type", type)};
+                                      , new SQLiteParameter("@type", type)
+                                      , new SQLiteParameter("@tspan", tspan)};
 
             DBhelper.ExecuteSQL("insert into hosts" +
-                        "(ipaddress, name, loginname, loginmode, password, superpw, type) " +
-                        "values(@ip, @hn, @ln, @mode, @pw, @spw, @type)", p);
+                        "(ipaddress, name, loginname, loginmode, password, superpw, type, timespan) " +
+                        "values(@ip, @hn, @ln, @mode, @pw, @spw, @type, @tspan)", p);
             return true;
         }
 
@@ -244,11 +252,12 @@ namespace BScripServiceLibrary {
                                       , new SQLiteParameter("@mode", loginmode)
                                       , new SQLiteParameter("@pw", password)
                                       , new SQLiteParameter("@spw", superpw)
-                                      , new SQLiteParameter("@type", type)};
+                                      , new SQLiteParameter("@type", type)
+                                      , new SQLiteParameter("@tspan", tspan)};
 
             DBhelper.ExecuteSQL("update hosts " +
                         "set ipaddress=@ip, loginname=@ln, loginmode=@mode, password=@pw, " +
-                        "superpw=@spw, type=@type where name=@hn", p);
+                        "superpw=@spw, type=@type, timespan=@tspan where name=@hn", p);
             return true;
         }
 
