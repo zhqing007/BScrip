@@ -109,61 +109,76 @@ namespace BScripServiceLibrary {
             return data;
         }
     }
-    
+
+    [DataContract]
     public class Host {
-        public string ipaddress;
-        public string hostname;
-        public string loginname;
-        public int loginmode;
-        public string password;
-        public string superpw;
-        public int type = 0;
-        public long tspan = 0;
+        private string _ipaddress;
+        private string _hostname;
+        private string _loginname;
+        private int _loginmode;
+        private string _password;
+        private string _superpw;
+        private int _type = 0;
+        private long _tspan = 0;
+        private long _monitor = 0;
 
         public Host(string name) {
             hostname = name;
         }
 
-        //public string ipaddress {
-        //    get { return _ipaddress; }
-        //    set { _ipaddress = value; }
-        //}
+        [DataMember]
+        public string ipaddress {
+            get { return _ipaddress; }
+            set { _ipaddress = value; }
+        }
 
-        //[DataMember]
-        //public string hostname {
-        //    get { return _hostname; }
-        //    set { _hostname = value; }
-        //}
+        [DataMember]
+        public string hostname {
+            get { return _hostname; }
+            set { _hostname = value; }
+        }
 
-        //[DataMember]
-        //public string loginname {
-        //    get { return _loginname; }
-        //    set { _loginname = value; }
-        //}
+        [DataMember]
+        public string loginname {
+            get { return _loginname; }
+            set { _loginname = value; }
+        }
 
-        //[DataMember]
-        //public int loginmode {
-        //    get { return _loginmode; }
-        //    set { _loginmode = value; }
-        //}
+        [DataMember]
+        public int loginmode {
+            get { return _loginmode; }
+            set { _loginmode = value; }
+        }
 
-        //[DataMember]
-        //public string password {
-        //    get { return _password; }
-        //    set { _password = value; }
-        //}
+        [DataMember]
+        public string password {
+            get { return _password; }
+            set { _password = value; }
+        }
 
-        //[DataMember]
-        //public string superpw {
-        //    get { return _superpw; }
-        //    set { _superpw = value; }
-        //}
+        [DataMember]
+        public string superpw {
+            get { return _superpw; }
+            set { _superpw = value; }
+        }
 
-        //[DataMember]
-        //public int type {
-        //    get { return _type; }
-        //    set { _type = value; }
-        //}
+        [DataMember]
+        public int type {
+            get { return _type; }
+            set { _type = value; }
+        }
+
+        [DataMember]
+        public long tspan {
+            get { return _tspan; }
+            set { _tspan = value; }
+        }
+
+        [DataMember]
+        public long monitor {
+            get { return _monitor; }
+            set { _monitor = value; }
+        }
 
         private static List<Host> GetHostsFromSQL(string sql) {
             DataTable data = DBhelper.ExecuteDataTable(sql, null);
@@ -176,6 +191,7 @@ namespace BScripServiceLibrary {
                 h.password = row["password"].ToString();
                 h.superpw = row["superpw"] as String;
                 h.tspan = Int64.Parse(row["timespan"].ToString());
+                h.monitor = Int64.Parse(row["monitor"].ToString());
                 hosts.Add(h);
             }
             return hosts;
@@ -189,6 +205,10 @@ namespace BScripServiceLibrary {
 
         public static List<Host> GetTimeHosts() {
             return GetHostsFromSQL("select * from hosts where timespan!=0");
+        }
+
+        public static List<Host> GetCpuMemHosts() {
+            return GetHostsFromSQL("select * from hosts where monitor!=0");
         }
         
         public static List<Host> GetAllHosts() {

@@ -4,29 +4,40 @@ using System.Linq;
 using System.Text;
 
 namespace BScripServiceLibrary.BSThread {
-    class TimeBackUpThread {
-        class Host_t {
-            Host backuphost;
-            long tspan;
-            public Host_t(Host h){
-                backuphost = h;
-                tspan = h.tspan;
-            }
-
-            public bool IsTimeUp(long t) {
-                if (tspan - t <= 0) {
-                    tspan = backuphost.tspan;
-                    return true;
-                }
-                tspan -= t;
-                return false;
-            }
-
-            public Host GetHost() {
-                return backuphost;
-            }
+    class Host_t {
+        Host backuphost;
+        long tspan;
+        long monitor;
+        public Host_t(Host h) {
+            backuphost = h;
+            tspan = h.tspan;
+            monitor = h.monitor;
         }
 
+        public bool IsTimeUp(long t) {
+            if (tspan - t <= 0) {
+                tspan = backuphost.tspan;
+                return true;
+            }
+            tspan -= t;
+            return false;
+        }
+
+        public bool IsMonitorTimeUp(long t) {
+            if (monitor - t <= 0) {
+                monitor = backuphost.monitor;
+                return true;
+            }
+            monitor -= t;
+            return false;
+        }
+
+        public Host GetHost() {
+            return backuphost;
+        }
+    }
+
+    class TimeBackUpThread {
         List<Host_t> bhosts;
         static object lockobj = new object();
 
@@ -40,7 +51,7 @@ namespace BScripServiceLibrary.BSThread {
         }
 
         public void BackUp() {
-            TimeSpan onehour = new TimeSpan(1, 0, 0);            
+            TimeSpan onehour = new TimeSpan(1, 0, 0);
             while (true) {
                 lock (lockobj) {
                     foreach (Host_t timehost in bhosts) {
@@ -49,7 +60,7 @@ namespace BScripServiceLibrary.BSThread {
                         }
                     }
                 }
-                System.Threading.Thread.Sleep(5 * 60 * 1000);
+                System.Threading.Thread.Sleep(onehour);
             }
         }
 

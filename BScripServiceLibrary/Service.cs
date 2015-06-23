@@ -44,13 +44,19 @@ namespace BScripServiceLibrary {
             tbthreadobj.SetHost(h, span);
         }
 
-        public string[] GetSwitchNames() {
+        public Host[] GetHosts() {
             List<Host> hostlist = Host.GetAllHosts();
-            string[] swname = new string[hostlist.Count];
-            for(int i = 0; i < hostlist.Count; ++i){
-                swname[i] = hostlist[i].hostname;
-            }
-            return swname;
+            return hostlist.ToArray();
         }
+
+        public void AddHost(Host item) {
+            item.Save();
+        }
+
+        public void UpdateHost(Host item) {
+            item.Update();
+        }
+
+        
     }
 }

@@ -19,7 +19,13 @@ namespace BScripServiceLibrary {
         void SetSaveConfTime(string hostname, long span);
 
         [OperationContract]
-        public string[] GetSwitchNames();
+        Host[] GetHosts();
+
+        [OperationContract]
+        void AddHost(Host item);
+
+        [OperationContract]
+        void UpdateHost(Host item);
 
         [OperationContract]
         CompositeType GetDataUsingDataContract(CompositeType composite);
