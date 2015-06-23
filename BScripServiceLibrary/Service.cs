@@ -10,9 +10,12 @@ namespace BScripServiceLibrary {
     // 注意: 使用“重构”菜单上的“重命名”命令，可以同时更改代码和配置文件中的类名“Service1”。
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class BSService : IBSService {
-
+        BSThread.TimeBackUpThread tbthreadobj;
+        Thread tbthread;
         public BSService() {
-
+            tbthreadobj = new BSThread.TimeBackUpThread();
+            tbthread = new Thread(new ThreadStart(tbthreadobj.BackUp));
+            tbthread.Start();
         }
 
         public string GetPath(){
@@ -20,13 +23,7 @@ namespace BScripServiceLibrary {
         }
 
         public CompositeType GetDataUsingDataContract(CompositeType composite) {
-            if (composite == null) {
-                throw new ArgumentNullException("composite");
-            }
-            if (composite.BoolValue) {
-                composite.StringValue += "Suffix";
-            }
-            return composite;
+            return null;
         }
 
         public void SaveConf(string[] hostnames) {
@@ -41,7 +38,19 @@ namespace BScripServiceLibrary {
             logThread.Start();
         }
 
-        public void SaveConfTime(string hostname, TimeSpan span) {
+        public void SetSaveConfTime(string hostname, long span) {
+            Host h = new Host(hostname);
+            h.GetFromName();
+            tbthreadobj.SetHost(h, span);
+        }
+
+        public string[] GetSwitchNames() {
+            List<Host> hostlist = Host.GetAllHosts();
+            string[] swname = new string[hostlist.Count];
+            for(int i = 0; i < hostlist.Count; ++i){
+                swname[i] = hostlist[i].hostname;
+            }
+            return swname;
         }
     }
 }

@@ -16,7 +16,10 @@ namespace BScripServiceLibrary {
         void SaveConf(string[] hostnames);
 
         [OperationContract]
-        void SaveConfTime(string hostname, TimeSpan span);
+        void SetSaveConfTime(string hostname, long span);
+
+        [OperationContract]
+        public string[] GetSwitchNames();
 
         [OperationContract]
         CompositeType GetDataUsingDataContract(CompositeType composite);

@@ -31,42 +31,44 @@ namespace BScripServiceLibrary.BSThread {
         //    tbox.AppendText(strb.ToString());
         //}
 
-        public void GetConfNoThread() {
+        public static HostConfigStruct SaveHostConf(Host item) {
             Device dev = null;
+            try {
+                if (item.loginmode == 0) {
+                    dev = Device.DeviceFactory(new TelnetLinker(item.ipaddress, item.loginname, item.password)
+                        , item.superpw);
+                    StaticFun.AddLog(item, "Telnet登录");
+                }
+                else {
+                    dev = Device.DeviceFactory(new SSH2Linker(item.ipaddress, item.loginname, item.password)
+                        , item.superpw);
+                    StaticFun.AddLog(item, "SSH2登录");
+                }
+
+                HostConfigStruct hc = new HostConfigStruct();
+                hc.device = item;
+                hc.config = dev.GetConfiguration();
+                if (hc.config != null && hc.config.Trim().Length > 0) {
+                    StaticFun.AddLog(item, "导出配置成功");
+                    DBhelper.SaveDeviceConfiguration(item, hc.config);
+                }
+                else
+                    StaticFun.AddLog(item, "导出配置失败");
+                dev.Close();
+                return hc;
+            }
+            catch (Exception exc) {
+                StaticFun.AddLog(item, "导出配置出现异常：" + exc.StackTrace);
+                return null;
+            }                
+        }
+
+        public void GetConfNoThread() {
             List<HostConfigStruct> hcList = new List<HostConfigStruct>();
             foreach (Host item in hosts) {
-                try {
-                    if (item.loginmode == 0) {
-                        dev = Device.DeviceFactory(new TelnetLinker(item.ipaddress, item.loginname, item.password)
-                            , item.superpw);
-                        StaticFun.AddLog(item, "Telnet登录");
-                    }
-                    else {
-                        dev = Device.DeviceFactory(new SSH2Linker(item.ipaddress, item.loginname, item.password)
-                            , item.superpw);
-                        StaticFun.AddLog(item, "SSH2登录");
-                    }
-
-                    HostConfigStruct hc = new HostConfigStruct();
-                    hc.device = item;
-                    hc.config = dev.GetConfiguration();
-                    if (hc.config != null && hc.config.Trim().Length > 0)
-                        StaticFun.AddLog(item, "导出配置成功");
-                    else {
-                        StaticFun.AddLog(item, "导出配置失败");
-                        continue;
-                    }
-
-                    DBhelper.SaveDeviceConfiguration(item, hc.config);
-
-                    if (server == null) continue;
-                    hcList.Add(hc);                    
-                }
-                catch (Exception exc) {
-                    StaticFun.AddLog(item, "导出配置出现异常：" + exc.StackTrace);
-                }
-                if(dev != null)
-                    dev.Close();
+                HostConfigStruct hc = SaveHostConf(item);
+                if (server != null && hc != null)
+                    hcList.Add(hc);
             }
             if (hcList.Count == 0) return;
             UploadToServer(server, hcList);
