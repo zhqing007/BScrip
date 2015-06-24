@@ -19,6 +19,9 @@ namespace BScripServiceLibrary {
         void SetSaveConfTime(string hostname, long span);
 
         [OperationContract]
+        void SetMonitorTime(string hostname, long span);
+
+        [OperationContract]
         Host[] GetHosts();
 
         [OperationContract]
