@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BSDataBase\DBBackUp.cs" />
     <Compile Include="BSDevice\CiscoSubDevice.cs" />
     <Compile Include="BSDevice\device.cs" />
     <Compile Include="BSDevice\HuaweiSubDevice.cs" />
@@ -75,9 +76,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BSFunction\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
