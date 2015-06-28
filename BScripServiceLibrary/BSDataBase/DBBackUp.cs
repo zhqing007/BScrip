@@ -5,7 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Collections;
-using System.Windows.Forms;
+//using System.Windows.Forms;
 
 namespace BScripServiceLibrary.BSDataBase {
     class DBBackUp {
@@ -60,23 +60,23 @@ namespace BScripServiceLibrary.BSDataBase {
                 dr.Close();
             }
             catch (SqlException eee) {
-                MessageBox.Show(eee.ToString());
+                //MessageBox.Show(eee.ToString());
             }
             finally {
                 conn.Close();
             }
-            //MessageBox.Show(list.Count.ToString());
+            ////MessageBox.Show(list.Count.ToString());
             for (int i = 0; i < list.Count; i++) {
                 conn.Open();
                 cmd1 = new SqlCommand(string.Format("KILL {0}", list[i].ToString()), conn);
                 cmd1.ExecuteNonQuery();
                 conn.Close();
-                MessageBox.Show("系统已经清除的数据库线程： " + list[i].ToString() + "\r\n正在还原数据库！");
+                //MessageBox.Show("系统已经清除的数据库线程： " + list[i].ToString() + "\r\n正在还原数据库！");
             }
             //这里一定要是master数据库，而不能是要还原的数据库，因为这样便变成了有其它进程
             //占用了数据库。
             string constr = @"Data Source=.;Initial Catalog=master;User ID=sa;pwd =";
-            string database = MyDataBase;
+            string database = "MyDataBase";
             string path = backfile;
             string BACKUP = String.Format("RESTORE DATABASE {0} FROM DISK = '{1}'", database, path);
             SqlConnection con = new SqlConnection(constr);
@@ -84,15 +84,15 @@ namespace BScripServiceLibrary.BSDataBase {
             con.Open();
             try {
                 cmd.ExecuteNonQuery();
-                MessageBox.Show("还原成功,点击退出系统！");
-                Application.Exit();
+                //MessageBox.Show("还原成功,点击退出系统！");
+                //Application.Exit();
             }
             catch (SqlException ee) {
                 //throw(ee);
 
-                //MessageBox.Show("还原失败");
+                ////MessageBox.Show("还原失败");
 
-                MessageBox.Show(ee.ToString());
+                //MessageBox.Show(ee.ToString());
 
             }
             finally {
