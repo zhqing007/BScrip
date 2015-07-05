@@ -60,22 +60,15 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite">
-      <HintPath>.\System.Data.SQLite.dll</HintPath>
-    </Reference>
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml" />
-    <Reference Include="Tamir.SharpSSH">
-      <HintPath>.\Tamir.SharpSSH.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BSDevice\CiscoSubDevice.cs" />
-    <Compile Include="BSDevice\device.cs" />
-    <Compile Include="BSDevice\HuaweiSubDevice.cs" />
     <Compile Include="BSForms\BackUpAnaForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,21 +117,7 @@
     <Compile Include="BSForms\WelcomeForm.Designer.cs">
       <DependentUpon>WelcomeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="BSForms\FiveLittle.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BSForms\FiveLittle.Designer.cs">
-      <DependentUpon>FiveLittle.cs</DependentUpon>
-    </Compile>
-    <Compile Include="BSForms\FiveLittleLogMessageForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BSForms\FiveLittleLogMessageForm.Designer.cs">
-      <DependentUpon>FiveLittleLogMessageForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="BSmenu\RightKeyMenu.cs" />
-    <Compile Include="DBhelper.cs" />
-    <Compile Include="EncodeAndDecode.cs" />
     <Compile Include="BSForms\HostInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -159,18 +138,18 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RemoteFileTransfer.cs" />
-    <Compile Include="RemoteLinker.cs" />
+    <Compile Include="Service References\BScripService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="StaticFun.cs" />
-    <Compile Include="TelnetInterface.cs" />
     <Compile Include="BSForms\TimerBackUpForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="BSForms\TimerBackUpForm.Designer.cs">
       <DependentUpon>TimerBackUpForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="BSThread\ConfThread.cs" />
-    <Compile Include="Util.cs" />
     <Compile Include="XMLHelper.cs" />
     <Compile Include="XmlHelper_S.cs" />
     <EmbeddedResource Include="BSForms\BackUpAnaForm.resx">
@@ -206,12 +185,6 @@
     <EmbeddedResource Include="BSForms\WelcomeForm.resx">
       <DependentUpon>WelcomeForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BSForms\FiveLittle.resx">
-      <DependentUpon>FiveLittle.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="BSForms\FiveLittleLogMessageForm.resx">
-      <DependentUpon>FiveLittleLogMessageForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -235,6 +208,25 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Service References\BScripService\BScrip.BScripService.CompositeType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\BScripService\BScrip.BScripService.Host.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\BScripService\BSService.wsdl" />
+    <None Include="Service References\BScripService\item.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\BScripService\item1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\BScripService\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\BScripService\item3.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -254,16 +246,28 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Service References\BScripService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\BScripService\configuration.svcinfo" />
+    <None Include="Service References\BScripService\configuration91.svcinfo" />
+    <None Include="Service References\BScripService\item.disco" />
     <None Include="Resources\18.ico" />
     <None Include="Resources\norun.jpg" />
     <None Include="Resources\run.gif" />
     <None Include="Resources\0.ico" />
     <Content Include="27.ico" />
-    <Content Include="SQLite.Interop.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="BSThread\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\BScripService\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

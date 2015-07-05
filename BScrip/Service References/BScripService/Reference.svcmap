@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="9203bac8-27ca-4871-b1ac-25c6702fac7c" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:8732/BScripServiceLibrary/BSService/" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="BSService.wsdl" MetadataType="Wsdl" ID="f849dd59-4b88-4c18-8ef2-bd61b3e4e361" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?wsdl" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="5b510acb-25d5-40f0-bcca-2130614da3db" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?xsd=xsd2" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="61f125b4-57d0-468e-8568-6cad0a50b0fa" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?xsd=xsd3" />
+    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="056f760b-b017-4beb-8781-24f1d7a06e75" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?xsd=xsd0" />
+    <MetadataFile FileName="item3.xsd" MetadataType="Schema" ID="b0622239-ad8e-4c2a-9440-ef193427e54c" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?xsd=xsd1" />
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="2d2542b1-fd4f-47eb-b3b6-497b7b806b0a" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

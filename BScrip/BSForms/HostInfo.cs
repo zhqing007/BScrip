@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using BScrip.BScripService;
 
 namespace BScrip.BSForms {
     public partial class HostInfo : Form {
@@ -15,10 +16,10 @@ namespace BScrip.BSForms {
         private void InfoOK_Click(object sender, EventArgs e) {
             if (!StaticFun.CheckHostInfo(NameBox.Text, IPBox.Text, LoginNameBox.Text, PWBox.Text))
                 return;
-            if (!NameBox.ReadOnly && GetHost().Exist()) {
-                MessageBox.Show("同名主机已存在！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            //if (!NameBox.ReadOnly && GetHost().Exist()) {
+            //    MessageBox.Show("同名主机已存在！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return;
+            //}
             this.DialogResult = DialogResult.OK;
         }
 
@@ -89,7 +90,7 @@ namespace BScrip.BSForms {
         }
 
         public Host GetHost() {
-            Host h = new Host(NameBox.Text.Trim());
+            Host h = null; // new Host(NameBox.Text.Trim());
             h.ipaddress = IPBox.Text.Trim();
             h.loginmode = telnetBox.Checked ? 0 : 1;
             h.loginname = LoginNameBox.Text.Trim();

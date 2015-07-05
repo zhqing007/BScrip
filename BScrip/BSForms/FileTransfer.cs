@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using BScrip.BScripService;
 
 namespace BScrip.BSForms {
     public partial class FileTransfer : Form {
@@ -14,29 +15,29 @@ namespace BScrip.BSForms {
         public const int UPDATESERVER = 2;
 
         public FileTransfer() {
-            InitializeComponent();
-            List<Host> serverList = Host.GetAllServer();
-            foreach(Host server in serverList){
-                serverBox.Items.Add(server);
-            }
+            //InitializeComponent();
+            //List<Host> serverList = Host.GetAllServer();
+            //foreach(Host server in serverList){
+            //    serverBox.Items.Add(server);
+            //}
         }
 
         private void OKButton_Click(object sender, EventArgs e) {
             if (StaticFun.CheckHostInfo(serverBox.Text, ipBox.Text, loginNameBox.Text, PWBox.Text)) {
-                if (defaultSer.Checked) {
-                    savedServer.Checked = true;
-                    DBhelper.SetDefaultUpLoadServer(serverBox.Text);
-                }
-                switch (SaveOrNot()) {
-                    case FileTransfer.NEWSERVER:
-                        GetServer().Save();
-                        break;
-                    case FileTransfer.UPDATESERVER:
-                        GetServer().Update();
-                        break;
-                    default:                        
-                        break;
-                }                
+                //if (defaultSer.Checked) {
+                //    savedServer.Checked = true;
+                //    DBhelper.SetDefaultUpLoadServer(serverBox.Text);
+                //}
+                //switch (SaveOrNot()) {
+                //    case FileTransfer.NEWSERVER:
+                //        GetServer().Save();
+                //        break;
+                //    case FileTransfer.UPDATESERVER:
+                //        GetServer().Update();
+                //        break;
+                //    default:                        
+                //        break;
+                //}                
 
                 this.DialogResult = DialogResult.OK;
             }
@@ -48,7 +49,7 @@ namespace BScrip.BSForms {
         }
 
         public Host GetServer() {
-            Host h = new Host(serverBox.Text.Trim());
+            Host h = null;// new Host(serverBox.Text.Trim());
             h.ipaddress = ipBox.Text.Trim();
             h.loginmode = 1; //SSH2
             h.loginname = loginNameBox.Text.Trim();

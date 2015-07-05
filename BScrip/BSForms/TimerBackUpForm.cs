@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
+using BScrip.BScripService;
 
 namespace BScrip.BSForms {
     public partial class TimerBackUpForm : BSForm {
@@ -21,11 +22,11 @@ namespace BScrip.BSForms {
             timerBackUpL.Columns.Add("登录方式", 80, HorizontalAlignment.Left);
             beginTimePicker.Value = beginTimePicker.MinDate = DateTime.Now;
             beginTimePicker.MaxDate = DateTime.Now + new TimeSpan(365, 0, 0, 0);
-            Host dfs = DBhelper.GetDefaultUpLoadServer();
-            if (dfs != null) {
-                remoser_re.Tag = dfs;
-                remoser_re.Text = dfs.hostname;
-            }
+            //Host dfs = DBhelper.GetDefaultUpLoadServer();
+            //if (dfs != null) {
+            //    remoser_re.Tag = dfs;
+            //    remoser_re.Text = dfs.hostname;
+            //}
             EnableTimerItems(false);
             EnableUploadItems(false);
         }
@@ -204,11 +205,11 @@ namespace BScrip.BSForms {
             foreach (object item in timerBackUpL.Items) {
                 hostlist.Add((item as ListViewItem).Tag as Host);
             }
-            Host _server = null;
-            if (isUpLoad_re.Checked) _server = remoser_re.Tag as Host;
-            BSThread.ConfThread confth = new BSThread.ConfThread(hostlist, _server);
-            Thread logThread = new Thread(new ThreadStart(confth.GetConfNoThread));
-            logThread.Start();
+            //Host _server = null;
+            //if (isUpLoad_re.Checked) _server = remoser_re.Tag as Host;
+            //BSThread.ConfThread confth = new BSThread.ConfThread(hostlist, _server);
+            //Thread logThread = new Thread(new ThreadStart(confth.GetConfNoThread));
+            //logThread.Start();
         }
 
         private void EnableTimerItems(bool en) {
@@ -242,8 +243,8 @@ namespace BScrip.BSForms {
             }
 
             TimerStruct ts = sender as TimerStruct;
-            BSThread.ConfThread conf = new BSThread.ConfThread(ts.hosts, ts.upLoadServer);
-            conf.GetConfNoThread();
+            //BSThread.ConfThread conf = new BSThread.ConfThread(ts.hosts, ts.upLoadServer);
+            //conf.GetConfNoThread();
 
             lock (locker) {
                 --threadcount;

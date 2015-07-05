@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using System.Threading;
+using System.Data;
 
 namespace BScripServiceLibrary {
     // 注意: 使用“重构”菜单上的“重命名”命令，可以同时更改代码和配置文件中的类名“Service1”。
@@ -26,10 +27,10 @@ namespace BScripServiceLibrary {
             return null;
         }
 
-        public void SaveConf(string[] hostnames) {
+        public void SaveConf(int userid, string[] hostnames) {
             List<Host> hostlist = new List<Host>();
             foreach (string hostname in hostnames) {
-                Host h = new Host(hostname);
+                Host h = new Host(userid, hostname);
                 h.GetFromName();
                 hostlist.Add(h);
             }
@@ -38,14 +39,14 @@ namespace BScripServiceLibrary {
             logThread.Start();
         }
 
-        public void SetSaveConfTime(string hostname, long span) {
-            Host h = new Host(hostname);
+        public void SetSaveConfTime(int userid, string hostname, long span) {
+            Host h = new Host(userid, hostname);
             h.GetFromName();
             tbthreadobj.SetHost(h, span);
         }
 
-        public Host[] GetHosts() {
-            List<Host> hostlist = Host.GetAllHosts();
+        public Host[] GetHosts(int userid) {
+            List<Host> hostlist = Host.GetAllHosts(userid);
             return hostlist.ToArray();
         }
 
@@ -57,6 +58,11 @@ namespace BScripServiceLibrary {
             item.Update();
         }
 
-        
+        public int CheckUser(string name, string pw) {
+            DataTable t_user =  DBhelper.ExecuteDataTable(
+                "select id from user where loginname='" + name + "' and password='" + pw + "'", null);
+            if (t_user.Rows.Count == 1) return Int32.Parse(t_user.Rows[0][0].ToString());
+            return -1;
+        }
     }
 }

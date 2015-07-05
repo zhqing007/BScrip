@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApplication1", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BScripServiceLibrary", "BScripServiceLibrary\BScripServiceLibrary.csproj", "{AEBDA6E6-A0C2-4B8A-B213-50D4DD56B2E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BScripHost", "BScripHost\BScripHost.csproj", "{37871ACF-0D86-4869-A06B-1E03B14AA773}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,16 @@ Global
 		{AEBDA6E6-A0C2-4B8A-B213-50D4DD56B2E3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AEBDA6E6-A0C2-4B8A-B213-50D4DD56B2E3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AEBDA6E6-A0C2-4B8A-B213-50D4DD56B2E3}.Release|x86.ActiveCfg = Release|Any CPU
+		{37871ACF-0D86-4869-A06B-1E03B14AA773}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{37871ACF-0D86-4869-A06B-1E03B14AA773}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{37871ACF-0D86-4869-A06B-1E03B14AA773}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{37871ACF-0D86-4869-A06B-1E03B14AA773}.Debug|x86.ActiveCfg = Debug|x86
+		{37871ACF-0D86-4869-A06B-1E03B14AA773}.Debug|x86.Build.0 = Debug|x86
+		{37871ACF-0D86-4869-A06B-1E03B14AA773}.Release|Any CPU.ActiveCfg = Release|x86
+		{37871ACF-0D86-4869-A06B-1E03B14AA773}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{37871ACF-0D86-4869-A06B-1E03B14AA773}.Release|Mixed Platforms.Build.0 = Release|x86
+		{37871ACF-0D86-4869-A06B-1E03B14AA773}.Release|x86.ActiveCfg = Release|x86
+		{37871ACF-0D86-4869-A06B-1E03B14AA773}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

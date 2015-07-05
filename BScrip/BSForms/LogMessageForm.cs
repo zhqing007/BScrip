@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using BScrip.BScripService;
 
 namespace BScrip.BSForms {
     public partial class LogMessageForm : Form {

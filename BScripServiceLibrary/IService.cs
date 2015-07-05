@@ -13,19 +13,22 @@ namespace BScripServiceLibrary {
         string GetPath();
 
         [OperationContract]
-        void SaveConf(string[] hostnames);
+        void SaveConf(int userid, string[] hostnames);
 
         [OperationContract]
-        void SetSaveConfTime(string hostname, long span);
+        void SetSaveConfTime(int userid, string hostname, long span);
 
         [OperationContract]
-        Host[] GetHosts();
+        Host[] GetHosts(int userid);
 
         [OperationContract]
         void AddHost(Host item);
 
         [OperationContract]
         void UpdateHost(Host item);
+
+        [OperationContract]
+        int CheckUser(string name, string pw);
 
         [OperationContract]
         CompositeType GetDataUsingDataContract(CompositeType composite);

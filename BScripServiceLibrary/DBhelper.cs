@@ -11,7 +11,7 @@ namespace BScripServiceLibrary {
         private static SQLiteCommand sqlcmd;
 
         static DBhelper() {
-            sqlconn = new SQLiteConnection("Data Source=D:\\WorkStation\\BScrip\\BScripServiceLibrary\\BScripServer.db;Password=zhqing");
+            sqlconn = new SQLiteConnection("Data Source=E:\\MYCPP\\BScrip\\BScripServiceLibrary\\BScripServer.db;Password=zhqing");
             sqlconn.Open();
             sqlcmd = sqlconn.CreateCommand();
         }
@@ -66,11 +66,13 @@ namespace BScripServiceLibrary {
         }
 
         public static Host GetDefaultUpLoadServer() {
-            string hostName = GetConfiguration("default_upload_server") as string;
-            if(hostName == null) return null;
-            Host rh = new Host(hostName);
-            rh.GetFromName();
-            return  rh;
+            //string hostName = GetConfiguration("default_upload_server") as string;
+            //if(hostName == null) return null;
+            //Host rh = new Host(hostName);
+            //rh.GetFromName();
+            //return  rh;
+
+            return null;
         }
 
         public static void SetDefaultUpLoadServer(string ser) {
@@ -121,9 +123,19 @@ namespace BScripServiceLibrary {
         private int _type = 0;
         private long _tspan = 0;
         private long _monitor = 0;
+        private int _userid;
 
-        public Host(string name) {
+        public Host(int userid, string name) {
             hostname = name;
+            _userid = userid;
+        }
+
+        private Host() {}
+
+        [DataMember]
+        public int userid {
+            get { return _userid; }
+            set { _userid = value; }
         }
 
         [DataMember]
@@ -184,7 +196,9 @@ namespace BScripServiceLibrary {
             DataTable data = DBhelper.ExecuteDataTable(sql, null);
             List<Host> hosts = new List<Host>();
             foreach (DataRow row in data.Rows) {
-                Host h = new Host(row["name"].ToString());
+                Host h = new Host();
+                h.userid = Int32.Parse(row["userid"].ToString());
+                h.hostname = row["name"].ToString();
                 h.ipaddress = row["ipaddress"].ToString();
                 h.loginname = row["loginname"].ToString();
                 h.loginmode = Int32.Parse(row["loginmode"].ToString());
@@ -198,8 +212,8 @@ namespace BScripServiceLibrary {
         }
 
         //type: 0为交换机，1为服务器
-        public static List<Host> GetAllHosts(int type) {
-            return GetHostsFromSQL("select * from hosts where type="
+        public static List<Host> GetAllHosts(int userid, int type) {
+            return GetHostsFromSQL("select * from hosts where userid=" + userid + " and type="
                 + type + " order by name");
         }
 
@@ -210,18 +224,18 @@ namespace BScripServiceLibrary {
         public static List<Host> GetCpuMemHosts() {
             return GetHostsFromSQL("select * from hosts where monitor!=0");
         }
-        
-        public static List<Host> GetAllHosts() {
-            return GetAllHosts(0);
+
+        public static List<Host> GetAllHosts(int userid) {
+            return GetAllHosts(userid, 0);
         }
 
-        public static List<Host> GetAllServer() {
-            return GetAllHosts(1);
+        public static List<Host> GetAllServer(int userid) {
+            return GetAllHosts(userid, 1);
         }
 
         public bool GetFromName() {
             if (hostname == null || hostname.Trim().Length == 0) return false;
-            List<Host> hosts = GetHostsFromSQL("select * from hosts where name='" + hostname +
+            List<Host> hosts = GetHostsFromSQL("select * from hosts where userid=" + userid + " and name='" + hostname +
                 "' and type=0");
             if (hosts.Count == 0) return false;
 
@@ -247,7 +261,8 @@ namespace BScripServiceLibrary {
             if (hostname == null || hostname.Trim().Length == 0) return false;
             if (Exist()) return false;
 
-            SQLiteParameter[] p = {new SQLiteParameter("@ip", ipaddress)
+            SQLiteParameter[] p = {new SQLiteParameter("@uid", userid)
+                                      , new SQLiteParameter("@ip", ipaddress)
                                       , new SQLiteParameter("@hn", hostname)
                                       , new SQLiteParameter("@ln", loginname)
                                       , new SQLiteParameter("@mode", loginmode)
@@ -257,8 +272,8 @@ namespace BScripServiceLibrary {
                                       , new SQLiteParameter("@tspan", tspan)};
 
             DBhelper.ExecuteSQL("insert into hosts" +
-                        "(ipaddress, name, loginname, loginmode, password, superpw, type, timespan) " +
-                        "values(@ip, @hn, @ln, @mode, @pw, @spw, @type, @tspan)", p);
+                        "(userid, ipaddress, name, loginname, loginmode, password, superpw, type, timespan) " +
+                        "values(@uid, @ip, @hn, @ln, @mode, @pw, @spw, @type, @tspan)", p);
             return true;
         }
 
@@ -266,7 +281,8 @@ namespace BScripServiceLibrary {
             if (hostname == null || hostname.Trim().Length == 0) return false;
             if (!Exist()) return false;
 
-            SQLiteParameter[] p = {new SQLiteParameter("@ip", ipaddress)
+            SQLiteParameter[] p = {new SQLiteParameter("@uid", userid)
+                                      , new SQLiteParameter("@ip", ipaddress)
                                       , new SQLiteParameter("@hn", hostname)
                                       , new SQLiteParameter("@ln", loginname)
                                       , new SQLiteParameter("@mode", loginmode)
@@ -277,7 +293,7 @@ namespace BScripServiceLibrary {
 
             DBhelper.ExecuteSQL("update hosts " +
                         "set ipaddress=@ip, loginname=@ln, loginmode=@mode, password=@pw, " +
-                        "superpw=@spw, type=@type, timespan=@tspan where name=@hn", p);
+                        "superpw=@spw, type=@type, timespan=@tspan where name=@hn and userid=@uid", p);
             return true;
         }
 

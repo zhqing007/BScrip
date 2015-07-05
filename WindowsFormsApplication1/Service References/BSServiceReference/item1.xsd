@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfHost">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Host" nillable="true" type="tns:Host" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfHost" nillable="true" type="tns:ArrayOfHost" />
+  <xs:complexType name="Host">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="hostname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ipaddress" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="loginmode" type="xs:int" />
+      <xs:element minOccurs="0" name="loginname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="monitor" type="xs:long" />
+      <xs:element minOccurs="0" name="password" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="superpw" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="tspan" type="xs:long" />
+      <xs:element minOccurs="0" name="type" type="xs:int" />
+      <xs:element minOccurs="0" name="userid" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Host" nillable="true" type="tns:Host" />
+  <xs:complexType name="CompositeType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BoolValue" type="xs:boolean" />
+      <xs:element minOccurs="0" name="StringValue" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CompositeType" nillable="true" type="tns:CompositeType" />
+</xs:schema>

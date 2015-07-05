@@ -5,6 +5,8 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.ServiceModel;
+using WindowsFormsApplication1.BSServiceReference;
 
 namespace WindowsFormsApplication1 {
     public partial class Form1 : Form {
@@ -125,7 +127,10 @@ namespace WindowsFormsApplication1 {
             MessageBox.Show(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
         }
 
-
-
+        private void button5_Click(object sender, EventArgs e) {
+            BSServiceClient proxy = new BSServiceClient();
+            MessageBox.Show(proxy.GetPath());
+            BSServiceReference.Host h = new Host();
+        }
     }
 }

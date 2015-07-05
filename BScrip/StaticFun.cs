@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data;
-using BScrip.BSDevice;
+//using BScrip.BSDevice;
 using System.IO;
 using System.Drawing;
+using BScrip.BScripService;
 
 namespace BScrip {
     public class StaticFun {
@@ -69,7 +70,7 @@ namespace BScrip {
                 .Append("on devicecommand.comid=devicebrand.comid where brand='")
                 .Append(brand).Append("' and model='")
                 .Append(model).Append("'");
-            DataTable comtab = DBhelper.ExecuteDataTable(sqlb.ToString(), null);
+            DataTable comtab = null;// DBhelper.ExecuteDataTable(sqlb.ToString(), null);
             comdic = new Dictionary<string, string>();
             foreach (DataRow row in comtab.Rows) {
                 comdic.Add(row["key"].ToString(), row["value"].ToString());
@@ -83,7 +84,7 @@ namespace BScrip {
                 .Append("on devicecommand.comid=devicebrand.comid where brand='")
                 .Append(brand).Append("' and model='")
                 .Append(model).Append("'");
-            DataTable comtab = DBhelper.ExecuteDataTable(sqlb.ToString(), null);
+            DataTable comtab = null;// DBhelper.ExecuteDataTable(sqlb.ToString(), null);
             foreach (DataRow row in comtab.Rows) {
                 if (comdic.ContainsKey(row["key"].ToString()))
                     comdic[row["key"].ToString()] = row["value"].ToString();
@@ -99,7 +100,7 @@ namespace BScrip {
                 .Append("on devicecommand.comid=devicebrand.comid where brand='")
                 .Append(brand).Append("' and model='")
                 .Append(model).Append("'");
-            DataTable comtab = DBhelper.ExecuteDataTable(sqlb.ToString(), null);
+            DataTable comtab = null;// DBhelper.ExecuteDataTable(sqlb.ToString(), null);
             foreach (DataRow row in comtab.Rows) {
                 comdic.Add(row["key"].ToString(), row["value"].ToString());
             }
@@ -112,7 +113,7 @@ namespace BScrip {
             sqlb.Append("select class from devicebrand where brand='")
                 .Append(brand).Append("' and model='")
                 .Append(model).Append("'");
-            DataTable comtab = DBhelper.ExecuteDataTable(sqlb.ToString(), null);
+            DataTable comtab = null;// DBhelper.ExecuteDataTable(sqlb.ToString(), null);
 
             return comtab.Rows[0]["class"].ToString();
         }
@@ -122,29 +123,29 @@ namespace BScrip {
             return new StreamReader(txtstr);
         }
 
-        public static BSDevice.Device HuaWeiFactory(Linker _linker, string spw) {
-            if (_linker == null) return null;
-            HuaweiDevice devhua = new HuaweiDevice(_linker);
-            devhua.SuperPassWord = spw;
-            devhua.SuperMe();
-            DeviceBaseInfo devinfo = devhua.GetBaseInfo();
+        //public static BSDevice.Device HuaWeiFactory(Linker _linker, string spw) {
+        //    if (_linker == null) return null;
+        //    HuaweiDevice devhua = new HuaweiDevice(_linker);
+        //    devhua.SuperPassWord = spw;
+        //    devhua.SuperMe();
+        //    DeviceBaseInfo devinfo = devhua.GetBaseInfo();
 
-            Type type = Type.GetType(GetClassName(devinfo.brand, devinfo.model));
-            Device dev = System.Activator.CreateInstance(
-                type, new object[] { _linker, devhua.comdic, devinfo.brand, devinfo.model}) as Device;
-            return dev;
-        }
+        //    Type type = Type.GetType(GetClassName(devinfo.brand, devinfo.model));
+        //    Device dev = System.Activator.CreateInstance(
+        //        type, new object[] { _linker, devhua.comdic, devinfo.brand, devinfo.model}) as Device;
+        //    return dev;
+        //}
 
-        public static BSDevice.Device CiscoFactory(Linker _linker, string spw) {
-            if (_linker == null) return null;
-            CiscoDevice devcisco = new CiscoDevice(_linker);
-            devcisco.SuperPassWord = spw;
-            devcisco.SuperMe();
-            DeviceBaseInfo devinfo = devcisco.GetBaseInfo();
+        //public static BSDevice.Device CiscoFactory(Linker _linker, string spw) {
+        //    if (_linker == null) return null;
+        //    CiscoDevice devcisco = new CiscoDevice(_linker);
+        //    devcisco.SuperPassWord = spw;
+        //    devcisco.SuperMe();
+        //    DeviceBaseInfo devinfo = devcisco.GetBaseInfo();
 
-            Type type = Type.GetType(GetClassName(devinfo.brand, devinfo.model));
-            Device dev = System.Activator.CreateInstance(type, new object[] { _linker, devcisco.comdic }) as Device;            
-            return dev;
-        }
+        //    Type type = Type.GetType(GetClassName(devinfo.brand, devinfo.model));
+        //    Device dev = System.Activator.CreateInstance(type, new object[] { _linker, devcisco.comdic }) as Device;            
+        //    return dev;
+        //}
     }
 }

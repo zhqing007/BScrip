@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using BScrip.BScripService;
 
 namespace BScrip.BSForms {
     public partial class HostsForm : Form {
@@ -22,7 +23,7 @@ namespace BScrip.BSForms {
 
         private void LoadHostToListView() {
             HostView.Items.Clear();
-            List<Host> hosts = Host.GetAllHosts();
+            List<Host> hosts = null;// = Host.GetAllHosts();
             AddHostToView(hosts);
         }
 
@@ -56,7 +57,7 @@ namespace BScrip.BSForms {
             host.ShowDialog();
             if (host.DialogResult.Equals(DialogResult.Cancel)) return;
             Host h = host.GetHost();
-            h.Save();
+            //h.Save();
             AddHostToView(h);
         }
 
@@ -66,7 +67,7 @@ namespace BScrip.BSForms {
                 == DialogResult.No) return;
             foreach (ListViewItem hostn in HostView.SelectedItems) {
                 Host h = hostn.Tag as Host;
-                h.Del();
+                //h.Del();
             }
             LoadHostToListView();
         }
@@ -86,7 +87,7 @@ namespace BScrip.BSForms {
             hostDia.ShowDialog();
             if (hostDia.DialogResult == DialogResult.OK) {
                 Host sh = hostDia.GetHost();
-                if (sh.Update()) {
+                if (true /*sh.Update()*/) {
                     HostView.SelectedItems[0].SubItems[1].Text = sh.ipaddress;
                     if (sh.loginmode == 0)
                         HostView.SelectedItems[0].SubItems[2].Text = "T";

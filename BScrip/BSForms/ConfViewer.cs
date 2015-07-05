@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using BScrip.BScripService;
 
 namespace BScrip.BSForms {
     public partial class ConfViewer : BSForm {
@@ -19,16 +20,16 @@ namespace BScrip.BSForms {
         }
 
         private void FindConf() {
-            DataTable conftime = DBhelper.GetDeviceConfTime(devicehost.hostname
-                , beginTimePicker.Value, endTimePicker.Value);
+            //DataTable conftime = DBhelper.GetDeviceConfTime(devicehost.hostname
+            //    , beginTimePicker.Value, endTimePicker.Value);
 
-            foreach (DataRow row in conftime.Rows)
-                configlist.Items.Add(row[0]);
+            //foreach (DataRow row in conftime.Rows)
+            //    configlist.Items.Add(row[0]);
         }
 
         private void datelist_SelectedIndexChanged(object sender, EventArgs e) {
-            if(configlist.SelectedItem != null)
-                confrichtb.Text = DBhelper.GetDeviceConfiguration(devicehost.hostname, (DateTime)(configlist.SelectedItem));
+            //if(configlist.SelectedItem != null)
+            //    confrichtb.Text = DBhelper.GetDeviceConfiguration(devicehost.hostname, (DateTime)(configlist.SelectedItem));
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e) {
@@ -85,7 +86,7 @@ namespace BScrip.BSForms {
             if (fileDialog.ShowDialog() != DialogResult.OK) return;
             
             System.IO.StreamWriter sw = System.IO.File.CreateText(fileDialog.FileName);
-            sw.Write(DBhelper.GetDeviceConfiguration(devicehost.hostname, (DateTime)(configlist.SelectedItem)));
+            //sw.Write(DBhelper.GetDeviceConfiguration(devicehost.hostname, (DateTime)(configlist.SelectedItem)));
             sw.Close();
             LogMessageForm.logForm.AddLog(devicehost, "已导出配置文件：" + fileDialog.FileName);
         }
@@ -96,13 +97,13 @@ namespace BScrip.BSForms {
             if (tranHost.DialogResult != DialogResult.OK) return;
             Host server = tranHost.GetServer();
 
-            DateTime savetime = (DateTime)(configlist.SelectedItem);
-            BScrip.BSThread.ConfThread.HostConfigStruct hc = new BSThread.ConfThread.HostConfigStruct();
-            hc.device = devicehost;
-            hc.filename = savetime.ToString("yyyyMMddHHmm") + ".txt";
-            hc.config = DBhelper.GetDeviceConfiguration(devicehost.hostname, (DateTime)(configlist.SelectedItem));
+            //DateTime savetime = (DateTime)(configlist.SelectedItem);
+            //BScrip.BSThread.ConfThread.HostConfigStruct hc = new BSThread.ConfThread.HostConfigStruct();
+            //hc.device = devicehost;
+            //hc.filename = savetime.ToString("yyyyMMddHHmm") + ".txt";
+            //hc.config = DBhelper.GetDeviceConfiguration(devicehost.hostname, (DateTime)(configlist.SelectedItem));
 
-            BScrip.BSThread.ConfThread.UploadAConfigToServer(server, hc);            
+            //BScrip.BSThread.ConfThread.UploadAConfigToServer(server, hc);            
         }
     }
 }
