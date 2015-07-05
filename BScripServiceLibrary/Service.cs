@@ -52,20 +52,15 @@ namespace BScripServiceLibrary {
             tbthreadobj.SetHost(h, span);
         }
 
-<<<<<<< HEAD
         public Host[] GetHosts(int userid) {
             List<Host> hostlist = Host.GetAllHosts(userid);
-=======
-        public void SetMonitorTime(string hostname, long span) {
-            Host h = new Host(hostname);
-            h.GetFromName();
-            cmthreadobj.SetHost(h, span);
+            return hostlist.ToArray();
         }
 
-        public Host[] GetHosts() {
-            List<Host> hostlist = Host.GetAllHosts();
->>>>>>> c1d74c32cb11e1a1225f19a1e11010632242bec4
-            return hostlist.ToArray();
+        public void SetMonitorTime(int userid, string hostname, long span) {
+            Host h = new Host(userid, hostname);
+            h.GetFromName();
+            cmthreadobj.SetHost(h, span);
         }
 
         public void AddHost(Host item) {
