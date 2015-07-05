@@ -21,7 +21,7 @@ namespace BScripServiceLibrary.BSThread {
         private void savemonitordata(Host item) {
             try {
                 Device dev = null;
-                DeviceBaseInfo dbi = null;
+                //DeviceBaseInfo dbi = null;
                 List<ResourcesUtilization> cpurulist = null;
                 List<ResourcesUtilization> memrulist = null;
                 if (item.loginmode == 0) {
@@ -36,9 +36,10 @@ namespace BScripServiceLibrary.BSThread {
                 }
 
                 dev.SuperPassWord = item.superpw;
-                dbi = dev.GetBaseInfo();
+                //dbi = dev.GetBaseInfo();
                 cpurulist = dev.GetCpuUsage();
                 memrulist = dev.GetMemUsage();
+                DBhelper.SaveCpuMemOccupy(item, cpurulist, memrulist);
             }
             catch (Exception exc) {
                 StaticFun.AddLog(item, "操作出现异常：" + exc.ToString());

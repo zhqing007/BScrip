@@ -4,6 +4,7 @@ using System.Text;
 using System.Data.SQLite;
 using System.Data;
 using System.Runtime.Serialization;
+using BScripServiceLibrary.BSDevice;
 
 namespace BScripServiceLibrary {
     public static class DBhelper {
@@ -26,6 +27,62 @@ namespace BScripServiceLibrary {
         private static void SetConfiguration(string key, string value) {
             ExecuteSQL("update configuration set value='" +
                 value + "' where key='" + key + "'");
+        }
+
+        public static void SaveCpuMemOccupy(Host h, List<ResourcesUtilization> cpuo, List<ResourcesUtilization> memo) {
+
+            DateTime now = DateTime.Now;
+            for (int i = 0; i < cpuo.Count; ++i) {
+                SQLiteParameter[] p = {new SQLiteParameter("@hn", h.hostname)
+                                     , new SQLiteParameter("@sn", cpuo[i].slotname)
+                                     , new SQLiteParameter("@cpu", cpuo[i].s5)
+                                     , new SQLiteParameter("@mem", memo[i].max)
+                                     , new SQLiteParameter("@tt", "m")
+                                     , new SQLiteParameter("@st", now.ToString("yyyy-MM-dd HH:mm:ss"))};
+                DBhelper.ExecuteSQL("insert into resourceoccupy " + 
+                    "(hostname, slotname, cpu, mem, timetype, savetime)" +
+                    "values (@hn, @sn, @cpu, @mem, @tt, @st)", p);
+            }
+
+            LevelUpOccupy(h.hostname, cpuo, now, false);
+            LevelUpOccupy(h.hostname, cpuo, now, true);            
+        }
+
+        private static void LevelUpOccupy(string hn, List<ResourcesUtilization> cpuo, DateTime now, bool today) {
+            DateTime qt = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0);
+
+            SQLiteParameter[] p1 = new SQLiteParameter[3];
+            p1[0].ParameterName = "@hn";
+            p1[0].Value = hn;
+            p1[1].ParameterName = "@st";
+            p1[1].Value = qt.ToString("yyyy-MM-dd HH:mm:ss");
+            string timetype = today ? "h" : "m";
+
+            foreach (ResourcesUtilization ru in cpuo) {
+                p1[0].ParameterName = "@sl";
+                p1[0].Value = ru.slotname;
+                DataTable reso = DBhelper.ExecuteDataTable("select * from resourceoccupy where hostname=@hn " +
+                    "and slotname=@sl and timetype ='" + timetype + "' and savetime<@st", p1);
+                if (reso.Rows.Count == 0) continue;
+                int cpuoccupy = 0, memoccupy = 0;
+                foreach (DataRow row in reso.Rows) {
+                    cpuoccupy += Int32.Parse(row["cpu"].ToString());
+                    memoccupy += Int32.Parse(row["mem"].ToString());
+                }
+
+                DBhelper.ExecuteSQL("delete from resourceoccupy where hostname=@hn " +
+                    "and slotname=@sl and timetype ='" + timetype + "' and savetime<@st", p1);
+
+                SQLiteParameter[] p2 = {new SQLiteParameter("@hn", hn)
+                                      , new SQLiteParameter("@sn", ru.slotname)
+                                      , new SQLiteParameter("@cpu", cpuoccupy / reso.Rows.Count)
+                                      , new SQLiteParameter("@mem", memoccupy / reso.Rows.Count)
+                                      , new SQLiteParameter("@tt", today ? "d" : "h")
+                                      , new SQLiteParameter("@st", now.ToString("yyyy-MM-dd HH:mm:ss"))};
+                DBhelper.ExecuteSQL("insert into resourceoccupy " +
+                    "(hostname, slotname, cpu, mem, timetype, savetime)" +
+                    "values (@hn, @sn, @cpu, @mem, @tt, @st)", p2);
+            }
         }
 
         public static void SaveDeviceConfiguration(Host h, string conf) {

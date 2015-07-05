@@ -13,10 +13,17 @@ namespace BScripServiceLibrary {
     public class BSService : IBSService {
         BSThread.TimeBackUpThread tbthreadobj;
         Thread tbthread;
+        BSThread.CpuMemThread cmthreadobj;
+        Thread cmthread;
+
         public BSService() {
             tbthreadobj = new BSThread.TimeBackUpThread();
             tbthread = new Thread(new ThreadStart(tbthreadobj.BackUp));
             tbthread.Start();
+
+            cmthreadobj = new BSThread.CpuMemThread();
+            cmthread = new Thread(new ThreadStart(cmthreadobj.MonitorUp));
+            cmthread.Start();
         }
 
         public string GetPath(){
@@ -45,8 +52,19 @@ namespace BScripServiceLibrary {
             tbthreadobj.SetHost(h, span);
         }
 
+<<<<<<< HEAD
         public Host[] GetHosts(int userid) {
             List<Host> hostlist = Host.GetAllHosts(userid);
+=======
+        public void SetMonitorTime(string hostname, long span) {
+            Host h = new Host(hostname);
+            h.GetFromName();
+            cmthreadobj.SetHost(h, span);
+        }
+
+        public Host[] GetHosts() {
+            List<Host> hostlist = Host.GetAllHosts();
+>>>>>>> c1d74c32cb11e1a1225f19a1e11010632242bec4
             return hostlist.ToArray();
         }
 
