@@ -276,8 +276,14 @@ namespace BScrip.BScripService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBSService/SetSaveConfTime", ReplyAction="http://tempuri.org/IBSService/SetSaveConfTimeResponse")]
         void SetSaveConfTime(int userid, string hostname, long span);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBSService/SetMonitorTime", ReplyAction="http://tempuri.org/IBSService/SetMonitorTimeResponse")]
+        void SetMonitorTime(int userid, string hostname, long span);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBSService/GetHosts", ReplyAction="http://tempuri.org/IBSService/GetHostsResponse")]
         BScrip.BScripService.Host[] GetHosts(int userid);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBSService/GetBackUpHosts", ReplyAction="http://tempuri.org/IBSService/GetBackUpHostsResponse")]
+        BScrip.BScripService.Host[] GetBackUpHosts();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBSService/AddHost", ReplyAction="http://tempuri.org/IBSService/AddHostResponse")]
         void AddHost(BScrip.BScripService.Host item);
@@ -331,8 +337,16 @@ namespace BScrip.BScripService {
             base.Channel.SetSaveConfTime(userid, hostname, span);
         }
         
+        public void SetMonitorTime(int userid, string hostname, long span) {
+            base.Channel.SetMonitorTime(userid, hostname, span);
+        }
+        
         public BScrip.BScripService.Host[] GetHosts(int userid) {
             return base.Channel.GetHosts(userid);
+        }
+        
+        public BScrip.BScripService.Host[] GetBackUpHosts() {
+            return base.Channel.GetBackUpHosts();
         }
         
         public void AddHost(BScrip.BScripService.Host item) {

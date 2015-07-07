@@ -20,9 +20,6 @@ namespace BScrip.BSForms {
         private BSForms.TableReport tabRCMDIChild = null;
 
         public BScripMDIParent() {
-            WelcomeForm fw = new WelcomeForm();
-            fw.ShowDialog();//show出欢迎窗口 
-
             InitializeComponent();
             HostsForm.allhostsform = new HostsForm();
             HostsForm.allhostsform.MdiParent = this;
@@ -197,12 +194,13 @@ namespace BScrip.BSForms {
         }
     }
 
-    public abstract class BSForm : Form {
+    public class BSForm : Form {
         public BSForm(){
             this.BackColor = StaticFun.BSColor;
         }
 
-        public abstract void AddHost(Host h = null);
+        public virtual void AddHost(Host h = null){}
+
         protected override void WndProc(ref Message m) {
             if (m.Msg == 0x00A1 && m.WParam.ToInt32() == 2) {
                 m.Msg = 0x0201;

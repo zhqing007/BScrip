@@ -25,6 +25,9 @@ namespace BScripServiceLibrary {
         Host[] GetHosts(int userid);
 
         [OperationContract]
+        Host[] GetBackUpHosts();
+
+        [OperationContract]
         void AddHost(Host item);
 
         [OperationContract]

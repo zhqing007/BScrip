@@ -132,5 +132,10 @@ namespace WindowsFormsApplication1 {
             MessageBox.Show(proxy.GetPath());
             BSServiceReference.Host h = new Host();
         }
+
+        private void button6_Click(object sender, EventArgs e) {
+            TimeSpan a = new TimeSpan(24, 0, 0);
+            MessageBox.Show(a.Ticks.ToString());
+        }
     }
 }

@@ -37,11 +37,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.remoser_re = new System.Windows.Forms.TextBox();
-            this.selserver_re = new System.Windows.Forms.Button();
-            this.isUpLoad_re = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.isTimercheckbox = new System.Windows.Forms.CheckBox();
             this.stopLocal = new System.Windows.Forms.Button();
@@ -52,14 +47,13 @@
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.minuteUpDown)).BeginInit();
             this.panel1.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.localIsRunningPic)).BeginInit();
             this.SuspendLayout();
             // 
             // moveRightB_t
             // 
-            this.moveRightB_t.Location = new System.Drawing.Point(12, 28);
+            this.moveRightB_t.Location = new System.Drawing.Point(12, 318);
             this.moveRightB_t.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.moveRightB_t.Name = "moveRightB_t";
             this.moveRightB_t.Size = new System.Drawing.Size(35, 109);
@@ -70,7 +64,7 @@
             // 
             // moveLeftB_t
             // 
-            this.moveLeftB_t.Location = new System.Drawing.Point(12, 141);
+            this.moveLeftB_t.Location = new System.Drawing.Point(12, 431);
             this.moveLeftB_t.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.moveLeftB_t.Name = "moveLeftB_t";
             this.moveLeftB_t.Size = new System.Drawing.Size(35, 109);
@@ -85,10 +79,10 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.timerBackUpL.FullRowSelect = true;
-            this.timerBackUpL.Location = new System.Drawing.Point(52, 28);
+            this.timerBackUpL.Location = new System.Drawing.Point(12, 28);
             this.timerBackUpL.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.timerBackUpL.Name = "timerBackUpL";
-            this.timerBackUpL.Size = new System.Drawing.Size(680, 302);
+            this.timerBackUpL.Size = new System.Drawing.Size(631, 286);
             this.timerBackUpL.TabIndex = 18;
             this.timerBackUpL.UseCompatibleStateImageBehavior = false;
             this.timerBackUpL.View = System.Windows.Forms.View.Details;
@@ -204,7 +198,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(49, 9);
+            this.label6.Location = new System.Drawing.Point(9, 9);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(157, 15);
             this.label6.TabIndex = 31;
@@ -213,66 +207,13 @@
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.panel1.Controls.Add(this.groupBox3);
             this.panel1.Controls.Add(this.groupBox2);
             this.panel1.Controls.Add(this.getConfB);
-            this.panel1.Location = new System.Drawing.Point(0, 334);
+            this.panel1.Location = new System.Drawing.Point(53, 318);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(730, 196);
+            this.panel1.Size = new System.Drawing.Size(590, 272);
             this.panel1.TabIndex = 32;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Controls.Add(this.remoser_re);
-            this.groupBox3.Controls.Add(this.selserver_re);
-            this.groupBox3.Controls.Add(this.isUpLoad_re);
-            this.groupBox3.Location = new System.Drawing.Point(495, 7);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(225, 148);
-            this.groupBox3.TabIndex = 40;
-            this.groupBox3.TabStop = false;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 32);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(112, 15);
-            this.label2.TabIndex = 38;
-            this.label2.Text = "上传服务器名：";
-            // 
-            // remoser_re
-            // 
-            this.remoser_re.Location = new System.Drawing.Point(9, 50);
-            this.remoser_re.Name = "remoser_re";
-            this.remoser_re.ReadOnly = true;
-            this.remoser_re.Size = new System.Drawing.Size(210, 25);
-            this.remoser_re.TabIndex = 37;
-            // 
-            // selserver_re
-            // 
-            this.selserver_re.Enabled = false;
-            this.selserver_re.Location = new System.Drawing.Point(70, 85);
-            this.selserver_re.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.selserver_re.Name = "selserver_re";
-            this.selserver_re.Size = new System.Drawing.Size(149, 30);
-            this.selserver_re.TabIndex = 35;
-            this.selserver_re.Text = "选择上上传服务器";
-            this.selserver_re.UseVisualStyleBackColor = true;
-            this.selserver_re.Click += new System.EventHandler(this.selserver_re_Click);
-            // 
-            // isUpLoad_re
-            // 
-            this.isUpLoad_re.AutoSize = true;
-            this.isUpLoad_re.Location = new System.Drawing.Point(9, 0);
-            this.isUpLoad_re.Name = "isUpLoad_re";
-            this.isUpLoad_re.Size = new System.Drawing.Size(104, 19);
-            this.isUpLoad_re.TabIndex = 36;
-            this.isUpLoad_re.Text = "上传到远端";
-            this.isUpLoad_re.UseVisualStyleBackColor = true;
-            this.isUpLoad_re.CheckedChanged += new System.EventHandler(this.isUpLoad_re_CheckedChanged);
             // 
             // groupBox2
             // 
@@ -282,7 +223,7 @@
             this.groupBox2.Controls.Add(this.groupBox1);
             this.groupBox2.Controls.Add(this.stopLocal);
             this.groupBox2.Controls.Add(this.localIsRunningPic);
-            this.groupBox2.Location = new System.Drawing.Point(14, 7);
+            this.groupBox2.Location = new System.Drawing.Point(12, 74);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(467, 148);
             this.groupBox2.TabIndex = 39;
@@ -326,7 +267,7 @@
             // getConfB
             // 
             this.getConfB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.getConfB.Location = new System.Drawing.Point(12, 160);
+            this.getConfB.Location = new System.Drawing.Point(12, 236);
             this.getConfB.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.getConfB.Name = "getConfB";
             this.getConfB.Size = new System.Drawing.Size(106, 30);
@@ -339,7 +280,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(744, 541);
+            this.ClientSize = new System.Drawing.Size(946, 647);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.moveRightB_t);
@@ -355,8 +296,6 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.minuteUpDown)).EndInit();
             this.panel1.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.localIsRunningPic)).EndInit();
@@ -383,13 +322,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button stopLocal;
         private System.Windows.Forms.PictureBox localIsRunningPic;
-        private System.Windows.Forms.TextBox remoser_re;
-        private System.Windows.Forms.CheckBox isUpLoad_re;
-        private System.Windows.Forms.Button selserver_re;
         private System.Windows.Forms.Button getConfB;
         private System.Windows.Forms.CheckBox isTimercheckbox;
-        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Label label2;
     }
 }

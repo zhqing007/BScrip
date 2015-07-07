@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using BScrip.BSForms;
 
 namespace BScrip
 {
@@ -14,6 +15,8 @@ namespace BScrip
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            WelcomeForm fw = new WelcomeForm();
+            if (fw.ShowDialog() == DialogResult.Abort) return;
             BSForms.BScripMDIParent.onlyOneMDI = new BSForms.BScripMDIParent();
             Application.Run(BSForms.BScripMDIParent.onlyOneMDI);
 

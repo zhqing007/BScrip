@@ -19,9 +19,25 @@ namespace BScrip.BSForms {
             timerBackUpL.Columns.Add("主机名", 100, HorizontalAlignment.Left);
             timerBackUpL.Columns.Add("IP地址", 120, HorizontalAlignment.Left);
             timerBackUpL.Columns.Add("登录名", 120, HorizontalAlignment.Left);
+            timerBackUpL.Columns.Add("备份间隔时间(小时)", 120, HorizontalAlignment.Left);
             timerBackUpL.Columns.Add("登录方式", 80, HorizontalAlignment.Left);
             beginTimePicker.Value = beginTimePicker.MinDate = DateTime.Now;
             beginTimePicker.MaxDate = DateTime.Now + new TimeSpan(365, 0, 0, 0);
+            Host[] buhosts = StaticFun.serverclient.GetBackUpHosts();
+            foreach (Host h in buhosts) {
+                ListViewItem listitem = new ListViewItem();
+                listitem.Text = h.hostname;
+                listitem.SubItems.Add(h.ipaddress);
+                listitem.SubItems.Add(h.loginname);
+                listitem.SubItems.Add((new TimeSpan(h.tspan)).TotalHours.ToString());
+                if (h.loginmode == 0)
+                    listitem.SubItems.Add("Telnet");
+                else
+                    listitem.SubItems.Add("SSH2");
+                timerBackUpL.Items.Add(listitem);
+            }
+
+
             //Host dfs = DBhelper.GetDefaultUpLoadServer();
             //if (dfs != null) {
             //    remoser_re.Tag = dfs;
@@ -34,6 +50,8 @@ namespace BScrip.BSForms {
         private void moveRightB_t_Click(object sender, EventArgs e) {
             if (!StaticFun.AddHostListToListViewTag(HostsForm.allhostsform.GetSelectHosts(), timerBackUpL))
                 return;
+
+
             Host th;
             foreach (ListViewItem downh in timerBackUpL.Items) {
                 if (downh.Text.Length > 0) continue;
@@ -97,10 +115,7 @@ namespace BScrip.BSForms {
 
             bool isbegin = false;
 
-            if (isUpLoad_re.Checked)
-                isbegin = BeginBackUp(ref this.locTimer, remoser_re.Tag as Host);
-            else
-                isbegin = BeginBackUp(ref this.locTimer, null);
+            isbegin = BeginBackUp(ref this.locTimer, null);
             if (!isbegin) return;
             this.stopLocal.Enabled = true;
             this.getConfB.Enabled = false;
@@ -162,30 +177,30 @@ namespace BScrip.BSForms {
         //}
 
         private void selserver_re_Click(object sender, EventArgs e) {
-            FileTransfer tranHost = new FileTransfer();
-            tranHost.ShowDialog();
-            if (tranHost.DialogResult != DialogResult.OK) return;
-            Host ser = tranHost.GetServer();
-            remoser_re.Tag = ser;
-            remoser_re.Text = ser.hostname;
+            //FileTransfer tranHost = new FileTransfer();
+            //tranHost.ShowDialog();
+            //if (tranHost.DialogResult != DialogResult.OK) return;
+            //Host ser = tranHost.GetServer();
+            //remoser_re.Tag = ser;
+            //remoser_re.Text = ser.hostname;
         }
 
         private void EnableUploadItems(bool en) {
-            label2.Enabled = en;
-            remoser_re.Enabled = en;
-            selserver_re.Enabled = en;
+            //label2.Enabled = en;
+            //remoser_re.Enabled = en;
+            //selserver_re.Enabled = en;
         }
 
         private void isUpLoad_re_CheckedChanged(object sender, EventArgs e) {
-            if (!(sender as CheckBox).Checked) {
-                EnableUploadItems(false);
-                return;
-            }
-            EnableUploadItems(true);
-            if (remoser_re.Tag != null) return;
-            selserver_re_Click(sender, e);
-            if (remoser_re.Tag == null)
-                isUpLoad_re.Checked = false;
+            //if (!(sender as CheckBox).Checked) {
+            //    EnableUploadItems(false);
+            //    return;
+            //}
+            //EnableUploadItems(true);
+            //if (remoser_re.Tag != null) return;
+            //selserver_re_Click(sender, e);
+            //if (remoser_re.Tag == null)
+            //    isUpLoad_re.Checked = false;
         }
 
         private void getConfB_Click(object sender, EventArgs e) {

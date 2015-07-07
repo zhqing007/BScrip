@@ -17,13 +17,13 @@ namespace BScripServiceLibrary {
         Thread cmthread;
 
         public BSService() {
-            tbthreadobj = new BSThread.TimeBackUpThread();
-            tbthread = new Thread(new ThreadStart(tbthreadobj.BackUp));
-            tbthread.Start();
+            //tbthreadobj = new BSThread.TimeBackUpThread();
+            //tbthread = new Thread(new ThreadStart(tbthreadobj.BackUp));
+            //tbthread.Start();
 
-            cmthreadobj = new BSThread.CpuMemThread();
-            cmthread = new Thread(new ThreadStart(cmthreadobj.MonitorUp));
-            cmthread.Start();
+            //cmthreadobj = new BSThread.CpuMemThread();
+            //cmthread = new Thread(new ThreadStart(cmthreadobj.MonitorUp));
+            //cmthread.Start();
         }
 
         public string GetPath(){
@@ -76,6 +76,11 @@ namespace BScripServiceLibrary {
                 "select id from user where loginname='" + name + "' and password='" + pw + "'", null);
             if (t_user.Rows.Count == 1) return Int32.Parse(t_user.Rows[0][0].ToString());
             return -1;
+        }
+
+        public Host[] GetBackUpHosts() {
+            List<Host> hostlist = Host.GetTimeHosts();
+            return hostlist.ToArray();
         }
     }
 }

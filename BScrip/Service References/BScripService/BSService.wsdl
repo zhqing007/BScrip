@@ -210,6 +210,44 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IBSService_SetMonitorTime_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IBSService_SetMonitorTime_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsp:Policy wsu:Id="WSHttpBinding_IBSService_GetHosts_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
@@ -230,6 +268,44 @@
     </wsp:ExactlyOne>
   </wsp:Policy>
   <wsp:Policy wsu:Id="WSHttpBinding_IBSService_GetHosts_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IBSService_GetBackUpHosts_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IBSService_GetBackUpHosts_output_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -426,11 +502,23 @@
   <wsdl:message name="IBSService_SetSaveConfTime_OutputMessage">
     <wsdl:part name="parameters" element="tns:SetSaveConfTimeResponse" />
   </wsdl:message>
+  <wsdl:message name="IBSService_SetMonitorTime_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetMonitorTime" />
+  </wsdl:message>
+  <wsdl:message name="IBSService_SetMonitorTime_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetMonitorTimeResponse" />
+  </wsdl:message>
   <wsdl:message name="IBSService_GetHosts_InputMessage">
     <wsdl:part name="parameters" element="tns:GetHosts" />
   </wsdl:message>
   <wsdl:message name="IBSService_GetHosts_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetHostsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IBSService_GetBackUpHosts_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBackUpHosts" />
+  </wsdl:message>
+  <wsdl:message name="IBSService_GetBackUpHosts_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBackUpHostsResponse" />
   </wsdl:message>
   <wsdl:message name="IBSService_AddHost_InputMessage">
     <wsdl:part name="parameters" element="tns:AddHost" />
@@ -469,9 +557,17 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IBSService/SetSaveConfTime" message="tns:IBSService_SetSaveConfTime_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IBSService/SetSaveConfTimeResponse" message="tns:IBSService_SetSaveConfTime_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SetMonitorTime">
+      <wsdl:input wsaw:Action="http://tempuri.org/IBSService/SetMonitorTime" message="tns:IBSService_SetMonitorTime_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IBSService/SetMonitorTimeResponse" message="tns:IBSService_SetMonitorTime_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetHosts">
       <wsdl:input wsaw:Action="http://tempuri.org/IBSService/GetHosts" message="tns:IBSService_GetHosts_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IBSService/GetHostsResponse" message="tns:IBSService_GetHosts_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBackUpHosts">
+      <wsdl:input wsaw:Action="http://tempuri.org/IBSService/GetBackUpHosts" message="tns:IBSService_GetBackUpHosts_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IBSService/GetBackUpHostsResponse" message="tns:IBSService_GetBackUpHosts_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddHost">
       <wsdl:input wsaw:Action="http://tempuri.org/IBSService/AddHost" message="tns:IBSService_AddHost_InputMessage" />
@@ -526,6 +622,17 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SetMonitorTime">
+      <soap12:operation soapAction="http://tempuri.org/IBSService/SetMonitorTime" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IBSService_SetMonitorTime_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IBSService_SetMonitorTime_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetHosts">
       <soap12:operation soapAction="http://tempuri.org/IBSService/GetHosts" style="document" />
       <wsdl:input>
@@ -534,6 +641,17 @@
       </wsdl:input>
       <wsdl:output>
         <wsp:PolicyReference URI="#WSHttpBinding_IBSService_GetHosts_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBackUpHosts">
+      <soap12:operation soapAction="http://tempuri.org/IBSService/GetBackUpHosts" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IBSService_GetBackUpHosts_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IBSService_GetBackUpHosts_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>

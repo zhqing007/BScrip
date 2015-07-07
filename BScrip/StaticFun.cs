@@ -12,6 +12,8 @@ using BScrip.BScripService;
 namespace BScrip {
     public class StaticFun {
         public static Color BSColor = Color.FromArgb(220, 230, 245);
+        public static BSServiceClient serverclient = new BSServiceClient();
+        public static int loginID;
 
         public static void SelectAll_ListView(ListView lv) {
             foreach (ListViewItem h in lv.Items)

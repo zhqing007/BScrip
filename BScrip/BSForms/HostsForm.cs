@@ -23,7 +23,7 @@ namespace BScrip.BSForms {
 
         private void LoadHostToListView() {
             HostView.Items.Clear();
-            List<Host> hosts = null;// = Host.GetAllHosts();
+            List<Host> hosts = new List<Host>(StaticFun.serverclient.GetHosts(StaticFun.loginID));
             AddHostToView(hosts);
         }
 
