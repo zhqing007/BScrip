@@ -10,7 +10,7 @@ using System.Threading;
 using BScrip.BScripService;
 
 namespace BScrip.BSForms {
-    public partial class TimerBackUpForm : BSForm {
+    public partial class TimerBackUpForm : Form {
         private System.Threading.Timer locTimer = null; 
 
         public TimerBackUpForm() {
