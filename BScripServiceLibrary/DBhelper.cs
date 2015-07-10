@@ -86,10 +86,28 @@ namespace BScripServiceLibrary {
         }
 
         public static void SaveDeviceConfiguration(Host h, string conf) {
-            SQLiteParameter[] p = {new SQLiteParameter("@hn", h.hostname)
-                                      , new SQLiteParameter("@st", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
+            SQLiteParameter[] p = {new SQLiteParameter("@ip", h.ipaddress)
+                                      , new SQLiteParameter("@conf", conf)};
+
+            DataTable deconf = ExecuteDataTable(
+                "select max(savetime) from deviceconfiguration where ipaddress=@ip and configuration=@conf", p);
+            DateTime savedate = DateTime.Now;
+            DateTime checkdate = DateTime.Now;
+
+            if (deconf.Rows.Count == 0) {
+                SQLiteParameter[] p1 = {new SQLiteParameter("@ip", h.ipaddress)
+                                      , new SQLiteParameter("@st", savedate.ToString("yyyy-MM-dd HH:mm:ss"))
                                       , new SQLiteParameter("@co", conf)};
-            DBhelper.ExecuteSQL("insert into deviceconfiguration (hostname, savetime, configuration) values (@hn, @st, @co)", p);
+                DBhelper.ExecuteSQL("insert into deviceconfiguration (ipaddress, savetime, configuration) values (@ip, @st, @co)", p1);
+            }
+            else {
+                savedate = (DateTime)(deconf.Rows[0][0]);
+            }
+
+            SQLiteParameter[] p2 = {new SQLiteParameter("@ip", h.ipaddress)
+                                       , new SQLiteParameter("@st", savedate.ToString("yyyy-MM-dd HH:mm:ss"))
+                                       , new SQLiteParameter("@ct", checkdate.ToString("yyyy-MM-dd HH:mm:ss"))};
+            DBhelper.ExecuteSQL("insert into devconfdate (ipaddress, savedate, checkdate) values (@ip, @st, @ct)", p2);
         }
 
         public static DataTable GetDeviceConfTime(string hostname, DateTime begin, DateTime end) {

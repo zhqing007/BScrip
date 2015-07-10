@@ -10,7 +10,7 @@ using System.Threading;
 using BScrip.BScripService;
 
 namespace BScrip.BSForms {
-    public partial class TimerBackUpForm : Form {
+    public partial class TimerBackUpForm : BSForm {
         private System.Threading.Timer locTimer = null; 
 
         public TimerBackUpForm() {
@@ -21,11 +21,10 @@ namespace BScrip.BSForms {
             timerBackUpL.Columns.Add("登录名", 120, HorizontalAlignment.Left);
             timerBackUpL.Columns.Add("备份间隔时间(小时)", 120, HorizontalAlignment.Left);
             timerBackUpL.Columns.Add("登录方式", 80, HorizontalAlignment.Left);
-            beginTimePicker.Value = beginTimePicker.MinDate = DateTime.Now;
-            beginTimePicker.MaxDate = DateTime.Now + new TimeSpan(365, 0, 0, 0);
             Host[] buhosts = StaticFun.serverclient.GetBackUpHosts();
             foreach (Host h in buhosts) {
                 ListViewItem listitem = new ListViewItem();
+                listitem.Tag = h;
                 listitem.Text = h.hostname;
                 listitem.SubItems.Add(h.ipaddress);
                 listitem.SubItems.Add(h.loginname);
@@ -36,91 +35,133 @@ namespace BScrip.BSForms {
                     listitem.SubItems.Add("SSH2");
                 timerBackUpL.Items.Add(listitem);
             }
-
-
-            //Host dfs = DBhelper.GetDefaultUpLoadServer();
-            //if (dfs != null) {
-            //    remoser_re.Tag = dfs;
-            //    remoser_re.Text = dfs.hostname;
-            //}
-            EnableTimerItems(false);
-            EnableUploadItems(false);
         }
 
         private void moveRightB_t_Click(object sender, EventArgs e) {
-            if (!StaticFun.AddHostListToListViewTag(HostsForm.allhostsform.GetSelectHosts(), timerBackUpL))
-                return;
-
-
-            Host th;
-            foreach (ListViewItem downh in timerBackUpL.Items) {
-                if (downh.Text.Length > 0) continue;
-                th = downh.Tag as Host;
-                downh.Text = th.hostname;
-                downh.SubItems.Add(th.ipaddress);
-                downh.SubItems.Add(th.loginname);
-                if (th.loginmode == 0)
-                    downh.SubItems.Add("Telnet");
-                else
-                    downh.SubItems.Add("SSH2");
-            }
+            List<Host> lh = HostsForm.allhostsform.GetSelectHosts();
+            if(lh.Count == 0) return;
+            AddHostToEdit(lh[0]);
         }
 
         public override void AddHost(Host h = null) {
             moveRightB_t_Click(null, null);
         }
 
-        private void moveLeftB_t_Click(object sender, EventArgs e) {
-            if (timerBackUpL.SelectedItems.Count == 0) return;
-            for (int p = timerBackUpL.SelectedItems.Count - 1; p >= 0; --p)
-                timerBackUpL.Items.Remove(timerBackUpL.SelectedItems[p]);
-        }
-
-        private void selectAllB_Click(object sender, EventArgs e) {
-            StaticFun.SelectAll_ListView(timerBackUpL);
-        }
-
-        private bool BeginBackUp(ref System.Threading.Timer t, Host upserver) {
-            TimeSpan beginTime = new TimeSpan();
-            if (beginTimePicker.Value > DateTime.Now)
-                beginTime = beginTimePicker.Value - DateTime.Now;
-            if(dayUpDown.Value == 0 && hourUpDown.Value == 0 && minuteUpDown.Value == 0){
-                MessageBox.Show("没有设置间隔时间！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            TimeSpan span = new TimeSpan(Decimal.ToInt32(dayUpDown.Value)
-                , Decimal.ToInt32(hourUpDown.Value)
-                , Decimal.ToInt32(minuteUpDown.Value)
-                , 0);
-            List<Host> hostlist = new List<Host>();
-            foreach (object item in timerBackUpL.Items) {
-                hostlist.Add((item as ListViewItem).Tag as Host);
-            }
-            
-            TimerConfGeter tgeter = new TimerConfGeter();
-            TimerStruct ts = new TimerStruct();
-            ts.hosts = hostlist;
-            ts.upLoadServer = upserver;
-
-            t = new System.Threading.Timer(new TimerCallback(tgeter.fun), ts, beginTime, span);
-            return true;
-        }
-
-        private void GetConfiguration_Timer() {
-            if (this.timerBackUpL.Items.Count <= 0) {
-                MessageBox.Show("没有要备份的主机！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        private void stopLocal_Click(object sender, EventArgs e) {
+            if (timerBackUpL.SelectedItems.Count <= 0) return;
+            Host h = timerBackUpL.SelectedItems[0].Tag as Host;
+            h.tspan = 0;
+            if (h.userid != StaticFun.loginID) {
+                MessageBox.Show("所要选定的主机由其它用户添加，请联系对方修改！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            bool isbegin = false;
+            if(MessageBox.Show("确定停止所选主机'" + h.hostname + "'的定期备份么？", "确认"
+                , MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
 
-            isbegin = BeginBackUp(ref this.locTimer, null);
-            if (!isbegin) return;
-            this.stopLocal.Enabled = true;
-            this.getConfB.Enabled = false;
-            SetPicSta(true);
+            StaticFun.serverclient.SetSaveConfTime(h.userid, h.hostname, h.tspan);
+            timerBackUpL.SelectedItems[0].Remove();
         }
+
+        private void addToBU_Click(object sender, EventArgs e) {
+            Host h = namebox.Tag as Host;
+            h.tspan = (new TimeSpan((int)(dayUpDown.Value), (int)(hourUpDown.Value), 0)).Ticks;
+            int index = -1;
+            foreach (ListViewItem item in timerBackUpL.Items) {
+                Host listh = item.Tag as Host;
+                if (h.ipaddress == listh.ipaddress) {
+                    index = item.Index;
+                    if (h.tspan == listh.tspan) {
+                        MessageBox.Show("所要备份的主机已添加！", "重复", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    if (h.userid != listh.userid) {
+                        MessageBox.Show("所要备份的主机已由其它用户添加，请联系对方修改！", "重复", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+            }
+
+            StaticFun.serverclient.SetSaveConfTime(h.userid, h.hostname, h.tspan);
+            timerBackUpL.Items[index].SubItems[2].Text = (new TimeSpan(h.tspan)).TotalHours.ToString();
+        }
+
+        private void AddHostToEdit(Host item) {
+            item.userid = StaticFun.loginID;
+            namebox.Tag = item;
+            namebox.Text = item.hostname;
+            ipbox.Text = item.ipaddress;
+            TimeSpan ts = new TimeSpan(item.tspan);
+            dayUpDown.Value = ts.Days;
+            hourUpDown.Value = ts.Hours;
+        }
+
+        private void timerBackUpL_SelectedIndexChanged(object sender, EventArgs e) {
+            if (timerBackUpL.SelectedItems.Count <= 0)
+                return;
+            AddHostToEdit(timerBackUpL.SelectedItems[0].Tag as Host);
+        }
+
+        //private void GetConfiguration() {
+        //    if (timerBackUpL.Items.Count <= 0) {
+        //        MessageBox.Show("没有要备份的主机！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //        return;
+        //    }
+
+        //    List<Host> hostlist = new List<Host>();
+        //    foreach (object item in timerBackUpL.Items) {
+        //        hostlist.Add((item as ListViewItem).Tag as Host);
+        //    }
+        //Host _server = null;
+        //if (isUpLoad_re.Checked) _server = remoser_re.Tag as Host;
+        //BSThread.ConfThread confth = new BSThread.ConfThread(hostlist, _server);
+        //Thread logThread = new Thread(new ThreadStart(confth.GetConfNoThread));
+        //logThread.Start();
+        //}
+
+        //private bool BeginBackUp(ref System.Threading.Timer t, Host upserver) {
+        //    TimeSpan beginTime = new TimeSpan();
+        //    if (beginTimePicker.Value > DateTime.Now)
+        //        beginTime = beginTimePicker.Value - DateTime.Now;
+        //    if(dayUpDown.Value == 0 && hourUpDown.Value == 0 && minuteUpDown.Value == 0){
+        //        MessageBox.Show("没有设置间隔时间！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //        return false;
+        //    }
+
+        //    TimeSpan span = new TimeSpan(Decimal.ToInt32(dayUpDown.Value)
+        //        , Decimal.ToInt32(hourUpDown.Value)
+        //        , Decimal.ToInt32(minuteUpDown.Value)
+        //        , 0);
+        //    List<Host> hostlist = new List<Host>();
+        //    foreach (object item in timerBackUpL.Items) {
+        //        hostlist.Add((item as ListViewItem).Tag as Host);
+        //    }
+            
+        //    TimerConfGeter tgeter = new TimerConfGeter();
+        //    TimerStruct ts = new TimerStruct();
+        //    ts.hosts = hostlist;
+        //    ts.upLoadServer = upserver;
+
+        //    t = new System.Threading.Timer(new TimerCallback(tgeter.fun), ts, beginTime, span);
+        //    return true;
+        //}
+
+        //private void GetConfiguration_Timer() {
+        //    if (this.timerBackUpL.Items.Count <= 0) {
+        //        MessageBox.Show("没有要备份的主机！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //        return;
+        //    }
+
+        //    bool isbegin = false;
+
+        //    isbegin = BeginBackUp(ref this.locTimer, null);
+        //    if (!isbegin) return;
+        //    this.stopLocal.Enabled = true;
+        //    this.getConfB.Enabled = false;
+        //    SetPicSta(true);
+        //}
 
         //private void timerRemBu_Click(object sender, EventArgs e) {
         //    if (this.timerBackUpL.Items.Count <= 0) {
@@ -137,109 +178,24 @@ namespace BScrip.BSForms {
         //    SetLocalCircle(Color.Green);
         //}
 
-        private void stopLocal_Click(object sender, EventArgs e) {
-            if (locTimer == null) return;
-            this.locTimer.Dispose();
-            this.stopLocal.Enabled = false;
-            this.getConfB.Enabled = true;
-            SetPicSta(false);
-        }
-
-        //private void stopRemote_Click(object sender, EventArgs e) {
-        //    this.remoteTimer.Dispose();
-        //    this.stopRemote.Enabled = false;
-        //    this.timerRemBu.Enabled = true;
-        //    SetRemoteCircle(SystemColors.Control);
+        //private void DrawPicBoxCircle(PictureBox pb, Graphics g, Color c) {
+        //    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+        //    Brush bush = new SolidBrush(c);
+        //    g.FillEllipse(bush, 0, 0, pb.Size.Width - 1, pb.Size.Height - 1);
         //}
 
-
-        private void SetPicSta(bool dis) {
-            this.localIsRunningPic.Image =
-                dis ? global::BScrip.Properties.Resources.run
-                : global::BScrip.Properties.Resources.norun;
-        }
-
-        //private void SetRemoteCircle(Color c) {
-        //    remoteColor = c;
-        //    remoteIsRunningPic.Invalidate();
+        //private void isUpLoad_re_CheckedChanged(object sender, EventArgs e) {
+        //if (!(sender as CheckBox).Checked) {
+        //    EnableUploadItems(false);
+        //    return;
         //}
-
-        private void DrawPicBoxCircle(PictureBox pb, Graphics g, Color c) {
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            Brush bush = new SolidBrush(c);
-            g.FillEllipse(bush, 0, 0, pb.Size.Width - 1, pb.Size.Height - 1);
-        }
-
-
-
-        //private void remoteIsRunningPic_Paint(object sender, PaintEventArgs e) {
-        //    DrawPicBoxCircle(sender as PictureBox, e.Graphics, remoteColor);
+        //EnableUploadItems(true);
+        //if (remoser_re.Tag != null) return;
+        //selserver_re_Click(sender, e);
+        //if (remoser_re.Tag == null)
+        //    isUpLoad_re.Checked = false;
         //}
-
-        private void selserver_re_Click(object sender, EventArgs e) {
-            //FileTransfer tranHost = new FileTransfer();
-            //tranHost.ShowDialog();
-            //if (tranHost.DialogResult != DialogResult.OK) return;
-            //Host ser = tranHost.GetServer();
-            //remoser_re.Tag = ser;
-            //remoser_re.Text = ser.hostname;
-        }
-
-        private void EnableUploadItems(bool en) {
-            //label2.Enabled = en;
-            //remoser_re.Enabled = en;
-            //selserver_re.Enabled = en;
-        }
-
-        private void isUpLoad_re_CheckedChanged(object sender, EventArgs e) {
-            //if (!(sender as CheckBox).Checked) {
-            //    EnableUploadItems(false);
-            //    return;
-            //}
-            //EnableUploadItems(true);
-            //if (remoser_re.Tag != null) return;
-            //selserver_re_Click(sender, e);
-            //if (remoser_re.Tag == null)
-            //    isUpLoad_re.Checked = false;
-        }
-
-        private void getConfB_Click(object sender, EventArgs e) {
-            if (isTimercheckbox.Checked)
-                GetConfiguration_Timer();
-            else
-                GetConfiguration();
-        }
-
-        private void GetConfiguration() {
-            if (timerBackUpL.Items.Count <= 0) {
-                MessageBox.Show("没有要备份的主机！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            List<Host> hostlist = new List<Host>();
-            foreach (object item in timerBackUpL.Items) {
-                hostlist.Add((item as ListViewItem).Tag as Host);
-            }
-            //Host _server = null;
-            //if (isUpLoad_re.Checked) _server = remoser_re.Tag as Host;
-            //BSThread.ConfThread confth = new BSThread.ConfThread(hostlist, _server);
-            //Thread logThread = new Thread(new ThreadStart(confth.GetConfNoThread));
-            //logThread.Start();
-        }
-
-        private void EnableTimerItems(bool en) {
-            this.label1.Enabled = en;
-            this.beginTimePicker.Enabled = en;
-            this.groupBox1.Enabled = en;
-            this.stopLocal.Enabled = false;
-            //this.localIsRunningPic.Image =
-            //    en ? global::BScrip.Properties.Resources.run
-            //    : global::BScrip.Properties.Resources.norun;
-        }
-
-        private void isTimercheckbox_CheckedChanged(object sender, EventArgs e) {
-            EnableTimerItems((sender as CheckBox).Checked);
-        }
+                
     }
 
     public class TimerStruct {

@@ -10,7 +10,7 @@ using System.IO;
 using BScrip.BScripService;
 
 namespace BScrip.BSForms {
-    public partial class ConfViewer : BSForm {
+    public partial class ConfViewer : Form {
         private Host devicehost;
         bool isloaded = false;
 
