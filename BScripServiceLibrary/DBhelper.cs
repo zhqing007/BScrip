@@ -110,21 +110,24 @@ namespace BScripServiceLibrary {
             DBhelper.ExecuteSQL("insert into devconfdate (ipaddress, savedate, checkdate) values (@ip, @st, @ct)", p2);
         }
 
-        public static DataTable GetDeviceConfTime(string hostname, DateTime begin, DateTime end) {
-            SQLiteParameter[] p = {new SQLiteParameter("@hn", hostname)
+        public static DataTable GetDeviceConfTime(string ip, DateTime begin, DateTime end) {
+            SQLiteParameter[] p = {new SQLiteParameter("@ip", ip)
                                       , new SQLiteParameter("@begin", begin.ToString("yyyy-MM-dd HH:mm:ss"))
                                       , new SQLiteParameter("@end", end.ToString("yyyy-MM-dd HH:mm:ss"))};
             DataTable deconf = ExecuteDataTable(
-                "select savetime from deviceconfiguration where hostname=@hn and savetime>=@begin and savetime<=@end"
+                "select checkdate from devconfdate where ipaddress=@ip and checkdate>=@begin and checkdate<=@end"
                 , p);
             return deconf;
         }
 
-        public static string GetDeviceConfiguration(string hostname, DateTime save) {
-            SQLiteParameter[] p = {new SQLiteParameter("@hn", hostname)
-                                      , new SQLiteParameter("@save", save.ToString("yyyy-MM-dd HH:mm:ss"))};
+        public static string GetDeviceConfiguration(string ip, DateTime check) {
+            SQLiteParameter[] p = {new SQLiteParameter("@ip", ip)
+                                      , new SQLiteParameter("@ct", check.ToString("yyyy-MM-dd HH:mm:ss"))};
             DataTable deconf = ExecuteDataTable(
-                "select configuration from deviceconfiguration where hostname=@hn and savetime=@save"
+                @"select deviceconfiguration.[configuration] from devconfdate left join deviceconfiguration 
+                  on devconfdate.[ipaddress]=deviceconfiguration.[ipaddress]
+                  and strftime('%s',devconfdate.[savedate])=strftime('%s',deviceconfiguration.[savetime])
+                  where devconfdate.[ipaddress]=@ip and strftime('%s',devconfdate.[checkdate])= strftime('%s',@ct)"
                 , p);
             if (deconf.Rows.Count <= 0) return null;
             return deconf.Rows[0][0].ToString();

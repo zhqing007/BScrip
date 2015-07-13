@@ -28,6 +28,12 @@ namespace BScripServiceLibrary {
         Host[] GetBackUpHosts();
 
         [OperationContract]
+        DateTime[] GetConSaveDate(string ip, DateTime begin, DateTime end);
+
+        [OperationContract]
+        string GetConf(string ip, DateTime checkdate);
+
+        [OperationContract]
         void AddHost(Host item);
 
         [OperationContract]

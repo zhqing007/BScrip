@@ -82,5 +82,20 @@ namespace BScripServiceLibrary {
             List<Host> hostlist = Host.GetTimeHosts();
             return hostlist.ToArray();
         }
+
+
+        public DateTime[] GetConSaveDate(string ip, DateTime begin, DateTime end) {
+            DataTable dt = DBhelper.GetDeviceConfTime(ip, begin, end);
+            DateTime[] ta = new DateTime[dt.Rows.Count];
+            for(int i = 0; i < dt.Rows.Count; ++i){
+                ta[i] = (DateTime)(dt.Rows[i][1]);
+            }
+            return ta;
+        }
+
+        public string GetConf(string ip, DateTime checkdate) {
+            throw new NotImplementedException();
+
+        }
     }
 }
