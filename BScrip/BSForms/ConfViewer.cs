@@ -10,9 +10,10 @@ using System.IO;
 using BScrip.BScripService;
 
 namespace BScrip.BSForms {
-    public partial class ConfViewer : Form {
+    public partial class ConfViewer : BSForm {
         private Host devicehost;
         bool isloaded = false;
+        string[] conf;
 
         public ConfViewer(Host sw) {
             InitializeComponent();
@@ -20,16 +21,21 @@ namespace BScrip.BSForms {
         }
 
         private void FindConf() {
-            //DataTable conftime = DBhelper.GetDeviceConfTime(devicehost.hostname
-            //    , beginTimePicker.Value, endTimePicker.Value);
-
-            //foreach (DataRow row in conftime.Rows)
-            //    configlist.Items.Add(row[0]);
+            DateTime[] savetimes = StaticFun.serverclient.GetConSaveDate
+                (devicehost.ipaddress, beginTimePicker.Value, endTimePicker.Value);
+            conf = new string[savetimes.Length];
+            foreach (DateTime savetime in savetimes)
+                configlist.Items.Add(savetime);
         }
 
         private void datelist_SelectedIndexChanged(object sender, EventArgs e) {
-            //if(configlist.SelectedItem != null)
-            //    confrichtb.Text = DBhelper.GetDeviceConfiguration(devicehost.hostname, (DateTime)(configlist.SelectedItem));
+            if (configlist.SelectedItem != null) {
+                if (conf[configlist.SelectedIndex] == null) {
+                    conf[configlist.SelectedIndex] = StaticFun.serverclient.GetConf(
+                        devicehost.ipaddress, (DateTime)(configlist.SelectedItem));
+                }
+                confrichtb.Text = conf[configlist.SelectedIndex];
+            }
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e) {

@@ -83,7 +83,6 @@ namespace BScripServiceLibrary {
             return hostlist.ToArray();
         }
 
-
         public DateTime[] GetConSaveDate(string ip, DateTime begin, DateTime end) {
             DataTable dt = DBhelper.GetDeviceConfTime(ip, begin, end);
             DateTime[] ta = new DateTime[dt.Rows.Count];
@@ -94,8 +93,7 @@ namespace BScripServiceLibrary {
         }
 
         public string GetConf(string ip, DateTime checkdate) {
-            throw new NotImplementedException();
-
+            return DBhelper.GetDeviceConfiguration(ip, checkdate);
         }
     }
 }

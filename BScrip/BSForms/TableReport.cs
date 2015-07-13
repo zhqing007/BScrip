@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using BScrip.BScripService;
 
 namespace BScrip.BSForms {
-    public partial class TableReport : BSForm {
+    public partial class TableReport : Form {
         public TableReport() {
             InitializeComponent();
         }

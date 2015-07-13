@@ -285,6 +285,12 @@ namespace BScrip.BScripService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBSService/GetBackUpHosts", ReplyAction="http://tempuri.org/IBSService/GetBackUpHostsResponse")]
         BScrip.BScripService.Host[] GetBackUpHosts();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBSService/GetConSaveDate", ReplyAction="http://tempuri.org/IBSService/GetConSaveDateResponse")]
+        System.DateTime[] GetConSaveDate(string ip, System.DateTime begin, System.DateTime end);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBSService/GetConf", ReplyAction="http://tempuri.org/IBSService/GetConfResponse")]
+        string GetConf(string ip, System.DateTime checkdate);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBSService/AddHost", ReplyAction="http://tempuri.org/IBSService/AddHostResponse")]
         void AddHost(BScrip.BScripService.Host item);
         
@@ -347,6 +353,14 @@ namespace BScrip.BScripService {
         
         public BScrip.BScripService.Host[] GetBackUpHosts() {
             return base.Channel.GetBackUpHosts();
+        }
+        
+        public System.DateTime[] GetConSaveDate(string ip, System.DateTime begin, System.DateTime end) {
+            return base.Channel.GetConSaveDate(ip, begin, end);
+        }
+        
+        public string GetConf(string ip, System.DateTime checkdate) {
+            return base.Channel.GetConf(ip, checkdate);
         }
         
         public void AddHost(BScrip.BScripService.Host item) {
