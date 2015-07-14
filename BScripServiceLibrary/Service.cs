@@ -87,7 +87,7 @@ namespace BScripServiceLibrary {
             DataTable dt = DBhelper.GetDeviceConfTime(ip, begin, end);
             DateTime[] ta = new DateTime[dt.Rows.Count];
             for(int i = 0; i < dt.Rows.Count; ++i){
-                ta[i] = (DateTime)(dt.Rows[i][1]);
+                ta[i] = (DateTime)(dt.Rows[i][0]);
             }
             return ta;
         }

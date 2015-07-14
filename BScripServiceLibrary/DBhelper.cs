@@ -12,7 +12,7 @@ namespace BScripServiceLibrary {
         private static SQLiteCommand sqlcmd;
 
         static DBhelper() {
-            sqlconn = new SQLiteConnection("Data Source=E:\\MYCPP\\BScrip\\BScripServiceLibrary\\BScripServer.db;Password=zhqing");
+            sqlconn = new SQLiteConnection("Data Source=d:\\WorkStation\\BScrip\\BScripServiceLibrary\\BScripServer.db;Password=zhqing");
             sqlconn.Open();
             sqlcmd = sqlconn.CreateCommand();
         }

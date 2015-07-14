@@ -11,7 +11,7 @@ using BScrip.BScripService;
 using System.Windows.Forms.DataVisualization.Charting;
 
 namespace BScrip.BSForms {
-    public partial class DeviceViewer : BSForm {
+    public partial class DeviceViewer : Form {
         private Host devicehost = null;
         //private DeviceBaseInfo dbi;
         //private List<ResourcesUtilization> cpurulist;
@@ -40,6 +40,8 @@ namespace BScrip.BSForms {
         }
 
         private void bGWorker_DoWork(object sender, DoWorkEventArgs e) {
+
+
             //try {
             //    if (devicehost.loginmode == 0) {
             //        dev = Device.DeviceFactory(new TelnetLinker(devicehost.ipaddress, devicehost.loginname, devicehost.password)

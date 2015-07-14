@@ -39,18 +39,19 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(49, 9);
+            this.label6.Location = new System.Drawing.Point(37, 7);
+            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(127, 15);
+            this.label6.Size = new System.Drawing.Size(101, 12);
             this.label6.TabIndex = 35;
             this.label6.Text = "需要统计的设备：";
             // 
             // moveRightB_t
             // 
-            this.moveRightB_t.Location = new System.Drawing.Point(12, 28);
-            this.moveRightB_t.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.moveRightB_t.Location = new System.Drawing.Point(9, 22);
+            this.moveRightB_t.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.moveRightB_t.Name = "moveRightB_t";
-            this.moveRightB_t.Size = new System.Drawing.Size(35, 109);
+            this.moveRightB_t.Size = new System.Drawing.Size(26, 87);
             this.moveRightB_t.TabIndex = 33;
             this.moveRightB_t.Text = ">>";
             this.moveRightB_t.UseVisualStyleBackColor = true;
@@ -58,10 +59,10 @@
             // 
             // moveLeftB_t
             // 
-            this.moveLeftB_t.Location = new System.Drawing.Point(12, 141);
-            this.moveLeftB_t.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.moveLeftB_t.Location = new System.Drawing.Point(9, 113);
+            this.moveLeftB_t.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.moveLeftB_t.Name = "moveLeftB_t";
-            this.moveLeftB_t.Size = new System.Drawing.Size(35, 109);
+            this.moveLeftB_t.Size = new System.Drawing.Size(26, 87);
             this.moveLeftB_t.TabIndex = 34;
             this.moveLeftB_t.Text = "<<";
             this.moveLeftB_t.UseVisualStyleBackColor = true;
@@ -78,10 +79,10 @@
             this.columnHeader3,
             this.columnHeader4});
             this.deviceList.FullRowSelect = true;
-            this.deviceList.Location = new System.Drawing.Point(52, 28);
-            this.deviceList.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.deviceList.Location = new System.Drawing.Point(39, 22);
+            this.deviceList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.deviceList.Name = "deviceList";
-            this.deviceList.Size = new System.Drawing.Size(710, 302);
+            this.deviceList.Size = new System.Drawing.Size(534, 242);
             this.deviceList.TabIndex = 32;
             this.deviceList.UseCompatibleStateImageBehavior = false;
             this.deviceList.View = System.Windows.Forms.View.Details;
@@ -108,9 +109,10 @@
             // 
             // backupAna
             // 
-            this.backupAna.Location = new System.Drawing.Point(36, 364);
+            this.backupAna.Location = new System.Drawing.Point(29, 291);
+            this.backupAna.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.backupAna.Name = "backupAna";
-            this.backupAna.Size = new System.Drawing.Size(100, 34);
+            this.backupAna.Size = new System.Drawing.Size(75, 27);
             this.backupAna.TabIndex = 36;
             this.backupAna.Text = "备份统计";
             this.backupAna.UseVisualStyleBackColor = true;
@@ -118,27 +120,29 @@
             // 
             // monthAna
             // 
-            this.monthAna.Location = new System.Drawing.Point(174, 364);
+            this.monthAna.Location = new System.Drawing.Point(131, 291);
+            this.monthAna.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.monthAna.Name = "monthAna";
-            this.monthAna.Size = new System.Drawing.Size(100, 34);
+            this.monthAna.Size = new System.Drawing.Size(75, 27);
             this.monthAna.TabIndex = 37;
             this.monthAna.Text = "月度分析";
             this.monthAna.UseVisualStyleBackColor = true;
             // 
             // errorAna
             // 
-            this.errorAna.Location = new System.Drawing.Point(319, 364);
+            this.errorAna.Location = new System.Drawing.Point(239, 291);
+            this.errorAna.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.errorAna.Name = "errorAna";
-            this.errorAna.Size = new System.Drawing.Size(100, 34);
+            this.errorAna.Size = new System.Drawing.Size(75, 27);
             this.errorAna.TabIndex = 38;
             this.errorAna.Text = "故障率统计";
             this.errorAna.UseVisualStyleBackColor = true;
             // 
             // TableReport
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(774, 563);
+            this.ClientSize = new System.Drawing.Size(580, 450);
             this.Controls.Add(this.errorAna);
             this.Controls.Add(this.monthAna);
             this.Controls.Add(this.backupAna);
@@ -147,6 +151,7 @@
             this.Controls.Add(this.moveLeftB_t);
             this.Controls.Add(this.deviceList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "TableReport";
             this.Text = "报表统计";
             this.ResumeLayout(false);

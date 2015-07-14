@@ -96,6 +96,7 @@ namespace BScrip.BSForms {
             TimeSpan ts = new TimeSpan(item.tspan);
             dayUpDown.Value = ts.Days;
             hourUpDown.Value = ts.Hours;
+            this.stopLocal.Enabled = true;
         }
 
         private void timerBackUpL_SelectedIndexChanged(object sender, EventArgs e) {

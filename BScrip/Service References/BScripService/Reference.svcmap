@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="9203bac8-27ca-4871-b1ac-25c6702fac7c" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="3ad5f3c4-98e8-4e76-b90a-43485cb5340b" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
@@ -21,12 +21,12 @@
     <MetadataSource Address="http://localhost:8732/BScripServiceLibrary/BSService/" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="BSService.wsdl" MetadataType="Wsdl" ID="f849dd59-4b88-4c18-8ef2-bd61b3e4e361" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?wsdl" />
-    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="5b510acb-25d5-40f0-bcca-2130614da3db" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?xsd=xsd2" />
-    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="61f125b4-57d0-468e-8568-6cad0a50b0fa" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?xsd=xsd3" />
-    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="056f760b-b017-4beb-8781-24f1d7a06e75" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?xsd=xsd0" />
-    <MetadataFile FileName="item3.xsd" MetadataType="Schema" ID="b0622239-ad8e-4c2a-9440-ef193427e54c" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?xsd=xsd1" />
-    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="2d2542b1-fd4f-47eb-b3b6-497b7b806b0a" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?disco" />
+    <MetadataFile FileName="BSService.wsdl" MetadataType="Wsdl" ID="daff1f9c-6e83-46bd-913b-7a4abb50e19c" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?wsdl" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="c7d07042-a154-4cc1-8208-ffbb28b0dd1c" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?xsd=xsd2" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="1cd114ad-36fb-4714-9ee1-0bc49ff9a878" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?xsd=xsd3" />
+    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="2940056c-39cb-4b8e-b322-6182950e02e8" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?xsd=xsd0" />
+    <MetadataFile FileName="item3.xsd" MetadataType="Schema" ID="624e10a4-082c-4308-b2aa-bccb4452f516" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?xsd=xsd1" />
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="5319d858-0ad0-4419-86f4-f0cd7d6d1860" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

@@ -28,11 +28,10 @@ namespace BScrip.BSForms {
             HostsForm.allhostsform.Show();
             timerBackUp_Click(null, null);
             LogMessageForm.logForm = new LogMessageForm();
-            LogMessageForm.logForm.MdiParent = this;
-            LogMessageForm.logForm.Parent = splitContainer2.Panel2;
-            LogMessageForm.logForm.Dock = DockStyle.Fill;
-            LogMessageForm.logForm.Show();
-            this.splitContainer2.SplitterDistance = (int)(splitContainer2.Size.Height * 0.8);
+            //LogMessageForm.logForm.MdiParent = this;
+            //LogMessageForm.logForm.Parent = splitContainer2.Panel2;
+            //LogMessageForm.logForm.Dock = DockStyle.Fill;
+            //LogMessageForm.logForm.Show();
         }
 
         private void ShowNewForm(object sender, EventArgs e) {
@@ -104,30 +103,30 @@ namespace BScrip.BSForms {
         }
 
         //private void BackUpConf_Click(object sender, EventArgs e) {
-        //    splitContainer2.Panel1.Controls.Clear();
+        //    splitContainer1.Panel2.Controls.Clear();
         //    if (backUpMDIChild == null || backUpMDIChild.IsDisposed) {
         //        backUpMDIChild = new BSForms.BackUpConfForm();
         //        backUpMDIChild.MdiParent = this;
-        //        backUpMDIChild.Parent = splitContainer2.Panel1;
+        //        backUpMDIChild.Parent = splitContainer1.Panel2;
         //        backUpMDIChild.Dock = DockStyle.Fill;
         //        backUpMDIChild.Show();
         //    }
         //    else
-        //        splitContainer2.Panel1.Controls.Add(backUpMDIChild);
+        //        splitContainer1.Panel2.Controls.Add(backUpMDIChild);
             
         //}
 
         private void timerBackUp_Click(object sender, EventArgs e) {
-            splitContainer2.Panel1.Controls.Clear();
+            splitContainer1.Panel2.Controls.Clear();
             if (timerBUMDIChild == null || timerBUMDIChild.IsDisposed) {
                 timerBUMDIChild = new TimerBackUpForm();
                 timerBUMDIChild.MdiParent = this;
-                timerBUMDIChild.Parent = splitContainer2.Panel1;
+                timerBUMDIChild.Parent = splitContainer1.Panel2;
                 timerBUMDIChild.Dock = DockStyle.Fill;
                 timerBUMDIChild.Show();
             }
             else
-                splitContainer2.Panel1.Controls.Add(timerBUMDIChild);
+                splitContainer1.Panel2.Controls.Add(timerBUMDIChild);
         }
 
         private void showInfo_Click(object sender, EventArgs e) {
@@ -136,7 +135,7 @@ namespace BScrip.BSForms {
 
         public void AddHost(Host h = null, bool timer = false) {
             timerBackUp_Click(null, null);
-            BSForm bsf = splitContainer2.Panel1.Controls[0] as BSForm;
+            BSForm bsf = splitContainer1.Panel2.Controls[0] as BSForm;
             if(bsf != null)
                 bsf.AddHost(h);
         }
@@ -147,17 +146,17 @@ namespace BScrip.BSForms {
                 MessageBox.Show("没有选择设备！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            splitContainer2.Panel1.Controls.Clear();
+            splitContainer1.Panel2.Controls.Clear();
             if (switchCMDIChild == null || switchCMDIChild.IsDisposed) {
                 switchCMDIChild = new BSForms.DeviceViewer();                
                 switchCMDIChild.MdiParent = this;
-                switchCMDIChild.Parent = splitContainer2.Panel1;
+                switchCMDIChild.Parent = splitContainer1.Panel2;
                 switchCMDIChild.Dock = DockStyle.Fill;
                 switchCMDIChild.Show();
                 switchCMDIChild.AddHost(selecthosts[0]);
             }
             else
-                splitContainer2.Panel1.Controls.Add(switchCMDIChild);
+                splitContainer1.Panel2.Controls.Add(switchCMDIChild);
         }
 
         public void confviewer_Click(object sender, EventArgs e) {
@@ -166,31 +165,31 @@ namespace BScrip.BSForms {
                 MessageBox.Show("没有选择设备！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            splitContainer2.Panel1.Controls.Clear();
+            splitContainer1.Panel2.Controls.Clear();
             if (confViewerCMDIChild == null || confViewerCMDIChild.IsDisposed) {
                 confViewerCMDIChild = new BSForms.ConfViewer(selecthosts[0]);
                 confViewerCMDIChild.MdiParent = this;
-                confViewerCMDIChild.Parent = splitContainer2.Panel1;
+                confViewerCMDIChild.Parent = splitContainer1.Panel2;
                 confViewerCMDIChild.Dock = DockStyle.Fill;
                 confViewerCMDIChild.Show();
             }
             else {
                 confViewerCMDIChild.AddHost(selecthosts[0]);
-                splitContainer2.Panel1.Controls.Add(confViewerCMDIChild);
+                splitContainer1.Panel2.Controls.Add(confViewerCMDIChild);
             }
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e) {
-            splitContainer2.Panel1.Controls.Clear();
+            splitContainer1.Panel2.Controls.Clear();
             if (tabRCMDIChild == null || tabRCMDIChild.IsDisposed) {
                 tabRCMDIChild = new TableReport();
                 tabRCMDIChild.MdiParent = this;
-                tabRCMDIChild.Parent = splitContainer2.Panel1;
+                tabRCMDIChild.Parent = splitContainer1.Panel2;
                 tabRCMDIChild.Dock = DockStyle.Fill;
                 tabRCMDIChild.Show();
             }
             else
-                splitContainer2.Panel1.Controls.Add(tabRCMDIChild);
+                splitContainer1.Panel2.Controls.Add(tabRCMDIChild);
         }
     }
 
