@@ -216,5 +216,9 @@ namespace BScrip.BSForms {
             }
             begin_mem.Enabled = true;
         }
+
+        private void addhostButton_Click(object sender, EventArgs e) {
+
+        }
     }
 }

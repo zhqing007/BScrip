@@ -30,30 +30,29 @@ namespace BScripServiceLibrary {
         }
 
         public static void SaveCpuMemOccupy(Host h, List<ResourcesUtilization> cpuo, List<ResourcesUtilization> memo) {
-
             DateTime now = DateTime.Now;
             for (int i = 0; i < cpuo.Count; ++i) {
-                SQLiteParameter[] p = {new SQLiteParameter("@hn", h.hostname)
+                SQLiteParameter[] p = {new SQLiteParameter("@ip", h.ipaddress)
                                      , new SQLiteParameter("@sn", cpuo[i].slotname)
                                      , new SQLiteParameter("@cpu", cpuo[i].s5)
                                      , new SQLiteParameter("@mem", memo[i].max)
                                      , new SQLiteParameter("@tt", "m")
                                      , new SQLiteParameter("@st", now.ToString("yyyy-MM-dd HH:mm:ss"))};
                 DBhelper.ExecuteSQL("insert into resourceoccupy " + 
-                    "(hostname, slotname, cpu, mem, timetype, savetime)" +
-                    "values (@hn, @sn, @cpu, @mem, @tt, @st)", p);
+                    "(ipaddress, slotname, cpu, mem, timetype, savetime)" +
+                    "values (@ip, @sn, @cpu, @mem, @tt, @st)", p);
             }
 
-            LevelUpOccupy(h.hostname, cpuo, now, false);
-            LevelUpOccupy(h.hostname, cpuo, now, true);            
+            LevelUpOccupy(h.ipaddress, cpuo, now, false);
+            LevelUpOccupy(h.ipaddress, cpuo, now, true);            
         }
 
-        private static void LevelUpOccupy(string hn, List<ResourcesUtilization> cpuo, DateTime now, bool today) {
+        private static void LevelUpOccupy(string ip, List<ResourcesUtilization> cpuo, DateTime now, bool today) {
             DateTime qt = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0);
 
             SQLiteParameter[] p1 = new SQLiteParameter[3];
-            p1[0].ParameterName = "@hn";
-            p1[0].Value = hn;
+            p1[0].ParameterName = "@ip";
+            p1[0].Value = ip;
             p1[1].ParameterName = "@st";
             p1[1].Value = qt.ToString("yyyy-MM-dd HH:mm:ss");
             string timetype = today ? "h" : "m";
@@ -61,7 +60,7 @@ namespace BScripServiceLibrary {
             foreach (ResourcesUtilization ru in cpuo) {
                 p1[0].ParameterName = "@sl";
                 p1[0].Value = ru.slotname;
-                DataTable reso = DBhelper.ExecuteDataTable("select * from resourceoccupy where hostname=@hn " +
+                DataTable reso = DBhelper.ExecuteDataTable("select * from resourceoccupy where ipaddress=@ip " +
                     "and slotname=@sl and timetype ='" + timetype + "' and savetime<@st", p1);
                 if (reso.Rows.Count == 0) continue;
                 int cpuoccupy = 0, memoccupy = 0;
@@ -70,19 +69,29 @@ namespace BScripServiceLibrary {
                     memoccupy += Int32.Parse(row["mem"].ToString());
                 }
 
-                DBhelper.ExecuteSQL("delete from resourceoccupy where hostname=@hn " +
+                DBhelper.ExecuteSQL("delete from resourceoccupy where ipaddress=@ip " +
                     "and slotname=@sl and timetype ='" + timetype + "' and savetime<@st", p1);
 
-                SQLiteParameter[] p2 = {new SQLiteParameter("@hn", hn)
+                SQLiteParameter[] p2 = {new SQLiteParameter("@ip", ip)
                                       , new SQLiteParameter("@sn", ru.slotname)
                                       , new SQLiteParameter("@cpu", cpuoccupy / reso.Rows.Count)
                                       , new SQLiteParameter("@mem", memoccupy / reso.Rows.Count)
                                       , new SQLiteParameter("@tt", today ? "d" : "h")
                                       , new SQLiteParameter("@st", now.ToString("yyyy-MM-dd HH:mm:ss"))};
                 DBhelper.ExecuteSQL("insert into resourceoccupy " +
-                    "(hostname, slotname, cpu, mem, timetype, savetime)" +
-                    "values (@hn, @sn, @cpu, @mem, @tt, @st)", p2);
+                    "(ipaddress, slotname, cpu, mem, timetype, savetime)" +
+                    "values (@ip, @sn, @cpu, @mem, @tt, @st)", p2);
             }
+        }
+
+        public static DataTable GetCpuMemOccupy(Host h, DateTime begintime, DateTime endtime) {
+            SQLiteParameter[] p = {new SQLiteParameter("@ip", h.ipaddress)
+                                      , new SQLiteParameter("@bt", begintime.ToString("yyyy-MM-dd HH:mm:ss"))
+                                      , new SQLiteParameter("@et", endtime.ToString("yyyy-MM-dd HH:mm:ss"))};
+            DataTable reso = DBhelper.ExecuteDataTable("select * from resourceoccupy where ipaddress=@ip " +
+                    "and timetype ='d' and savetime>=@bt and savetime<=@et", p);
+            reso.TableName = "CpuMemOccupy";
+            return reso;
         }
 
         public static void SaveDeviceConfiguration(Host h, string conf) {

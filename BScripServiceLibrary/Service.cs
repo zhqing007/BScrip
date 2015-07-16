@@ -95,5 +95,9 @@ namespace BScripServiceLibrary {
         public string GetConf(string ip, DateTime checkdate) {
             return DBhelper.GetDeviceConfiguration(ip, checkdate);
         }
+
+        public DataTable GetCpuMemOccupy(Host h, DateTime begintime, DateTime endtime) {
+            return DBhelper.GetCpuMemOccupy(h, begintime, endtime);
+        }
     }
 }
