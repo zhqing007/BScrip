@@ -25,14 +25,12 @@
         private void InitializeComponent() {
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.cpuresourceschart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.loadbasebg = new System.ComponentModel.BackgroundWorker();
             this.devbaseinfo = new System.Windows.Forms.TextBox();
-            this.memresourceschart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.devicebasemsg = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.monthPicker = new System.Windows.Forms.DateTimePicker();
             this.removehostButton = new System.Windows.Forms.Button();
             this.addhostButton = new System.Windows.Forms.Button();
             this.resutilizelist_v = new System.Windows.Forms.ListView();
@@ -41,21 +39,15 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.stop_cpu = new System.Windows.Forms.Button();
-            this.begin_cpu = new System.Windows.Forms.Button();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.stop_mem = new System.Windows.Forms.Button();
-            this.begin_mem = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.refresh = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.interfaceGridView = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
+            this.export = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.cpuresourceschart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.memresourceschart)).BeginInit();
             this.devicebasemsg.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.tabPage3.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.interfaceGridView)).BeginInit();
             this.SuspendLayout();
@@ -83,10 +75,10 @@
             legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Top;
             legend1.Name = "Legend1";
             this.cpuresourceschart.Legends.Add(legend1);
-            this.cpuresourceschart.Location = new System.Drawing.Point(92, 0);
+            this.cpuresourceschart.Location = new System.Drawing.Point(51, 0);
             this.cpuresourceschart.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cpuresourceschart.Name = "cpuresourceschart";
-            this.cpuresourceschart.Size = new System.Drawing.Size(921, 248);
+            this.cpuresourceschart.Size = new System.Drawing.Size(613, 181);
             this.cpuresourceschart.TabIndex = 0;
             this.cpuresourceschart.Text = "chart1";
             // 
@@ -108,83 +100,62 @@
             this.devbaseinfo.Size = new System.Drawing.Size(756, 86);
             this.devbaseinfo.TabIndex = 1;
             // 
-            // memresourceschart
-            // 
-            chartArea2.AxisX.InterlacedColor = System.Drawing.Color.White;
-            chartArea2.AxisX.Interval = 10D;
-            chartArea2.AxisX.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
-            chartArea2.AxisX.MajorGrid.Interval = 10D;
-            chartArea2.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea2.AxisX.MajorTickMark.Interval = 5D;
-            chartArea2.AxisX.Maximum = 100D;
-            chartArea2.AxisX.Minimum = 0D;
-            chartArea2.AxisY.InterlacedColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            chartArea2.AxisY.Interval = 10D;
-            chartArea2.AxisY.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
-            chartArea2.AxisY.IsInterlaced = true;
-            chartArea2.AxisY.MajorGrid.Interval = 10D;
-            chartArea2.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea2.AxisY.MajorTickMark.Interval = 5D;
-            chartArea2.AxisY.Maximum = 100D;
-            chartArea2.Name = "ChartArea1";
-            this.memresourceschart.ChartAreas.Add(chartArea2);
-            this.memresourceschart.Dock = System.Windows.Forms.DockStyle.Top;
-            legend2.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Top;
-            legend2.Name = "Legend1";
-            this.memresourceschart.Legends.Add(legend2);
-            this.memresourceschart.Location = new System.Drawing.Point(3, 2);
-            this.memresourceschart.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.memresourceschart.Name = "memresourceschart";
-            this.memresourceschart.Size = new System.Drawing.Size(1019, 366);
-            this.memresourceschart.TabIndex = 2;
-            this.memresourceschart.Text = "chart1";
-            // 
             // devicebasemsg
             // 
             this.devicebasemsg.Controls.Add(this.tabPage2);
-            this.devicebasemsg.Controls.Add(this.tabPage3);
             this.devicebasemsg.Controls.Add(this.tabPage1);
             this.devicebasemsg.Dock = System.Windows.Forms.DockStyle.Fill;
             this.devicebasemsg.Location = new System.Drawing.Point(0, 0);
             this.devicebasemsg.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.devicebasemsg.Name = "devicebasemsg";
             this.devicebasemsg.SelectedIndex = 0;
-            this.devicebasemsg.Size = new System.Drawing.Size(1033, 670);
+            this.devicebasemsg.Size = new System.Drawing.Size(680, 604);
             this.devicebasemsg.TabIndex = 3;
             // 
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(230)))), ((int)(((byte)(245)))));
+            this.tabPage2.Controls.Add(this.export);
+            this.tabPage2.Controls.Add(this.monthPicker);
             this.tabPage2.Controls.Add(this.removehostButton);
             this.tabPage2.Controls.Add(this.addhostButton);
             this.tabPage2.Controls.Add(this.resutilizelist_v);
-            this.tabPage2.Controls.Add(this.stop_cpu);
-            this.tabPage2.Controls.Add(this.begin_cpu);
             this.tabPage2.Controls.Add(this.cpuresourceschart);
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPage2.Size = new System.Drawing.Size(1025, 641);
+            this.tabPage2.Size = new System.Drawing.Size(672, 575);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "CPU占用率";
             // 
+            // monthPicker
+            // 
+            this.monthPicker.CustomFormat = "yyyy年MM月";
+            this.monthPicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.monthPicker.Location = new System.Drawing.Point(51, 542);
+            this.monthPicker.Name = "monthPicker";
+            this.monthPicker.ShowUpDown = true;
+            this.monthPicker.Size = new System.Drawing.Size(139, 25);
+            this.monthPicker.TabIndex = 6;
+            // 
             // removehostButton
             // 
-            this.removehostButton.Location = new System.Drawing.Point(16, 255);
-            this.removehostButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.removehostButton.Location = new System.Drawing.Point(9, 123);
+            this.removehostButton.Margin = new System.Windows.Forms.Padding(4);
             this.removehostButton.Name = "removehostButton";
-            this.removehostButton.Size = new System.Drawing.Size(44, 198);
+            this.removehostButton.Size = new System.Drawing.Size(35, 109);
             this.removehostButton.TabIndex = 5;
             this.removehostButton.Text = "<<";
             this.removehostButton.UseVisualStyleBackColor = true;
+            this.removehostButton.Click += new System.EventHandler(this.removehostButton_Click);
             // 
             // addhostButton
             // 
-            this.addhostButton.Location = new System.Drawing.Point(16, 25);
-            this.addhostButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.addhostButton.Location = new System.Drawing.Point(9, 6);
+            this.addhostButton.Margin = new System.Windows.Forms.Padding(4);
             this.addhostButton.Name = "addhostButton";
-            this.addhostButton.Size = new System.Drawing.Size(44, 198);
+            this.addhostButton.Size = new System.Drawing.Size(35, 109);
             this.addhostButton.TabIndex = 4;
             this.addhostButton.Text = ">>";
             this.addhostButton.UseVisualStyleBackColor = true;
@@ -198,10 +169,10 @@
             this.columnHeader3,
             this.columnHeader4,
             this.columnHeader5});
-            this.resutilizelist_v.Location = new System.Drawing.Point(92, 254);
-            this.resutilizelist_v.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.resutilizelist_v.Location = new System.Drawing.Point(52, 187);
+            this.resutilizelist_v.Margin = new System.Windows.Forms.Padding(4);
             this.resutilizelist_v.Name = "resutilizelist_v";
-            this.resutilizelist_v.Size = new System.Drawing.Size(920, 258);
+            this.resutilizelist_v.Size = new System.Drawing.Size(611, 348);
             this.resutilizelist_v.TabIndex = 3;
             this.resutilizelist_v.UseCompatibleStateImageBehavior = false;
             this.resutilizelist_v.View = System.Windows.Forms.View.Details;
@@ -214,6 +185,7 @@
             // columnHeader2
             // 
             this.columnHeader2.Text = "设备名称";
+            this.columnHeader2.Width = 92;
             // 
             // columnHeader3
             // 
@@ -223,74 +195,12 @@
             // columnHeader4
             // 
             this.columnHeader4.Text = "CPU月均使用率";
-            this.columnHeader4.Width = 90;
+            this.columnHeader4.Width = 132;
             // 
             // columnHeader5
             // 
             this.columnHeader5.Text = "MEM月均使用率";
             this.columnHeader5.Width = 90;
-            // 
-            // stop_cpu
-            // 
-            this.stop_cpu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.stop_cpu.Location = new System.Drawing.Point(929, 585);
-            this.stop_cpu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.stop_cpu.Name = "stop_cpu";
-            this.stop_cpu.Size = new System.Drawing.Size(84, 30);
-            this.stop_cpu.TabIndex = 2;
-            this.stop_cpu.Text = "停止监控";
-            this.stop_cpu.UseVisualStyleBackColor = true;
-            this.stop_cpu.Click += new System.EventHandler(this.stop_cpu_Click);
-            // 
-            // begin_cpu
-            // 
-            this.begin_cpu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.begin_cpu.Location = new System.Drawing.Point(801, 585);
-            this.begin_cpu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.begin_cpu.Name = "begin_cpu";
-            this.begin_cpu.Size = new System.Drawing.Size(84, 30);
-            this.begin_cpu.TabIndex = 1;
-            this.begin_cpu.Text = "开始监控";
-            this.begin_cpu.UseVisualStyleBackColor = true;
-            this.begin_cpu.Click += new System.EventHandler(this.begin_cpu_Click);
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(230)))), ((int)(((byte)(245)))));
-            this.tabPage3.Controls.Add(this.stop_mem);
-            this.tabPage3.Controls.Add(this.begin_mem);
-            this.tabPage3.Controls.Add(this.memresourceschart);
-            this.tabPage3.Location = new System.Drawing.Point(4, 25);
-            this.tabPage3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPage3.Size = new System.Drawing.Size(1025, 641);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "内存占用率";
-            // 
-            // stop_mem
-            // 
-            this.stop_mem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.stop_mem.Location = new System.Drawing.Point(824, 418);
-            this.stop_mem.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.stop_mem.Name = "stop_mem";
-            this.stop_mem.Size = new System.Drawing.Size(84, 30);
-            this.stop_mem.TabIndex = 4;
-            this.stop_mem.Text = "停止监控";
-            this.stop_mem.UseVisualStyleBackColor = true;
-            this.stop_mem.Click += new System.EventHandler(this.stop_mem_Click);
-            // 
-            // begin_mem
-            // 
-            this.begin_mem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.begin_mem.Location = new System.Drawing.Point(824, 372);
-            this.begin_mem.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.begin_mem.Name = "begin_mem";
-            this.begin_mem.Size = new System.Drawing.Size(84, 30);
-            this.begin_mem.TabIndex = 3;
-            this.begin_mem.Text = "开始监控";
-            this.begin_mem.UseVisualStyleBackColor = true;
-            this.begin_mem.Click += new System.EventHandler(this.begin_mem_Click);
             // 
             // tabPage1
             // 
@@ -304,7 +214,7 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPage1.Size = new System.Drawing.Size(1025, 641);
+            this.tabPage1.Size = new System.Drawing.Size(814, 507);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "基本信息";
             // 
@@ -355,21 +265,29 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "设备基本信息：";
             // 
+            // export
+            // 
+            this.export.Location = new System.Drawing.Point(543, 542);
+            this.export.Name = "export";
+            this.export.Size = new System.Drawing.Size(120, 25);
+            this.export.TabIndex = 7;
+            this.export.Text = "导出";
+            this.export.UseVisualStyleBackColor = true;
+            this.export.Click += new System.EventHandler(this.export_Click);
+            // 
             // DeviceViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1033, 670);
+            this.ClientSize = new System.Drawing.Size(680, 604);
             this.Controls.Add(this.devicebasemsg);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "DeviceViewer";
             this.Text = "设备信息及状态";
             ((System.ComponentModel.ISupportInitialize)(this.cpuresourceschart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.memresourceschart)).EndInit();
             this.devicebasemsg.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            this.tabPage3.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.interfaceGridView)).EndInit();
@@ -382,19 +300,13 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart cpuresourceschart;
         private System.ComponentModel.BackgroundWorker loadbasebg;
         private System.Windows.Forms.TextBox devbaseinfo;
-        private System.Windows.Forms.DataVisualization.Charting.Chart memresourceschart;
         private System.Windows.Forms.TabControl devicebasemsg;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.DataGridView interfaceGridView;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button refresh;
-        private System.Windows.Forms.Button begin_cpu;
-        private System.Windows.Forms.Button stop_cpu;
-        private System.Windows.Forms.Button stop_mem;
-        private System.Windows.Forms.Button begin_mem;
         private System.Windows.Forms.ListView resutilizelist_v;
         private System.Windows.Forms.Button removehostButton;
         private System.Windows.Forms.Button addhostButton;
@@ -403,6 +315,8 @@
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
+        private System.Windows.Forms.DateTimePicker monthPicker;
+        private System.Windows.Forms.Button export;
 
     }
 }

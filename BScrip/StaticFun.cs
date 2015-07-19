@@ -125,6 +125,25 @@ namespace BScrip {
             return new StreamReader(txtstr);
         }
 
+        public static DataTable listViewToDataTable(ListView lv){
+            int i, j;
+            DataRow dr;
+            DataTable dt = new DataTable();
+             //生成DataTable列头
+            for (i = 0; i < lv.Columns.Count; i++){
+                dt.Columns.Add(lv.Columns[i].Text.Trim(), typeof(String));
+            }
+             //每行内容
+            for (i = 0; i < lv.Items.Count; i++){
+                dr = dt.NewRow();
+                for (j = 0; j < lv.Columns.Count; j++){
+                    dr[j] = lv.Items[i].SubItems[j].Text.Trim();
+                }
+                dt.Rows.Add(dr);
+            }
+            return dt;
+         }
+
         //public static BSDevice.Device HuaWeiFactory(Linker _linker, string spw) {
         //    if (_linker == null) return null;
         //    HuaweiDevice devhua = new HuaweiDevice(_linker);

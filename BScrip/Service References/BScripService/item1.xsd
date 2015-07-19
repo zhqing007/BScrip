@@ -21,11 +21,19 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Host" nillable="true" type="tns:Host" />
-  <xs:complexType name="CompositeType">
+  <xs:complexType name="ArrayOfROccupy">
     <xs:sequence>
-      <xs:element minOccurs="0" name="BoolValue" type="xs:boolean" />
-      <xs:element minOccurs="0" name="StringValue" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ROccupy" nillable="true" type="tns:ROccupy" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="CompositeType" nillable="true" type="tns:CompositeType" />
+  <xs:element name="ArrayOfROccupy" nillable="true" type="tns:ArrayOfROccupy" />
+  <xs:complexType name="ROccupy">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CpuOccupy" type="xs:int" />
+      <xs:element minOccurs="0" name="IP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MemOccupy" type="xs:int" />
+      <xs:element minOccurs="0" name="SlotName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ROccupy" nillable="true" type="tns:ROccupy" />
 </xs:schema>

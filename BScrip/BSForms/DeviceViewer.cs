@@ -11,7 +11,7 @@ using BScrip.BScripService;
 using System.Windows.Forms.DataVisualization.Charting;
 
 namespace BScrip.BSForms {
-    public partial class DeviceViewer : Form {
+    public partial class DeviceViewer : BSForm {
         private Host devicehost = null;
         //private DeviceBaseInfo dbi;
         //private List<ResourcesUtilization> cpurulist;
@@ -193,32 +193,70 @@ namespace BScrip.BSForms {
             lock (locker) {                
                 tasklist.Add(refresh_c);
             }
-            begin_cpu.Enabled = false;
+            //begin_cpu.Enabled = false;
         }
 
         private void stop_cpu_Click(object sender, EventArgs e) {
             lock (locker) {
                 tasklist.Remove(refresh_c);
             }
-            begin_cpu.Enabled = true;
+            //begin_cpu.Enabled = true;
         }
 
         private void begin_mem_Click(object sender, EventArgs e) {
             lock (locker) {
                 tasklist.Add(refresh_m);
             }
-            begin_mem.Enabled = false;
+            //begin_mem.Enabled = false;
         }
 
         private void stop_mem_Click(object sender, EventArgs e) {
             lock (locker) {
                 tasklist.Remove(refresh_m);
             }
-            begin_mem.Enabled = true;
+            //begin_mem.Enabled = true;
         }
 
         private void addhostButton_Click(object sender, EventArgs e) {
+            List<Host> lh = HostsForm.allhostsform.GetSelectHosts();
+            if (lh.Count == 0) return;
+            DateTime begin = new DateTime(monthPicker.Value.Year, monthPicker.Value.Month,1);
+            DateTime end = new DateTime(monthPicker.Value.Year, monthPicker.Value.Month + 1, 1);
+            int i = 0;
+            int cpuo = 0;
+            int memo = 0;
+            foreach(Host h in lh){
+                ROccupy[] occupy = StaticFun.serverclient.GetCpuMemOccupy(h, begin, end);
+                ListViewItem vitem = new ListViewItem();
+                vitem.Tag = occupy;
+                vitem.Text = (i++).ToString();
+                foreach(ROccupy ro in occupy){
+                    cpuo += ro.CpuOccupy;
+                    memo += ro.MemOccupy;
+                }
 
+                cpuo /= occupy.Length;
+                memo /= occupy.Length;
+
+                vitem.SubItems.Add(h.hostname);
+                vitem.SubItems.Add(h.ipaddress);
+                vitem.SubItems.Add("" + cpuo + "%");
+                vitem.SubItems.Add("" + memo + "%");
+                resutilizelist_v.Items.Add(vitem);
+            }
+        }
+
+        private void removehostButton_Click(object sender, EventArgs e) {
+            for(int i = resutilizelist_v.SelectedItems.Count - 1; i >= 0; --i)
+                resutilizelist_v.Items.Remove(resutilizelist_v.SelectedItems[i]);
+        }
+
+        private void export_Click(object sender, EventArgs e) {
+            SaveFileDialog fileDialog = new SaveFileDialog();
+            fileDialog.Filter = "xls文件|*.xls";
+            if (fileDialog.ShowDialog() != DialogResult.OK) return;
+            DataTable dt = StaticFun.listViewToDataTable(resutilizelist_v);
+            NPOIHelper.ExportDataTableToExcel(dt, fileDialog.FileName);
         }
     }
 }

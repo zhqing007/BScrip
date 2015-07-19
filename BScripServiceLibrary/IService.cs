@@ -32,7 +32,7 @@ namespace BScripServiceLibrary {
         DateTime[] GetConSaveDate(string ip, DateTime begin, DateTime end);
 
         [OperationContract]
-        DataTable GetCpuMemOccupy(Host h, DateTime begintime, DateTime endtime);
+        ROccupy[] GetCpuMemOccupy(Host h, DateTime begintime, DateTime endtime);
 
         [OperationContract]
         string GetConf(string ip, DateTime checkdate);
@@ -46,28 +46,39 @@ namespace BScripServiceLibrary {
         [OperationContract]
         int CheckUser(string name, string pw);
 
-        [OperationContract]
-        CompositeType GetDataUsingDataContract(CompositeType composite);
-
         // TODO: 在此添加您的服务操作
     }
 
     // 使用下面示例中说明的数据协定将复合类型添加到服务操作
     [DataContract]
-    public class CompositeType {
-        bool boolValue = true;
-        string stringValue = "Hello ";
+    public class ROccupy {
+        string ip;
+        string slotname;
+        int cpuoccupy;
+        int memoccupy;
 
         [DataMember]
-        public bool BoolValue {
-            get { return boolValue; }
-            set { boolValue = value; }
+        public string IP {
+            get { return ip; }
+            set { ip = value; }
         }
 
         [DataMember]
-        public string StringValue {
-            get { return stringValue; }
-            set { stringValue = value; }
+        public string SlotName {
+            get { return slotname; }
+            set { slotname = value; }
+        }
+
+        [DataMember]
+        public int CpuOccupy {
+            get { return cpuoccupy; }
+            set { cpuoccupy = value; }
+        }
+
+        [DataMember]
+        public int MemOccupy {
+            get { return memoccupy; }
+            set { memoccupy = value; }
         }
     }
 }

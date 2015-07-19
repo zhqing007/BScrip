@@ -89,7 +89,7 @@ namespace BScripServiceLibrary {
                                       , new SQLiteParameter("@bt", begintime.ToString("yyyy-MM-dd HH:mm:ss"))
                                       , new SQLiteParameter("@et", endtime.ToString("yyyy-MM-dd HH:mm:ss"))};
             DataTable reso = DBhelper.ExecuteDataTable("select * from resourceoccupy where ipaddress=@ip " +
-                    "and timetype ='d' and savetime>=@bt and savetime<=@et", p);
+                    "and timetype ='d' and savetime>=@bt and savetime=@et", p);
             reso.TableName = "CpuMemOccupy";
             return reso;
         }

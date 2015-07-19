@@ -30,10 +30,6 @@ namespace BScripServiceLibrary {
             return System.IO.Directory.GetCurrentDirectory();
         }
 
-        public CompositeType GetDataUsingDataContract(CompositeType composite) {
-            return null;
-        }
-
         public void SaveConf(int userid, string[] hostnames) {
             List<Host> hostlist = new List<Host>();
             foreach (string hostname in hostnames) {
@@ -96,8 +92,38 @@ namespace BScripServiceLibrary {
             return DBhelper.GetDeviceConfiguration(ip, checkdate);
         }
 
-        public DataTable GetCpuMemOccupy(Host h, DateTime begintime, DateTime endtime) {
-            return DBhelper.GetCpuMemOccupy(h, begintime, endtime);
+        public ROccupy[] GetCpuMemOccupy(Host h, DateTime begintime, DateTime endtime) {
+            DataTable occupy = DBhelper.GetCpuMemOccupy(h, begintime, endtime);
+            DataTable occupynodate = new DataTable("occupy");
+            List<ROccupy> deol = new List<ROccupy>();
+            string slotname = occupy.Rows[0][1].ToString();
+            int cpuo = 0;
+            int memo = 0;
+            int count = 0;
+            ROccupy devo;
+            foreach (DataRow row in occupy.Rows) {
+                if (slotname != row["slotname"].ToString()) {
+                    devo = new ROccupy();
+                    devo.IP = h.ipaddress;
+                    devo.SlotName = slotname;
+                    devo.CpuOccupy = cpuo / count;
+                    devo.MemOccupy = memo / count;
+                    deol.Add(devo);
+                    cpuo = memo = count = 0;
+                    slotname = row[1].ToString();
+                }
+                ++count;
+                cpuo += Int32.Parse(row["cpu"].ToString());
+                memo += Int32.Parse(row["mem"].ToString());
+            }
+            devo = new ROccupy();
+            devo.IP = h.ipaddress;
+            devo.SlotName = slotname;
+            devo.CpuOccupy = cpuo / count;
+            devo.MemOccupy = memo / count;
+            deol.Add(devo);
+
+            return deol.ToArray();
         }
     }
 }

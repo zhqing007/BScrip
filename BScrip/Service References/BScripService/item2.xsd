@@ -97,6 +97,22 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetCpuMemOccupy">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="h" nillable="true" type="q5:Host" />
+        <xs:element minOccurs="0" name="begintime" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endtime" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCpuMemOccupyResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="GetCpuMemOccupyResult" nillable="true" type="q6:ArrayOfROccupy" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="GetConf">
     <xs:complexType>
       <xs:sequence>
@@ -115,7 +131,7 @@
   <xs:element name="AddHost">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="item" nillable="true" type="q5:Host" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="item" nillable="true" type="q7:Host" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -127,7 +143,7 @@
   <xs:element name="UpdateHost">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="item" nillable="true" type="q6:Host" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="item" nillable="true" type="q8:Host" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -148,20 +164,6 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="CheckUserResult" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetDataUsingDataContract">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="composite" nillable="true" type="q7:CompositeType" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetDataUsingDataContractResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="GetDataUsingDataContractResult" nillable="true" type="q8:CompositeType" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
