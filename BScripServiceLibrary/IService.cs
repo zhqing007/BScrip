@@ -29,6 +29,9 @@ namespace BScripServiceLibrary {
         Host[] GetBackUpHosts();
 
         [OperationContract]
+        Host[] GetDBHosts(int userid);
+
+        [OperationContract]
         DateTime[] GetConSaveDate(string ip, DateTime begin, DateTime end);
 
         [OperationContract]
@@ -45,6 +48,9 @@ namespace BScripServiceLibrary {
 
         [OperationContract]
         int CheckUser(string name, string pw);
+
+        [OperationContract]
+        int[] GeConfCount(Host[] hl, DateTime begin, DateTime end);
 
         // TODO: 在此添加您的服务操作
     }

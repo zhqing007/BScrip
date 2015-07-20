@@ -142,13 +142,14 @@ namespace BScripServiceLibrary {
             return deconf.Rows[0][0].ToString();
         }
 
-        public static int GetDeviceBackUpCount(string hostname, DateTime begin, DateTime end) {
-            SQLiteParameter[] p = {new SQLiteParameter("@hn", hostname)
+        public static int GetDeviceBackUpCount(string ip, DateTime begin, DateTime end) {
+            SQLiteParameter[] p = {new SQLiteParameter("@ip", ip)
                                       , new SQLiteParameter("@begin", begin.ToString("yyyy-MM-dd HH:mm:ss"))
                                       , new SQLiteParameter("@end", end.ToString("yyyy-MM-dd HH:mm:ss"))};
             DataTable deconf = ExecuteDataTable(
-                @"select count(*) as cou from deviceconfiguration where hostname=@hn 
-                    and savetime>=@begin and savetime<=@end", p);
+                @"select count(deviceconfiguration.[configuration]) as cou 
+                  from devconfdate left join deviceconfiguration on devconfdate.[ipaddress]=deviceconfiguration.[ipaddress]
+                  where devconfdate.[ipaddress]=@ip and devconfdate.[checkdate]>=@begin and devconfdate.[checkdate]<@end", p);
             return Int32.Parse(deconf.Rows[0][0].ToString());
         }
 
@@ -204,7 +205,7 @@ namespace BScripServiceLibrary {
         private string _ipaddress;
         private string _hostname;
         private string _loginname;
-        private int _loginmode;
+        private int _loginmode;//telnet/ssh, sql/oracle
         private string _password;
         private string _superpw;
         private int _type = 0;
@@ -298,14 +299,14 @@ namespace BScripServiceLibrary {
             return hosts;
         }
 
-        //type: 0为交换机，1为服务器
+        //type: 0为交换机，1为服务器， 2为数据库
         public static List<Host> GetAllHosts(int userid, int type) {
             return GetHostsFromSQL("select * from hosts where userid=" + userid + " and type="
                 + type + " order by name");
         }
 
         public static List<Host> GetTimeHosts() {
-            return GetHostsFromSQL("select * from hosts where timespan!=0");
+            return GetHostsFromSQL("select * from hosts where type=0 and timespan!=0");
         }
 
         public static List<Host> GetCpuMemHosts() {

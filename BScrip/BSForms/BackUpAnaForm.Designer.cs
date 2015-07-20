@@ -28,14 +28,11 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.statBegin = new System.Windows.Forms.DateTimePicker();
-            this.statEnd = new System.Windows.Forms.DateTimePicker();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.close = new System.Windows.Forms.Button();
             this.anaStatus = new System.Windows.Forms.StatusStrip();
             this.anaStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.export = new System.Windows.Forms.Button();
             this.anaStatus.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,9 +43,11 @@
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4});
-            this.backuplist.Location = new System.Drawing.Point(12, 89);
+            this.backuplist.Dock = System.Windows.Forms.DockStyle.Top;
+            this.backuplist.Location = new System.Drawing.Point(0, 0);
+            this.backuplist.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.backuplist.Name = "backuplist";
-            this.backuplist.Size = new System.Drawing.Size(604, 453);
+            this.backuplist.Size = new System.Drawing.Size(471, 421);
             this.backuplist.TabIndex = 0;
             this.backuplist.UseCompatibleStateImageBehavior = false;
             this.backuplist.View = System.Windows.Forms.View.Details;
@@ -73,43 +72,12 @@
             this.columnHeader4.Text = "次数";
             this.columnHeader4.Width = 134;
             // 
-            // statBegin
-            // 
-            this.statBegin.Location = new System.Drawing.Point(48, 12);
-            this.statBegin.Name = "statBegin";
-            this.statBegin.Size = new System.Drawing.Size(174, 25);
-            this.statBegin.TabIndex = 1;
-            // 
-            // statEnd
-            // 
-            this.statEnd.Location = new System.Drawing.Point(311, 12);
-            this.statEnd.Name = "statEnd";
-            this.statEnd.Size = new System.Drawing.Size(174, 25);
-            this.statEnd.TabIndex = 2;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 17);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 15);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "起：";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(268, 17);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(37, 15);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "止：";
-            // 
             // close
             // 
-            this.close.Location = new System.Drawing.Point(530, 548);
+            this.close.Location = new System.Drawing.Point(398, 438);
+            this.close.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.close.Name = "close";
-            this.close.Size = new System.Drawing.Size(86, 30);
+            this.close.Size = new System.Drawing.Size(64, 24);
             this.close.TabIndex = 4;
             this.close.Text = "关闭";
             this.close.UseVisualStyleBackColor = true;
@@ -119,9 +87,10 @@
             // 
             this.anaStatus.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.anaStatusLabel});
-            this.anaStatus.Location = new System.Drawing.Point(0, 592);
+            this.anaStatus.Location = new System.Drawing.Point(0, 469);
             this.anaStatus.Name = "anaStatus";
-            this.anaStatus.Size = new System.Drawing.Size(628, 22);
+            this.anaStatus.Padding = new System.Windows.Forms.Padding(1, 0, 10, 0);
+            this.anaStatus.Size = new System.Drawing.Size(471, 22);
             this.anaStatus.TabIndex = 5;
             this.anaStatus.Text = "statusStrip1";
             // 
@@ -134,18 +103,26 @@
             // 
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             // 
+            // export
+            // 
+            this.export.Location = new System.Drawing.Point(286, 438);
+            this.export.Name = "export";
+            this.export.Size = new System.Drawing.Size(75, 23);
+            this.export.TabIndex = 6;
+            this.export.Text = "导出";
+            this.export.UseVisualStyleBackColor = true;
+            this.export.Click += new System.EventHandler(this.export_Click);
+            // 
             // BackUpAnaForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(628, 614);
+            this.ClientSize = new System.Drawing.Size(471, 491);
+            this.Controls.Add(this.export);
             this.Controls.Add(this.anaStatus);
             this.Controls.Add(this.close);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.statEnd);
-            this.Controls.Add(this.statBegin);
             this.Controls.Add(this.backuplist);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "BackUpAnaForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "网络设备备份统计";
@@ -163,13 +140,10 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.DateTimePicker statBegin;
-        private System.Windows.Forms.DateTimePicker statEnd;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button close;
         private System.Windows.Forms.StatusStrip anaStatus;
         private System.Windows.Forms.ToolStripStatusLabel anaStatusLabel;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.Button export;
     }
 }

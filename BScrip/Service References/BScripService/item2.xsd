@@ -167,4 +167,20 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GeConfCount">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="hl" nillable="true" type="q9:ArrayOfHost" />
+        <xs:element minOccurs="0" name="begin" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="end" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GeConfCountResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GeConfCountResult" nillable="true" type="q10:ArrayOfint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

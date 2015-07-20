@@ -17,7 +17,7 @@ namespace BScrip.BSForms {
         private TimerBackUpForm timerBUMDIChild = null;
         private BSForms.DeviceViewer switchCMDIChild = null;
         private BSForms.ConfViewer confViewerCMDIChild = null;
-        private BSForms.TableReport tabRCMDIChild = null;
+        private BSForms.DBexport tabRCMDIChild = null;
 
         public BScripMDIParent() {
             InitializeComponent();
@@ -182,7 +182,7 @@ namespace BScrip.BSForms {
         private void toolStripButton1_Click(object sender, EventArgs e) {
             splitContainer1.Panel2.Controls.Clear();
             if (tabRCMDIChild == null || tabRCMDIChild.IsDisposed) {
-                tabRCMDIChild = new TableReport();
+                tabRCMDIChild = new DBexport();
                 tabRCMDIChild.MdiParent = this;
                 tabRCMDIChild.Parent = splitContainer1.Panel2;
                 tabRCMDIChild.Dock = DockStyle.Fill;

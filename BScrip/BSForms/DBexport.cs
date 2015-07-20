@@ -9,8 +9,8 @@ using System.Windows.Forms;
 using BScrip.BScripService;
 
 namespace BScrip.BSForms {
-    public partial class TableReport : BSForm {
-        public TableReport() {
+    public partial class DBexport : BSForm {
+        public DBexport() {
             InitializeComponent();
         }
 
@@ -53,7 +53,22 @@ namespace BScrip.BSForms {
                 hosts.Add(h.Tag as Host);
             }
 
-            (new BackUpAnaForm(hosts)).ShowDialog();
+            //(new BackUpAnaForm(hosts)).ShowDialog();
+        }
+
+        private void monthAna_Click(object sender, EventArgs e) {
+
+        }
+
+        private void errorAna_Click(object sender, EventArgs e) {
+
+        }
+
+        private void add_Click(object sender, EventArgs e) {
+            DBInfo didia = new DBInfo();
+            didia.ShowDialog();
+            if (didia.DialogResult != DialogResult.OK) return;
+            StaticFun.serverclient.AddHost(didia.dbhost);
         }
     }
 }

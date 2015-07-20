@@ -11,13 +11,13 @@ using BScrip.BScripService;
 namespace BScrip.BSForms {
     public partial class BackUpAnaForm : Form {
         List<Host> hosts;
-
-        public BackUpAnaForm(List<Host> _hosts) {
+        DateTime bt, et;
+        public BackUpAnaForm(List<Host> _hosts, DateTime begint, DateTime endt) {
             InitializeComponent();
             this.hosts = _hosts;
             anaStatusLabel.Text = "统计中......";
-            statEnd.Value = DateTime.Now;
-            statBegin.Value = DateTime.Now - TimeSpan.FromDays(30);
+            et = endt;
+            bt = begint;
             backgroundWorker1.RunWorkerAsync();
         }
 
@@ -26,19 +26,25 @@ namespace BScrip.BSForms {
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e) {
-            //ListViewItem listItem;
-            //for(int i = 0; i < hosts.Count; ++i){
-            //    listItem = new ListViewItem();
-            //    listItem.Text = (i + 1).ToString();
-            //    listItem.SubItems.Add(hosts[i].hostname);
-            //    listItem.SubItems.Add(hosts[i].ipaddress);
-            //    int num = DBhelper.GetDeviceBackUpCount(hosts[i].hostname
-            //        , statBegin.Value, statEnd.Value);
-            //    listItem.SubItems.Add(num.ToString());
-            //    backuplist.Items.Add(listItem);
-            //}
-
+            ListViewItem listItem;
+            int[] nums = StaticFun.serverclient.GeConfCount(hosts.ToArray(), bt, et);
+            for (int i = 0; i < hosts.Count; ++i) {
+                listItem = new ListViewItem();
+                listItem.Text = (i + 1).ToString();
+                listItem.SubItems.Add(hosts[i].hostname);
+                listItem.SubItems.Add(hosts[i].ipaddress);
+                listItem.SubItems.Add(nums[i].ToString());
+                backuplist.Items.Add(listItem);
+            }
             anaStatusLabel.Text = "统计完毕！";
+        }
+
+        private void export_Click(object sender, EventArgs e) {
+            SaveFileDialog fileDialog = new SaveFileDialog();
+            fileDialog.Filter = "xls文件|*.xls";
+            if (fileDialog.ShowDialog() != DialogResult.OK) return;
+            DataTable dt = StaticFun.listViewToDataTable(backuplist);
+            NPOIHelper.ExportDataTableToExcel(dt, fileDialog.FileName);
         }
     }
 }

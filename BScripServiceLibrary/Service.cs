@@ -79,6 +79,11 @@ namespace BScripServiceLibrary {
             return hostlist.ToArray();
         }
 
+        public Host[] GetDBHosts(int userid) {
+            List<Host> hostlist = Host.GetAllHosts(userid, 2);
+            return hostlist.ToArray();
+        }
+
         public DateTime[] GetConSaveDate(string ip, DateTime begin, DateTime end) {
             DataTable dt = DBhelper.GetDeviceConfTime(ip, begin, end);
             DateTime[] ta = new DateTime[dt.Rows.Count];
@@ -124,6 +129,14 @@ namespace BScripServiceLibrary {
             deol.Add(devo);
 
             return deol.ToArray();
+        }
+
+        public int[] GeConfCount(Host[] hl, DateTime begin, DateTime end) {
+            int[] count = new int[hl.Length];
+            for (int i = 0; i < hl.Length; ++i) {
+                count[i] = DBhelper.GetDeviceBackUpCount(hl[i].ipaddress, begin, end);
+            }
+            return count;
         }
     }
 }

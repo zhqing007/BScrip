@@ -10,13 +10,13 @@ using System.Collections;
 namespace BScripServiceLibrary.BSDataBase {
     class DBBackUp {
         static string connectionString = "server=.;database=master;uid=sa;pwd=";
-        SqlConnection conn = new SqlConnection(connectionString);
+        static SqlConnection conn = new SqlConnection(connectionString);
         /// <summary>
         /// 备份指定的数据库文件
         /// </summary>
         /// <param name="databasename">要还原的数据库</param>
         /// <returns></returns>
-        public bool BackUpDataBaseSQLServer(string databasefile) {
+        public static bool SQLServerBackUp(string databasefile) {
             if (!File.Exists(databasefile)) {
 
             }
@@ -38,6 +38,18 @@ namespace BScripServiceLibrary.BSDataBase {
             conn.Close();//关闭数据库连接
             return true;
         }
+
+        public static void OracleBackUp(string user, string pwd, string ip) {
+            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            string filename = "E:\\DataName" + System.DateTime.Today.ToString("yyyyMMdd") + ".dmp";
+            p.StartInfo.FileName = "D:\\oracle\\product\\10.2.0\\db_1\\BIN\\exp.exe";
+            p.StartInfo.UseShellExecute = true;
+            p.StartInfo.CreateNoWindow = false;
+            //执行参数用户名和密码还有本机配置的Oracle服务名[kdtc/bjdscoal@tns:orcl file=" + filename + ]  
+            p.StartInfo.Arguments = user + "/" + pwd + "@" + ip + "  file=" + filename;
+            p.Start();
+            p.Dispose();
+        }  
 
         //以下是还原数据库，稍微麻烦些，要关闭所有与当前数据库相连的连接------------------------------------
 

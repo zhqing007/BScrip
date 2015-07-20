@@ -80,11 +80,11 @@
     <Compile Include="BSForms\BackUpAnaForm.Designer.cs">
       <DependentUpon>BackUpAnaForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="BSForms\ConfShower.cs">
+    <Compile Include="BSForms\DBInfo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BSForms\ConfShower.Designer.cs">
-      <DependentUpon>ConfShower.cs</DependentUpon>
+    <Compile Include="BSForms\DBInfo.Designer.cs">
+      <DependentUpon>DBInfo.cs</DependentUpon>
     </Compile>
     <Compile Include="BSForms\ConfViewer.cs">
       <SubType>Form</SubType>
@@ -110,11 +110,11 @@
     <Compile Include="BSForms\LogMessageForm.Designer.cs">
       <DependentUpon>LogMessageForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="BSForms\TableReport.cs">
+    <Compile Include="BSForms\DBexport.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BSForms\TableReport.Designer.cs">
-      <DependentUpon>TableReport.cs</DependentUpon>
+    <Compile Include="BSForms\DBexport.Designer.cs">
+      <DependentUpon>DBexport.cs</DependentUpon>
     </Compile>
     <Compile Include="BSForms\WelcomeForm.cs">
       <SubType>Form</SubType>
@@ -161,8 +161,8 @@
     <EmbeddedResource Include="BSForms\BackUpAnaForm.resx">
       <DependentUpon>BackUpAnaForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BSForms\ConfShower.resx">
-      <DependentUpon>ConfShower.cs</DependentUpon>
+    <EmbeddedResource Include="BSForms\DBInfo.resx">
+      <DependentUpon>DBInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BSForms\ConfViewer.resx">
       <DependentUpon>ConfViewer.cs</DependentUpon>
@@ -185,8 +185,8 @@
     <EmbeddedResource Include="BSForms\LogMessageForm.resx">
       <DependentUpon>LogMessageForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BSForms\TableReport.resx">
-      <DependentUpon>TableReport.cs</DependentUpon>
+    <EmbeddedResource Include="BSForms\DBexport.resx">
+      <DependentUpon>DBexport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BSForms\WelcomeForm.resx">
       <DependentUpon>WelcomeForm.cs</DependentUpon>

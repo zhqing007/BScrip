@@ -56,6 +56,7 @@
     <Compile Include="BSThread\ConfThread.cs" />
     <Compile Include="BSThread\CpuMemThread.cs" />
     <Compile Include="BSThread\TimeBackUpThread.cs" />
+    <Compile Include="BSThread\DBBackUpThread.cs" />
     <Compile Include="DBhelper.cs" />
     <Compile Include="IService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -87,7 +87,6 @@
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -448,8 +447,8 @@
             this.helpToolStripButton,
             this.BackUpConf,
             this.timerBackUp,
-            this.showInfo,
             this.confviewer,
+            this.showInfo,
             this.tableReport});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
@@ -556,7 +555,7 @@
             this.showInfo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.showInfo.Name = "showInfo";
             this.showInfo.Size = new System.Drawing.Size(108, 52);
-            this.showInfo.Text = "运行状态";
+            this.showInfo.Text = "状态统计";
             this.showInfo.Click += new System.EventHandler(this.showInfo_Click);
             // 
             // confviewer
@@ -574,7 +573,7 @@
             this.tableReport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tableReport.Name = "tableReport";
             this.tableReport.Size = new System.Drawing.Size(108, 52);
-            this.tableReport.Text = "日志分析";
+            this.tableReport.Text = "数据备份";
             this.tableReport.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // statusStrip
@@ -599,7 +598,7 @@
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 55);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Size = new System.Drawing.Size(1059, 651);
             this.splitContainer1.SplitterDistance = 306;
@@ -629,7 +628,6 @@
             this.toolStrip.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
-            this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);

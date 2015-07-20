@@ -258,5 +258,23 @@ namespace BScrip.BSForms {
             DataTable dt = StaticFun.listViewToDataTable(resutilizelist_v);
             NPOIHelper.ExportDataTableToExcel(dt, fileDialog.FileName);
         }
+
+        private void backupinfo_Click(object sender, EventArgs e) {
+            if (resutilizelist_v.Items.Count == 0) {
+                MessageBox.Show("没有选择设备！"
+                    , "错误", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            List<Host> hosts = new List<Host>();
+            foreach (ListViewItem h in resutilizelist_v.Items) {
+                Host hos = new Host();
+                hos.ipaddress = h.SubItems[1].Text;
+                hosts.Add(hos);
+            }
+            DateTime begin = new DateTime(monthPicker.Value.Year, monthPicker.Value.Month, 1);
+            DateTime end = new DateTime(monthPicker.Value.Year, monthPicker.Value.Month + 1, 1);
+            (new BackUpAnaForm(hosts, begin, end)).ShowDialog();
+        }
     }
 }
