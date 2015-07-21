@@ -15,15 +15,22 @@ namespace BScripServiceLibrary {
         Thread tbthread;
         BSThread.CpuMemThread cmthreadobj;
         Thread cmthread;
+        BSThread.DBBackUpThread dbbthreadobj;
+        Thread dbbthread;
 
         public BSService() {
-            //tbthreadobj = new BSThread.TimeBackUpThread();
-            //tbthread = new Thread(new ThreadStart(tbthreadobj.BackUp));
-            //tbthread.Start();
+            tbthreadobj = new BSThread.TimeBackUpThread();
+            tbthread = new Thread(new ThreadStart(tbthreadobj.BackUp));
+            tbthread.Start();
 
-            //cmthreadobj = new BSThread.CpuMemThread();
-            //cmthread = new Thread(new ThreadStart(cmthreadobj.MonitorUp));
-            //cmthread.Start();
+            cmthreadobj = new BSThread.CpuMemThread();
+            cmthread = new Thread(new ThreadStart(cmthreadobj.MonitorUp));
+            cmthread.Start();
+
+            //dbbthreadobj = new BSThread.DBBackUpThread();
+            //dbbthread = new Thread(new ThreadStart(dbbthreadobj.BackUp));
+            //dbbthread.Start();
+
         }
 
         public string GetPath(){
@@ -98,9 +105,9 @@ namespace BScripServiceLibrary {
         }
 
         public ROccupy[] GetCpuMemOccupy(Host h, DateTime begintime, DateTime endtime) {
-            DataTable occupy = DBhelper.GetCpuMemOccupy(h, begintime, endtime);
-            DataTable occupynodate = new DataTable("occupy");
+            DataTable occupy = DBhelper.GetCpuMemOccupy(h, begintime, endtime);            
             List<ROccupy> deol = new List<ROccupy>();
+            if (occupy.Rows.Count == 0) return deol.ToArray();
             string slotname = occupy.Rows[0][1].ToString();
             int cpuo = 0;
             int memo = 0;

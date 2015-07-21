@@ -12,19 +12,19 @@ namespace BScripServiceLibrary {
         private static SQLiteCommand sqlcmd;
 
         static DBhelper() {
-            sqlconn = new SQLiteConnection("Data Source=d:\\WorkStation\\BScrip\\BScripServiceLibrary\\BScripServer.db;Password=zhqing");
+            sqlconn = new SQLiteConnection("Data Source=E:\\MYCPP\\BScrip\\BScripServiceLibrary\\BScripServer.db;Password=zhqing");
             sqlconn.Open();
             sqlcmd = sqlconn.CreateCommand();
         }
 
-        private static object GetConfiguration(string key) {
+        public static string GetConfiguration(string key) {
             DataTable data = ExecuteDataTable(
                 "select value from configuration where key='" + key + "'", null);
             if (data.Rows.Count == 0) return null;
-            return data.Rows[0][0];
+            return data.Rows[0][0].ToString();
         }
 
-        private static void SetConfiguration(string key, string value) {
+        public static void SetConfiguration(string key, string value) {
             ExecuteSQL("update configuration set value='" +
                 value + "' where key='" + key + "'");
         }
@@ -89,7 +89,7 @@ namespace BScripServiceLibrary {
                                       , new SQLiteParameter("@bt", begintime.ToString("yyyy-MM-dd HH:mm:ss"))
                                       , new SQLiteParameter("@et", endtime.ToString("yyyy-MM-dd HH:mm:ss"))};
             DataTable reso = DBhelper.ExecuteDataTable("select * from resourceoccupy where ipaddress=@ip " +
-                    "and timetype ='d' and savetime>=@bt and savetime=@et", p);
+                    "and timetype ='d' and savetime>=@bt and savetime<@et", p);
             reso.TableName = "CpuMemOccupy";
             return reso;
         }
@@ -304,7 +304,7 @@ namespace BScripServiceLibrary {
             return GetHostsFromSQL("select * from hosts where userid=" + userid + " and type="
                 + type + " order by name");
         }
-
+        
         public static List<Host> GetTimeHosts() {
             return GetHostsFromSQL("select * from hosts where type=0 and timespan!=0");
         }

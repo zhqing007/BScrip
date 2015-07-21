@@ -15,12 +15,22 @@ namespace BScrip.BSForms {
             InitializeComponent();
         }
 
+        public DBInfo(Host host) {
+            InitializeComponent();
+            dbhost = host;
+            server.Text = dbhost.ipaddress;
+            loginname.Text = dbhost.loginname;
+            password.Text = dbhost.password;
+            database.Text = dbhost.hostname;
+        }
+
         private void close_Click(object sender, EventArgs e) {
             this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.Close();
         }
 
         private void saveto_Click(object sender, EventArgs e) {
+            if (server.Text.Trim().Length == 0) return;
             dbhost = new Host();
             dbhost.userid = StaticFun.loginID;
             dbhost.ipaddress = server.Text;
@@ -46,8 +56,8 @@ namespace BScrip.BSForms {
         }
 
         private void SetWinLogin(bool en) {
-            label4.Enabled = en;
-            label4.Enabled = en;
+            label2.Enabled = en;
+            label3.Enabled = en;
             loginname.Enabled = en;
             password.Enabled = en;
         }

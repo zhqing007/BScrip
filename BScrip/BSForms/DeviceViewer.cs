@@ -129,10 +129,10 @@ namespace BScrip.BSForms {
         }
 
         public override void AddHost(Host sw = null) {
-            devicehost = sw;
-            if (refreshtimespan.Equals(TimeSpan.Zero))
-                refreshtimespan = new TimeSpan(0, 0, 10);
-            loadbasebg.RunWorkerAsync();
+            //devicehost = sw;
+            //if (refreshtimespan.Equals(TimeSpan.Zero))
+            //    refreshtimespan = new TimeSpan(0, 0, 10);
+            //loadbasebg.RunWorkerAsync();
         }
 
         private void refresh_Click(object sender, EventArgs e) {
@@ -227,6 +227,7 @@ namespace BScrip.BSForms {
             int memo = 0;
             foreach(Host h in lh){
                 ROccupy[] occupy = StaticFun.serverclient.GetCpuMemOccupy(h, begin, end);
+                if (occupy.Length == 0) continue;
                 ListViewItem vitem = new ListViewItem();
                 vitem.Tag = occupy;
                 vitem.Text = (i++).ToString();
@@ -256,6 +257,7 @@ namespace BScrip.BSForms {
             fileDialog.Filter = "xls文件|*.xls";
             if (fileDialog.ShowDialog() != DialogResult.OK) return;
             DataTable dt = StaticFun.listViewToDataTable(resutilizelist_v);
+            dt.TableName = DateTime.Now.ToString("yyyy年MM月dd日");
             NPOIHelper.ExportDataTableToExcel(dt, fileDialog.FileName);
         }
 

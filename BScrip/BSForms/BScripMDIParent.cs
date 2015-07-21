@@ -141,11 +141,11 @@ namespace BScrip.BSForms {
         }
 
         public void ShowSwitchInfo() {
-            List<Host> selecthosts = HostsForm.allhostsform.GetSelectHosts();
-            if (selecthosts.Count <= 0) {
-                MessageBox.Show("没有选择设备！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+            //List<Host> selecthosts = HostsForm.allhostsform.GetSelectHosts();
+            //if (selecthosts.Count <= 0) {
+            //    MessageBox.Show("没有选择设备！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //    return;
+            //}
             splitContainer1.Panel2.Controls.Clear();
             if (switchCMDIChild == null || switchCMDIChild.IsDisposed) {
                 switchCMDIChild = new BSForms.DeviceViewer();                
@@ -153,7 +153,7 @@ namespace BScrip.BSForms {
                 switchCMDIChild.Parent = splitContainer1.Panel2;
                 switchCMDIChild.Dock = DockStyle.Fill;
                 switchCMDIChild.Show();
-                switchCMDIChild.AddHost(selecthosts[0]);
+                //switchCMDIChild.AddHost(selecthosts[0]);
             }
             else
                 splitContainer1.Panel2.Controls.Add(switchCMDIChild);
@@ -190,6 +190,10 @@ namespace BScrip.BSForms {
             }
             else
                 splitContainer1.Panel2.Controls.Add(tabRCMDIChild);
+        }
+
+        private void toolStripButton1_Click_1(object sender, EventArgs e) {
+
         }
     }
 

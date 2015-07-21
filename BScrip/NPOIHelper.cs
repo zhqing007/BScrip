@@ -13,7 +13,7 @@ using System.Configuration;
 
 namespace BScrip {
     public class NPOIHelper {
-        private static int ExcelMaxRow = Convert.ToInt32(ConfigurationManager.AppSettings["ExcelMaxRow"]);
+        private static int ExcelMaxRow = 300;
         /// <summary>
         /// 由DataSet导出Excel
         /// </summary>
@@ -120,10 +120,17 @@ namespace BScrip {
             }
             else {
                 MemoryStream ms = ExportDataTableToExcel(sourceTable) as MemoryStream;
-                HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment;filename=" + fileName);
-                HttpContext.Current.Response.BinaryWrite(ms.ToArray());
-                HttpContext.Current.ApplicationInstance.CompleteRequest();
-                //HttpContext.Current.Response.End();
+                FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
+                byte[] data = ms.ToArray();
+
+                fs.Write(data, 0, data.Length);
+                fs.Flush();
+                fs.Close();  
+
+                //HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment;filename=" + fileName);
+                //HttpContext.Current.Response.BinaryWrite(ms.ToArray());
+                //HttpContext.Current.ApplicationInstance.CompleteRequest();
+                ////HttpContext.Current.Response.End();
                 ms.Close();
                 ms = null;
             }

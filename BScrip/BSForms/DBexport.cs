@@ -69,6 +69,51 @@ namespace BScrip.BSForms {
             didia.ShowDialog();
             if (didia.DialogResult != DialogResult.OK) return;
             StaticFun.serverclient.AddHost(didia.dbhost);
+            AddHostToListView(didia.dbhost);
+        }
+
+        private void del_Click(object sender, EventArgs e) {
+            if (deviceList.SelectedItems.Count == 0) return;
+            Host tar = (Host)deviceList.SelectedItems[0].Tag;
+            tar.tspan = 0;
+            StaticFun.serverclient.UpdateHost(tar);
+            UpdateHostToListView(tar);
+        }
+
+        private void deviceList_DoubleClick(object sender, EventArgs e) {
+            if (deviceList.SelectedItems.Count == 0) return;
+            Host tar = (Host)deviceList.SelectedItems[0].Tag;
+            DBInfo didia = new DBInfo(tar);
+            didia.ShowDialog();
+            if (didia.DialogResult != DialogResult.OK) return;
+            StaticFun.serverclient.UpdateHost(didia.dbhost);
+            UpdateHostToListView(didia.dbhost);
+        }
+
+        private void AddHostToListView(Host h) {
+            ListViewItem item = new ListViewItem(h.hostname);
+            item.Tag = h;
+            item.SubItems.Add(h.ipaddress);
+            item.SubItems.Add(h.loginname);
+            item.SubItems.Add((new TimeSpan(h.tspan)).TotalHours.ToString());
+            item.SubItems.Add(h.loginmode == 0 ? "SQL Server" : "Oracle");
+            deviceList.Items.Add(item);
+        }
+
+        private void UpdateHostToListView(Host h) {
+            deviceList.SelectedItems[0].Text = h.hostname;
+            deviceList.SelectedItems[0].Tag = h;
+            deviceList.SelectedItems[0].SubItems[0].Text = h.ipaddress;
+            deviceList.SelectedItems[0].SubItems[0].Text = h.loginname;
+            deviceList.SelectedItems[0].SubItems[0].Text = (new TimeSpan(h.tspan)).TotalHours.ToString();
+            deviceList.SelectedItems[0].SubItems[0].Text = h.loginmode == 0 ? "SQL Server" : "Oracle";
+        }
+
+        private void DBexport_Load(object sender, EventArgs e) {
+            Host[] dbhosts = StaticFun.serverclient.GetDBHosts(StaticFun.loginID);
+            
+            foreach (Host h in dbhosts)
+                AddHostToListView(h);
         }
     }
 }

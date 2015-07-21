@@ -81,6 +81,20 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetDBHosts">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userid" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDBHostsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="GetDBHostsResult" nillable="true" type="q4:ArrayOfHost" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="GetConSaveDate">
     <xs:complexType>
       <xs:sequence>
@@ -93,14 +107,14 @@
   <xs:element name="GetConSaveDateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetConSaveDateResult" nillable="true" type="q4:ArrayOfdateTime" />
+        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetConSaveDateResult" nillable="true" type="q5:ArrayOfdateTime" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetCpuMemOccupy">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="h" nillable="true" type="q5:Host" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="h" nillable="true" type="q6:Host" />
         <xs:element minOccurs="0" name="begintime" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endtime" type="xs:dateTime" />
       </xs:sequence>
@@ -109,7 +123,7 @@
   <xs:element name="GetCpuMemOccupyResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="GetCpuMemOccupyResult" nillable="true" type="q6:ArrayOfROccupy" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="GetCpuMemOccupyResult" nillable="true" type="q7:ArrayOfROccupy" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -131,7 +145,7 @@
   <xs:element name="AddHost">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="item" nillable="true" type="q7:Host" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="item" nillable="true" type="q8:Host" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -143,7 +157,7 @@
   <xs:element name="UpdateHost">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="item" nillable="true" type="q8:Host" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="item" nillable="true" type="q9:Host" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -170,7 +184,7 @@
   <xs:element name="GeConfCount">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="hl" nillable="true" type="q9:ArrayOfHost" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/BScripServiceLibrary" minOccurs="0" name="hl" nillable="true" type="q10:ArrayOfHost" />
         <xs:element minOccurs="0" name="begin" type="xs:dateTime" />
         <xs:element minOccurs="0" name="end" type="xs:dateTime" />
       </xs:sequence>
@@ -179,7 +193,7 @@
   <xs:element name="GeConfCountResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GeConfCountResult" nillable="true" type="q10:ArrayOfint" />
+        <xs:element xmlns:q11="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GeConfCountResult" nillable="true" type="q11:ArrayOfint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

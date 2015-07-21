@@ -34,19 +34,18 @@
             this.password = new System.Windows.Forms.TextBox();
             this.loginname = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.winlogin = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // upto
             // 
-            this.upto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.upto.Location = new System.Drawing.Point(274, 341);
-            this.upto.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.upto.Location = new System.Drawing.Point(219, 283);
+            this.upto.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.upto.Name = "upto";
-            this.upto.Size = new System.Drawing.Size(79, 31);
+            this.upto.Size = new System.Drawing.Size(88, 30);
             this.upto.TabIndex = 4;
             this.upto.Text = "关闭";
             this.upto.UseVisualStyleBackColor = true;
@@ -54,11 +53,10 @@
             // 
             // saveto
             // 
-            this.saveto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveto.Location = new System.Drawing.Point(86, 341);
-            this.saveto.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.saveto.Location = new System.Drawing.Point(78, 283);
+            this.saveto.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.saveto.Name = "saveto";
-            this.saveto.Size = new System.Drawing.Size(79, 31);
+            this.saveto.Size = new System.Drawing.Size(88, 30);
             this.saveto.TabIndex = 3;
             this.saveto.Text = "保存";
             this.saveto.UseVisualStyleBackColor = true;
@@ -67,108 +65,121 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(31, 113);
+            this.label1.Location = new System.Drawing.Point(32, 101);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(53, 12);
+            this.label1.Size = new System.Drawing.Size(67, 15);
             this.label1.TabIndex = 5;
             this.label1.Text = "服务器：";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(43, 210);
+            this.label2.Location = new System.Drawing.Point(47, 195);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(41, 12);
+            this.label2.Size = new System.Drawing.Size(52, 15);
             this.label2.TabIndex = 6;
             this.label2.Text = "密码：";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(31, 157);
+            this.label3.Location = new System.Drawing.Point(32, 162);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(53, 12);
+            this.label3.Size = new System.Drawing.Size(67, 15);
             this.label3.TabIndex = 7;
             this.label3.Text = "登录名：";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(31, 273);
+            this.label4.Location = new System.Drawing.Point(32, 227);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(53, 12);
+            this.label4.Size = new System.Drawing.Size(67, 15);
             this.label4.TabIndex = 8;
             this.label4.Text = "数据源：";
             // 
             // server
             // 
-            this.server.Location = new System.Drawing.Point(113, 106);
+            this.server.Location = new System.Drawing.Point(107, 96);
+            this.server.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.server.Name = "server";
-            this.server.Size = new System.Drawing.Size(251, 21);
+            this.server.Size = new System.Drawing.Size(229, 25);
             this.server.TabIndex = 9;
             // 
             // database
             // 
-            this.database.Location = new System.Drawing.Point(113, 270);
+            this.database.Location = new System.Drawing.Point(107, 222);
+            this.database.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.database.Name = "database";
-            this.database.Size = new System.Drawing.Size(251, 21);
+            this.database.Size = new System.Drawing.Size(229, 25);
             this.database.TabIndex = 10;
             // 
             // password
             // 
-            this.password.Location = new System.Drawing.Point(113, 207);
+            this.password.Location = new System.Drawing.Point(107, 189);
+            this.password.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.password.Name = "password";
-            this.password.Size = new System.Drawing.Size(251, 21);
+            this.password.Size = new System.Drawing.Size(229, 25);
             this.password.TabIndex = 11;
             // 
             // loginname
             // 
-            this.loginname.Location = new System.Drawing.Point(113, 154);
+            this.loginname.Location = new System.Drawing.Point(107, 156);
+            this.loginname.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.loginname.Name = "loginname";
-            this.loginname.Size = new System.Drawing.Size(251, 21);
+            this.loginname.Size = new System.Drawing.Size(229, 25);
             this.loginname.TabIndex = 12;
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.radioButton2);
             this.groupBox1.Controls.Add(this.radioButton1);
-            this.groupBox1.Location = new System.Drawing.Point(33, 30);
+            this.groupBox1.Location = new System.Drawing.Point(13, 13);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(331, 56);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Size = new System.Drawing.Size(338, 70);
             this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "数据库类型";
             // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(206, 29);
+            this.radioButton2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(76, 19);
+            this.radioButton2.TabIndex = 1;
+            this.radioButton2.Text = "Oracle";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            // 
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(49, 23);
+            this.radioButton1.Checked = true;
+            this.radioButton1.Location = new System.Drawing.Point(65, 29);
+            this.radioButton1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(83, 16);
+            this.radioButton1.Size = new System.Drawing.Size(108, 19);
             this.radioButton1.TabIndex = 0;
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "SQL Server";
             this.radioButton1.UseVisualStyleBackColor = true;
             this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(195, 23);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(59, 16);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Oracle";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
-            // 
             // winlogin
             // 
             this.winlogin.AutoSize = true;
-            this.winlogin.Location = new System.Drawing.Point(113, 234);
+            this.winlogin.Location = new System.Drawing.Point(107, 129);
+            this.winlogin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.winlogin.Name = "winlogin";
-            this.winlogin.Size = new System.Drawing.Size(90, 16);
+            this.winlogin.Size = new System.Drawing.Size(115, 19);
             this.winlogin.TabIndex = 15;
             this.winlogin.Text = "Windows登录";
             this.winlogin.UseVisualStyleBackColor = true;
@@ -176,9 +187,9 @@
             // 
             // DBInfo
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(456, 418);
+            this.ClientSize = new System.Drawing.Size(394, 358);
             this.Controls.Add(this.winlogin);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.loginname);
@@ -191,9 +202,12 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.upto);
             this.Controls.Add(this.saveto);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "DBInfo";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "数据库信息";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

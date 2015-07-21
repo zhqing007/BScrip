@@ -9,19 +9,23 @@ using System.Collections;
 
 namespace BScripServiceLibrary.BSDataBase {
     class DBBackUp {
-        static string connectionString = "server=.;database=master;uid=sa;pwd=";
-        static SqlConnection conn = new SqlConnection(connectionString);
         /// <summary>
         /// 备份指定的数据库文件
         /// </summary>
         /// <param name="databasename">要还原的数据库</param>
         /// <returns></returns>
-        public static bool SQLServerBackUp(string databasefile) {
-            if (!File.Exists(databasefile)) {
-
-            }
-            //还原的数据库MyDataBase
-            string sql = "BACKUP DATABASE " + "MyDataBase" + " TO DISK = '" + databasefile + ".bak' ";
+        public static bool SQLServerBackUp(string user, string pw, string database, string server) {
+            StringBuilder connectionString = new StringBuilder("server=")
+                .Append(server).Append(";database=").Append(database);
+            if (user != null)
+                connectionString.Append(";uid=").Append(user).Append(";pwd=")
+                    .Append(pw);
+            else
+                connectionString.Append(";Trusted_Connection=SSPI");
+            SqlConnection conn = new SqlConnection(connectionString.ToString());
+            string databasefile = DBhelper.GetConfiguration("DataBaseDumpPath")
+                + database + DateTime.Today.ToString("yyyyMMdd");
+            string sql = "BACKUP DATABASE " + database + " TO DISK = '" + databasefile + ".bak' ";
             conn.Open();
             SqlCommand comm = new SqlCommand(sql, conn);
             comm.CommandType = CommandType.Text;
@@ -31,7 +35,6 @@ namespace BScripServiceLibrary.BSDataBase {
             catch (Exception err) {
                 string str = err.Message;
                 conn.Close();
-
                 return false;
             }
 
@@ -41,15 +44,16 @@ namespace BScripServiceLibrary.BSDataBase {
 
         public static void OracleBackUp(string user, string pwd, string ip) {
             System.Diagnostics.Process p = new System.Diagnostics.Process();
-            string filename = "E:\\DataName" + System.DateTime.Today.ToString("yyyyMMdd") + ".dmp";
-            p.StartInfo.FileName = "D:\\oracle\\product\\10.2.0\\db_1\\BIN\\exp.exe";
+            string filename = DBhelper.GetConfiguration("DataBaseDumpPath")
+                + ip.Replace('.', '_') + DateTime.Today.ToString("yyyyMMdd") + ".dmp";
+            p.StartInfo.FileName = DBhelper.GetConfiguration("OracleExpEXE");// "D:\\oracle\\product\\10.2.0\\db_1\\BIN\\exp.exe";
             p.StartInfo.UseShellExecute = true;
             p.StartInfo.CreateNoWindow = false;
             //执行参数用户名和密码还有本机配置的Oracle服务名[kdtc/bjdscoal@tns:orcl file=" + filename + ]  
             p.StartInfo.Arguments = user + "/" + pwd + "@" + ip + "  file=" + filename;
             p.Start();
             p.Dispose();
-        }  
+        }
 
         //以下是还原数据库，稍微麻烦些，要关闭所有与当前数据库相连的连接------------------------------------
 

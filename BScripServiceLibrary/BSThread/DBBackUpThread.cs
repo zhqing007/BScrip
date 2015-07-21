@@ -25,9 +25,14 @@ namespace BScripServiceLibrary.BSThread {
                     foreach (Host_t timehost in bhosts) {
                         if (timehost.IsTimeUp(onehour.Ticks)) {
                             if (timehost.GetHost().loginmode == 0)
-                                DBBackUp.SQLServerBackUp("");
+                                DBBackUp.SQLServerBackUp(timehost.GetHost().loginname
+                                    , timehost.GetHost().password
+                                    , timehost.GetHost().hostname
+                                    , timehost.GetHost().ipaddress);
                             else
-                                DBBackUp.OracleBackUp(null, null, null);
+                                DBBackUp.OracleBackUp(timehost.GetHost().loginname
+                                    , timehost.GetHost().password
+                                    , timehost.GetHost().ipaddress);
                         }
                     }
                 }

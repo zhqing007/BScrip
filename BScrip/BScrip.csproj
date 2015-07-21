@@ -253,6 +253,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\27.ico" />
+    <None Include="Resources\10.ico" />
     <None Include="Service References\BScripService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
