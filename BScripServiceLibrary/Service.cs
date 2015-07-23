@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Data;
+using BScripServiceLibrary.BSDevice;
 
 namespace BScripServiceLibrary {
     // 注意: 使用“重构”菜单上的“重命名”命令，可以同时更改代码和配置文件中的类名“Service1”。
@@ -30,8 +31,9 @@ namespace BScripServiceLibrary {
             //dbbthreadobj = new BSThread.DBBackUpThread();
             //dbbthread = new Thread(new ThreadStart(dbbthreadobj.BackUp));
             //dbbthread.Start();
-
         }
+
+        
 
         public string GetPath(){
             return System.IO.Directory.GetCurrentDirectory();
@@ -144,6 +146,53 @@ namespace BScripServiceLibrary {
                 count[i] = DBhelper.GetDeviceBackUpCount(hl[i].ipaddress, begin, end);
             }
             return count;
+        }
+
+        public string GetBaseInfo(Host devicehost) {
+            try {
+                Device dev;
+                DeviceBaseInfo dbi;
+                if (devicehost.loginmode == 0) {
+                    dev = Device.DeviceFactory(new TelnetLinker(devicehost.ipaddress, devicehost.loginname, devicehost.password)
+                        , devicehost.superpw);
+                    //Addstr(_server, "Telnet登录");
+                }
+                else {
+                    dev = Device.DeviceFactory(new SSH2Linker(devicehost.ipaddress, devicehost.loginname, devicehost.password)
+                        , devicehost.superpw);
+                    //Addstr(_server, "SSH2登录");
+                }
+
+                dev.SuperPassWord = devicehost.superpw;
+                dbi = dev.GetBaseInfo();
+                return dbi.ToString();
+            }
+            catch (Exception exc) {
+                return "操作出现异常：" + exc.ToString();
+            }
+        }
+
+        public DataTable GetInterfaceInfo(Host devicehost) {
+            try {
+                Device dev;
+
+                if (devicehost.loginmode == 0) {
+                    dev = Device.DeviceFactory(new TelnetLinker(devicehost.ipaddress, devicehost.loginname, devicehost.password)
+                        , devicehost.superpw);
+                    //Addstr(_server, "Telnet登录");
+                }
+                else {
+                    dev = Device.DeviceFactory(new SSH2Linker(devicehost.ipaddress, devicehost.loginname, devicehost.password)
+                        , devicehost.superpw);
+                    //Addstr(_server, "SSH2登录");
+                }
+                DataTable redt =  dev.GetInterfaceBrif();
+                redt.TableName = "interfacetable";
+                return redt;
+            }
+            catch (Exception exc) {
+                return null;
+            }
         }
     }
 }

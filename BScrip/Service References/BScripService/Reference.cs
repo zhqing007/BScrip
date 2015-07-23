@@ -340,6 +340,12 @@ namespace BScrip.BScripService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBSService/GeConfCount", ReplyAction="http://tempuri.org/IBSService/GeConfCountResponse")]
         int[] GeConfCount(BScrip.BScripService.Host[] hl, System.DateTime begin, System.DateTime end);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBSService/GetBaseInfo", ReplyAction="http://tempuri.org/IBSService/GetBaseInfoResponse")]
+        string GetBaseInfo(BScrip.BScripService.Host devicehost);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBSService/GetInterfaceInfo", ReplyAction="http://tempuri.org/IBSService/GetInterfaceInfoResponse")]
+        System.Data.DataTable GetInterfaceInfo(BScrip.BScripService.Host devicehost);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -423,6 +429,14 @@ namespace BScrip.BScripService {
         
         public int[] GeConfCount(BScrip.BScripService.Host[] hl, System.DateTime begin, System.DateTime end) {
             return base.Channel.GeConfCount(hl, begin, end);
+        }
+        
+        public string GetBaseInfo(BScrip.BScripService.Host devicehost) {
+            return base.Channel.GetBaseInfo(devicehost);
+        }
+        
+        public System.Data.DataTable GetInterfaceInfo(BScrip.BScripService.Host devicehost) {
+            return base.Channel.GetInterfaceInfo(devicehost);
         }
     }
 }

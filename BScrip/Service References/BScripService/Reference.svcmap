@@ -22,6 +22,7 @@
   </MetadataSources>
   <Metadata>
     <MetadataFile FileName="BSService.wsdl" MetadataType="Wsdl" ID="daff1f9c-6e83-46bd-913b-7a4abb50e19c" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?wsdl" />
+    <MetadataFile FileName="item4.xsd" MetadataType="Schema" ID="8dbf3206-e302-46c4-8fc1-ff2ae7ecb632" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?xsd=xsd4" />
     <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="c7d07042-a154-4cc1-8208-ffbb28b0dd1c" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?xsd=xsd2" />
     <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="1cd114ad-36fb-4714-9ee1-0bc49ff9a878" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?xsd=xsd3" />
     <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="2940056c-39cb-4b8e-b322-6182950e02e8" SourceId="1" SourceUrl="http://localhost:8732/BScripServiceLibrary/BSService/?xsd=xsd0" />

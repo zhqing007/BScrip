@@ -66,7 +66,7 @@ namespace BScrip.BSForms {
 
         private void addToBU_Click(object sender, EventArgs e) {
             Host h = namebox.Tag as Host;
-            h.tspan = (new TimeSpan((int)(dayUpDown.Value), (int)(hourUpDown.Value), 0)).Ticks;
+            h.tspan = (new TimeSpan((int)(dayUpDown.Value), (int)(hourUpDown.Value), 0, 0)).Ticks;
             int index = -1;
             foreach (ListViewItem item in timerBackUpL.Items) {
                 Host listh = item.Tag as Host;
@@ -84,8 +84,22 @@ namespace BScrip.BSForms {
                 }
             }
 
-            StaticFun.serverclient.SetSaveConfTime(h.userid, h.hostname, h.tspan);
-            timerBackUpL.Items[index].SubItems[2].Text = (new TimeSpan(h.tspan)).TotalHours.ToString();
+            StaticFun.serverclient.SetSaveConfTime(h.userid, h.hostname, h.tspan);            
+            if (index != -1)
+                timerBackUpL.Items[index].SubItems[2].Text = (new TimeSpan(h.tspan)).TotalHours.ToString();
+            else{
+                ListViewItem listitem = new ListViewItem();
+                listitem.Tag = h;
+                listitem.Text = h.hostname;
+                listitem.SubItems.Add(h.ipaddress);
+                listitem.SubItems.Add(h.loginname);
+                listitem.SubItems.Add((new TimeSpan(h.tspan)).TotalHours.ToString());
+                if (h.loginmode == 0)
+                    listitem.SubItems.Add("Telnet");
+                else
+                    listitem.SubItems.Add("SSH2");
+                timerBackUpL.Items.Add(listitem);
+            }
         }
 
         private void AddHostToEdit(Host item) {

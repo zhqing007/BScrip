@@ -12,7 +12,7 @@ namespace BScripServiceLibrary {
         private static SQLiteCommand sqlcmd;
 
         static DBhelper() {
-            sqlconn = new SQLiteConnection("Data Source=E:\\MYCPP\\BScrip\\BScripServiceLibrary\\BScripServer.db;Password=zhqing");
+            sqlconn = new SQLiteConnection("Data Source=D:\\MyWork\\BScrip\\BScripServiceLibrary\\BScripServer.db;Password=zhqing");
             sqlconn.Open();
             sqlcmd = sqlconn.CreateCommand();
         }
@@ -293,7 +293,7 @@ namespace BScripServiceLibrary {
                 h.password = row["password"].ToString();
                 h.superpw = row["superpw"] as String;
                 h.tspan = Int64.Parse(row["timespan"].ToString());
-                h.monitor = Int64.Parse(row["monitor"].ToString());
+                h.monitor = Int64.Parse(row["mon"].ToString());
                 hosts.Add(h);
             }
             return hosts;
@@ -309,8 +309,12 @@ namespace BScripServiceLibrary {
             return GetHostsFromSQL("select * from hosts where type=0 and timespan!=0");
         }
 
+        public static List<Host> GetTimeDataBase() {
+            return GetHostsFromSQL("select * from hosts where type=2 and timespan!=0");
+        } 
+
         public static List<Host> GetCpuMemHosts() {
-            return GetHostsFromSQL("select * from hosts where monitor!=0");
+            return GetHostsFromSQL("select * from hosts where mon!=0");
         }
 
         public static List<Host> GetAllHosts(int userid) {
@@ -377,11 +381,12 @@ namespace BScripServiceLibrary {
                                       , new SQLiteParameter("@pw", password)
                                       , new SQLiteParameter("@spw", superpw)
                                       , new SQLiteParameter("@type", type)
-                                      , new SQLiteParameter("@tspan", tspan)};
+                                      , new SQLiteParameter("@tspan", tspan)
+                                  , new SQLiteParameter("@mon", monitor)};
 
             DBhelper.ExecuteSQL("update hosts " +
                         "set ipaddress=@ip, loginname=@ln, loginmode=@mode, password=@pw, " +
-                        "superpw=@spw, type=@type, timespan=@tspan where name=@hn and userid=@uid", p);
+                        "superpw=@spw, type=@type, timespan=@tspan, mon=@mon where name=@hn and userid=@uid", p);
             return true;
         }
 

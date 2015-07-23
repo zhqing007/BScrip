@@ -52,6 +52,12 @@ namespace BScripServiceLibrary {
         [OperationContract]
         int[] GeConfCount(Host[] hl, DateTime begin, DateTime end);
 
+        [OperationContract]
+        string GetBaseInfo(Host devicehost);
+
+        [OperationContract]
+        DataTable GetInterfaceInfo(Host devicehost);
+
         // TODO: 在此添加您的服务操作
     }
 

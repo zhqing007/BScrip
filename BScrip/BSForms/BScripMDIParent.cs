@@ -18,6 +18,7 @@ namespace BScrip.BSForms {
         private BSForms.DeviceViewer switchCMDIChild = null;
         private BSForms.ConfViewer confViewerCMDIChild = null;
         private BSForms.DBexport tabRCMDIChild = null;
+        private BSForms.DeviceInfo devInfoMDIChild = null;
 
         public BScripMDIParent() {
             InitializeComponent();
@@ -192,8 +193,22 @@ namespace BScrip.BSForms {
                 splitContainer1.Panel2.Controls.Add(tabRCMDIChild);
         }
 
-        private void toolStripButton1_Click_1(object sender, EventArgs e) {
-
+        public void ShowStatus_Click(object sender, EventArgs e) {
+            List<Host> selecthosts = HostsForm.allhostsform.GetSelectHosts();
+            if (selecthosts.Count <= 0) {
+                MessageBox.Show("没有选择设备！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            splitContainer1.Panel2.Controls.Clear();
+            if (devInfoMDIChild == null || devInfoMDIChild.IsDisposed) {
+                devInfoMDIChild = new DeviceInfo(selecthosts[0]);
+                devInfoMDIChild.MdiParent = this;
+                devInfoMDIChild.Parent = splitContainer1.Panel2;
+                devInfoMDIChild.Dock = DockStyle.Fill;
+                devInfoMDIChild.Show();
+            }
+            else
+                splitContainer1.Panel2.Controls.Add(devInfoMDIChild);
         }
     }
 

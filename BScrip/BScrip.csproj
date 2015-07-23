@@ -80,6 +80,18 @@
     <Compile Include="BSForms\BackUpAnaForm.Designer.cs">
       <DependentUpon>BackUpAnaForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="BSForms\BSMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BSForms\BSMessageBox.Designer.cs">
+      <DependentUpon>BSMessageBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BSForms\CPUMemTimeSpan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BSForms\CPUMemTimeSpan.Designer.cs">
+      <DependentUpon>CPUMemTimeSpan.cs</DependentUpon>
+    </Compile>
     <Compile Include="BSForms\DBInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,6 +103,12 @@
     </Compile>
     <Compile Include="BSForms\ConfViewer.Designer.cs">
       <DependentUpon>ConfViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BSForms\DeviceInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BSForms\DeviceInfo.Designer.cs">
+      <DependentUpon>DeviceInfo.cs</DependentUpon>
     </Compile>
     <Compile Include="BSForms\FileTransfer.cs">
       <SubType>Form</SubType>
@@ -161,11 +179,20 @@
     <EmbeddedResource Include="BSForms\BackUpAnaForm.resx">
       <DependentUpon>BackUpAnaForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="BSForms\BSMessageBox.resx">
+      <DependentUpon>BSMessageBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BSForms\CPUMemTimeSpan.resx">
+      <DependentUpon>CPUMemTimeSpan.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BSForms\DBInfo.resx">
       <DependentUpon>DBInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BSForms\ConfViewer.resx">
       <DependentUpon>ConfViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BSForms\DeviceInfo.resx">
+      <DependentUpon>DeviceInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BSForms\FileTransfer.resx">
       <DependentUpon>FileTransfer.cs</DependentUpon>
@@ -253,8 +280,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\24.ico" />
     <None Include="Resources\27.ico" />
     <None Include="Resources\10.ico" />
+    <None Include="Service References\BScripService\item4.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\BScripService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

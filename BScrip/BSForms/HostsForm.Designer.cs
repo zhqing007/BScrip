@@ -87,7 +87,7 @@
             // 
             this.hostDetails.Name = "hostDetails";
             this.hostDetails.Size = new System.Drawing.Size(168, 24);
-            this.hostDetails.Text = "查看运行数据";
+            this.hostDetails.Text = "基本状态查看";
             this.hostDetails.Click += new System.EventHandler(this.showInfo_Click);
             // 
             // selectAll

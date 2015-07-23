@@ -11,12 +11,11 @@ using BScrip.BScripService;
 using System.Windows.Forms.DataVisualization.Charting;
 
 namespace BScrip.BSForms {
-    public partial class DeviceViewer : BSForm {
+    public partial class DeviceViewer : Form {
         private Host devicehost = null;
         //private DeviceBaseInfo dbi;
         //private List<ResourcesUtilization> cpurulist;
         //private List<ResourcesUtilization> memrulist;
-        private DataTable intfinfo = null;
         private TimeSpan refreshtimespan;
         //private Device dev;
         private delegate void UpdateDelegate();
@@ -37,67 +36,6 @@ namespace BScrip.BSForms {
 
         public string GetDeviceName() {
             return devicehost.hostname;
-        }
-
-        private void bGWorker_DoWork(object sender, DoWorkEventArgs e) {
-
-
-            //try {
-            //    if (devicehost.loginmode == 0) {
-            //        dev = Device.DeviceFactory(new TelnetLinker(devicehost.ipaddress, devicehost.loginname, devicehost.password)
-            //            , devicehost.superpw);
-            //        //Addstr(_server, "Telnet登录");
-            //    }
-            //    else {
-            //        dev = Device.DeviceFactory(new SSH2Linker(devicehost.ipaddress, devicehost.loginname, devicehost.password)
-            //            , devicehost.superpw);
-            //        //Addstr(_server, "SSH2登录");
-            //    }
-
-            //    dev.SuperPassWord = devicehost.superpw;
-            //    LogMessageForm.logForm.AddLog(devicehost, "正在读取设备基本信息");
-            //    dbi = dev.GetBaseInfo();
-            //    LogMessageForm.logForm.AddLog(devicehost, "读取设备基本信息结束");
-            //    devbaseinfo.AppendText(dbi.ToString());
-
-            //    refresh_Click(null, null);//读取接口信息
-
-
-            //    while (true) {                    
-            //        lock (locker) {
-            //            foreach (UpdateDelegate task in tasklist) {
-            //                task();
-            //            }
-            //        }
-            //        if (quit) return;
-            //        sw.Restart();
-            //        while (true) {
-            //            Thread.Sleep(1000);
-            //            lock (timelocker) {
-            //                if (sw.Elapsed >= refreshtimespan) {
-            //                    sw.Stop();
-            //                    break;
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            //catch (Exception exc) {
-            //    LogMessageForm.logForm.AddLog(devicehost, "操作出现异常：" + exc.ToString());
-            //}
-        }
-
-        private void bGWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-            
-        }
-
-        private void refreshinfobg_DoWork(object sender, DoWorkEventArgs e) {
-            
-        }
-
-        private void DisplayInterfaceInfo() {
-            if(intfinfo != null)
-                interfaceGridView.DataSource = intfinfo;
         }
 
         private void interfaceGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e) {
@@ -126,21 +64,6 @@ namespace BScrip.BSForms {
             lock (timelocker) {
                 refreshtimespan = span;
             }
-        }
-
-        public override void AddHost(Host sw = null) {
-            //devicehost = sw;
-            //if (refreshtimespan.Equals(TimeSpan.Zero))
-            //    refreshtimespan = new TimeSpan(0, 0, 10);
-            //loadbasebg.RunWorkerAsync();
-        }
-
-        private void refresh_Click(object sender, EventArgs e) {
-            //LogMessageForm.logForm.AddLog(devicehost, "正在读取接口状态信息");
-            //intfinfo = dev.GetInterfaceBrif();
-            //LogMessageForm.logForm.AddLog(devicehost, "读取接口状态信息结束");
-            //UpdateDelegate fc = new UpdateDelegate(DisplayInterfaceInfo);
-            //interfaceGridView.Invoke(fc);
         }
 
         private void RefreshCpuUsage() {
@@ -189,34 +112,6 @@ namespace BScrip.BSForms {
             //}
         }
 
-        private void begin_cpu_Click(object sender, EventArgs e) {
-            lock (locker) {                
-                tasklist.Add(refresh_c);
-            }
-            //begin_cpu.Enabled = false;
-        }
-
-        private void stop_cpu_Click(object sender, EventArgs e) {
-            lock (locker) {
-                tasklist.Remove(refresh_c);
-            }
-            //begin_cpu.Enabled = true;
-        }
-
-        private void begin_mem_Click(object sender, EventArgs e) {
-            lock (locker) {
-                tasklist.Add(refresh_m);
-            }
-            //begin_mem.Enabled = false;
-        }
-
-        private void stop_mem_Click(object sender, EventArgs e) {
-            lock (locker) {
-                tasklist.Remove(refresh_m);
-            }
-            //begin_mem.Enabled = true;
-        }
-
         private void addhostButton_Click(object sender, EventArgs e) {
             List<Host> lh = HostsForm.allhostsform.GetSelectHosts();
             if (lh.Count == 0) return;
@@ -230,7 +125,7 @@ namespace BScrip.BSForms {
                 if (occupy.Length == 0) continue;
                 ListViewItem vitem = new ListViewItem();
                 vitem.Tag = occupy;
-                vitem.Text = (i++).ToString();
+                vitem.Text = (++i).ToString();
                 foreach(ROccupy ro in occupy){
                     cpuo += ro.CpuOccupy;
                     memo += ro.MemOccupy;
@@ -277,6 +172,25 @@ namespace BScrip.BSForms {
             DateTime begin = new DateTime(monthPicker.Value.Year, monthPicker.Value.Month, 1);
             DateTime end = new DateTime(monthPicker.Value.Year, monthPicker.Value.Month + 1, 1);
             (new BackUpAnaForm(hosts, begin, end)).ShowDialog();
+        }
+
+        private void resutilizelist_v_SelectedIndexChanged(object sender, EventArgs e) {
+            if(resutilizelist_v.SelectedItems.Count == 0) return;
+            slotlistview.Items.Clear();
+            ROccupy[] occupy = (ROccupy[])(resutilizelist_v.SelectedItems[0].Tag);
+            for(int i= 0; i < occupy.Length; ++i) {
+                ListViewItem item = new ListViewItem();
+                item.Text = (i + 1).ToString();
+                item.SubItems.Add(occupy[i].SlotName);
+                item.SubItems.Add("" + occupy[i].CpuOccupy + "%");
+                item.SubItems.Add("" + occupy[i].MemOccupy + "%");
+                slotlistview.Items.Add(item);
+            }
+        }
+
+        private void timespanset_Click(object sender, EventArgs e) {
+            CPUMemTimeSpan cmsetbox = new CPUMemTimeSpan();
+            cmsetbox.ShowDialog();
         }
     }
 }

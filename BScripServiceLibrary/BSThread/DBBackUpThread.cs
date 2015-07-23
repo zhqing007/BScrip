@@ -9,8 +9,8 @@ namespace BScripServiceLibrary.BSThread {
         List<Host_t> bhosts;
         static object lockobj = new object();
 
-        public DBBackUpThread(int uid) {
-            List<Host> hosts = Host.GetAllHosts(uid, 2);
+        public DBBackUpThread() {
+            List<Host> hosts = Host.GetTimeDataBase();
             bhosts = new List<Host_t>();
 
             foreach (Host h in hosts) {

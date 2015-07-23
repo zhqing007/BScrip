@@ -116,7 +116,7 @@ namespace BScrip.BSForms {
         }
 
         private void showInfo_Click(object sender, EventArgs e) {
-            BSForms.BScripMDIParent.onlyOneMDI.ShowSwitchInfo();
+            BSForms.BScripMDIParent.onlyOneMDI.ShowStatus_Click(null, null);
         }
 
         private void setMenuVisible(bool visible) {
