@@ -8,6 +8,7 @@
   <xs:element name="ArrayOfHost" nillable="true" type="tns:ArrayOfHost" />
   <xs:complexType name="Host">
     <xs:sequence>
+      <xs:element minOccurs="0" name="dbname" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="hostname" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ipaddress" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="loginmode" type="xs:int" />

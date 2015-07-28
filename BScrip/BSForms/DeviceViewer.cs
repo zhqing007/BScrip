@@ -166,12 +166,14 @@ namespace BScrip.BSForms {
             List<Host> hosts = new List<Host>();
             foreach (ListViewItem h in resutilizelist_v.Items) {
                 Host hos = new Host();
-                hos.ipaddress = h.SubItems[1].Text;
+                hos.hostname = h.SubItems[1].Text;
+                hos.ipaddress = h.SubItems[2].Text;
                 hosts.Add(hos);
             }
             DateTime begin = new DateTime(monthPicker.Value.Year, monthPicker.Value.Month, 1);
             DateTime end = new DateTime(monthPicker.Value.Year, monthPicker.Value.Month + 1, 1);
             (new BackUpAnaForm(hosts, begin, end)).ShowDialog();
+
         }
 
         private void resutilizelist_v_SelectedIndexChanged(object sender, EventArgs e) {

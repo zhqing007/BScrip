@@ -16,11 +16,11 @@ namespace BScripServiceLibrary {
         [OperationContract]
         void SaveConf(int userid, string[] hostnames);
 
-        [OperationContract]
-        void SetSaveConfTime(int userid, string hostname, long span);
+        //[OperationContract]
+        //void SetSaveConfTime(int userid, string hostname, long span);
 
-        [OperationContract]
-        void SetMonitorTime(int userid, string hostname, long span);
+        //[OperationContract]
+        //void SetMonitorTime(int userid, string hostname, long span);
 
         [OperationContract]
         Host[] GetHosts(int userid);

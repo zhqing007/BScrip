@@ -23,8 +23,8 @@ namespace BScripServiceLibrary.BSDataBase {
             else
                 connectionString.Append(";Trusted_Connection=SSPI");
             SqlConnection conn = new SqlConnection(connectionString.ToString());
-            string databasefile = DBhelper.GetConfiguration("DataBaseDumpPath")
-                + database + DateTime.Today.ToString("yyyyMMdd");
+            string databasefile = DBhelper.GetConfiguration("DataBaseFilePath")
+                + "\\" + database + DateTime.Today.ToString("yyyyMMdd");
             string sql = "BACKUP DATABASE " + database + " TO DISK = '" + databasefile + ".bak' ";
             conn.Open();
             SqlCommand comm = new SqlCommand(sql, conn);
@@ -44,9 +44,9 @@ namespace BScripServiceLibrary.BSDataBase {
 
         public static void OracleBackUp(string user, string pwd, string ip) {
             System.Diagnostics.Process p = new System.Diagnostics.Process();
-            string filename = DBhelper.GetConfiguration("DataBaseDumpPath")
-                + ip.Replace('.', '_') + DateTime.Today.ToString("yyyyMMdd") + ".dmp";
-            p.StartInfo.FileName = DBhelper.GetConfiguration("OracleExpEXE");// "D:\\oracle\\product\\10.2.0\\db_1\\BIN\\exp.exe";
+            string filename = DBhelper.GetConfiguration("DataBaseFilePath")
+                + "\\" + ip.Replace('.', '_') + DateTime.Today.ToString("yyyyMMdd") + ".dmp";
+            p.StartInfo.FileName = DBhelper.GetConfiguration("OracleExpPath");// "D:\\oracle\\product\\10.2.0\\db_1\\BIN\\exp.exe";
             p.StartInfo.UseShellExecute = true;
             p.StartInfo.CreateNoWindow = false;
             //执行参数用户名和密码还有本机配置的Oracle服务名[kdtc/bjdscoal@tns:orcl file=" + filename + ]  

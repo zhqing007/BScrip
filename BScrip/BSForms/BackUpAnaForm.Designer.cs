@@ -45,7 +45,7 @@
             this.columnHeader4});
             this.backuplist.Dock = System.Windows.Forms.DockStyle.Top;
             this.backuplist.Location = new System.Drawing.Point(0, 0);
-            this.backuplist.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.backuplist.Margin = new System.Windows.Forms.Padding(2);
             this.backuplist.Name = "backuplist";
             this.backuplist.Size = new System.Drawing.Size(471, 421);
             this.backuplist.TabIndex = 0;
@@ -65,17 +65,17 @@
             // columnHeader3
             // 
             this.columnHeader3.Text = "IP地址";
-            this.columnHeader3.Width = 161;
+            this.columnHeader3.Width = 130;
             // 
             // columnHeader4
             // 
             this.columnHeader4.Text = "次数";
-            this.columnHeader4.Width = 134;
+            this.columnHeader4.Width = 100;
             // 
             // close
             // 
-            this.close.Location = new System.Drawing.Point(398, 438);
-            this.close.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.close.Location = new System.Drawing.Point(396, 438);
+            this.close.Margin = new System.Windows.Forms.Padding(2);
             this.close.Name = "close";
             this.close.Size = new System.Drawing.Size(64, 24);
             this.close.TabIndex = 4;
@@ -105,9 +105,9 @@
             // 
             // export
             // 
-            this.export.Location = new System.Drawing.Point(286, 438);
+            this.export.Location = new System.Drawing.Point(302, 438);
             this.export.Name = "export";
-            this.export.Size = new System.Drawing.Size(75, 23);
+            this.export.Size = new System.Drawing.Size(64, 24);
             this.export.TabIndex = 6;
             this.export.Text = "导出";
             this.export.UseVisualStyleBackColor = true;
@@ -122,10 +122,14 @@
             this.Controls.Add(this.anaStatus);
             this.Controls.Add(this.close);
             this.Controls.Add(this.backuplist);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
+            this.MinimizeBox = false;
             this.Name = "BackUpAnaForm";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "网络设备备份统计";
+            this.Shown += new System.EventHandler(this.BackUpAnaForm_Shown);
             this.anaStatus.ResumeLayout(false);
             this.anaStatus.PerformLayout();
             this.ResumeLayout(false);

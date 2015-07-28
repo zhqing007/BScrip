@@ -39,56 +39,54 @@ namespace BScripServiceLibrary.BSThread {
 
     class TimeBackUpThread {
         List<Host_t> bhosts;
-        static object lockobj = new object();
-
-        public TimeBackUpThread() {
-            List<Host> hosts = Host.GetTimeHosts();
-            bhosts = new List<Host_t>();
-
-            foreach (Host h in hosts) {
-                bhosts.Add(new Host_t(h));
-            }
-        }
+        //static object lockobj = new object();
 
         public void BackUp() {
             TimeSpan onehour = new TimeSpan(1, 0, 0);
             while (true) {
-                lock (lockobj) {
-                    foreach (Host_t timehost in bhosts) {
-                        if (timehost.IsTimeUp(onehour.Ticks)) {
-                            ConfThread.SaveHostConf(timehost.GetHost());
-                        }
+                BSService.tbmu.WaitOne();
+                List<Host> hosts = Host.GetTimeHosts();
+                bhosts = new List<Host_t>();
+
+                foreach (Host h in hosts) {
+                    bhosts.Add(new Host_t(h));
+                }
+
+                foreach (Host_t timehost in bhosts) {
+                    if (timehost.IsTimeUp(onehour.Ticks)) {
+                        ConfThread.SaveHostConf(timehost.GetHost());
                     }
                 }
+                BSService.tbmu.ReleaseMutex();
                 System.Threading.Thread.Sleep(onehour);
             }
         }
 
-        public void SetHost(Host item, long ticks) {
-            lock (lockobj) {
-                item.tspan = ticks;
-                item.Update();
-                int i;
-                for(i = 0; i < bhosts.Count; ++i){
-                    if (bhosts[i].GetHost().hostname == item.hostname)
-                        break;
-                }
+        //public void SetHost(Host item, long ticks) {
+        //    BSService.tbmu.WaitOne();
+        //    item.tspan = ticks;
+        //    item.Update();
+        //    int i;
+        //    for(i = 0; i < bhosts.Count; ++i){
+        //        if (bhosts[i].GetHost().hostname == item.hostname)
+        //            break;
+        //    }
 
-                if (ticks == 0) {
-                    if (i == bhosts.Count)
-                        return;
-                    else
-                        bhosts.RemoveAt(i);
-                }
-                else{
-                    if (i == bhosts.Count)
-                        bhosts.Add(new Host_t(item));
-                    else {
-                        bhosts.RemoveAt(i);
-                        bhosts.Add(new Host_t(item));
-                    }
-                }                    
-            }
-        }
+        //    if (ticks == 0) {
+        //        if (i == bhosts.Count)
+        //            return;
+        //        else
+        //            bhosts.RemoveAt(i);
+        //    }
+        //    else{
+        //        if (i == bhosts.Count)
+        //            bhosts.Add(new Host_t(item));
+        //        else {
+        //            bhosts.RemoveAt(i);
+        //            bhosts.Add(new Host_t(item));
+        //        }
+        //    }                    
+        //    BSService.tbmu.ReleaseMutex();
+        //}
     }
 }

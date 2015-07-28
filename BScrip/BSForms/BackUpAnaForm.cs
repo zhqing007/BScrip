@@ -17,8 +17,7 @@ namespace BScrip.BSForms {
             this.hosts = _hosts;
             anaStatusLabel.Text = "统计中......";
             et = endt;
-            bt = begint;
-            backgroundWorker1.RunWorkerAsync();
+            bt = begint;            
         }
 
         private void close_Click(object sender, EventArgs e) {
@@ -44,7 +43,12 @@ namespace BScrip.BSForms {
             fileDialog.Filter = "xls文件|*.xls";
             if (fileDialog.ShowDialog() != DialogResult.OK) return;
             DataTable dt = StaticFun.listViewToDataTable(backuplist);
+            dt.TableName = DateTime.Now.ToString("yyyy年MM月dd日");
             NPOIHelper.ExportDataTableToExcel(dt, fileDialog.FileName);
+        }
+
+        private void BackUpAnaForm_Shown(object sender, EventArgs e) {
+            backgroundWorker1.RunWorkerAsync();
         }
     }
 }

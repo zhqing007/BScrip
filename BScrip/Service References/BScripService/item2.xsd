@@ -27,34 +27,6 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetSaveConfTime">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="userid" type="xs:int" />
-        <xs:element minOccurs="0" name="hostname" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="span" type="xs:long" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SetSaveConfTimeResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SetMonitorTime">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="userid" type="xs:int" />
-        <xs:element minOccurs="0" name="hostname" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="span" type="xs:long" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SetMonitorTimeResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
   <xs:element name="GetHosts">
     <xs:complexType>
       <xs:sequence>

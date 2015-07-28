@@ -23,6 +23,9 @@ namespace BScrip.BScripService {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string dbnameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string hostnameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -59,6 +62,19 @@ namespace BScrip.BScripService {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string dbname {
+            get {
+                return this.dbnameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.dbnameField, value) != true)) {
+                    this.dbnameField = value;
+                    this.RaisePropertyChanged("dbname");
+                }
             }
         }
         
@@ -305,12 +321,6 @@ namespace BScrip.BScripService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBSService/SaveConf", ReplyAction="http://tempuri.org/IBSService/SaveConfResponse")]
         void SaveConf(int userid, string[] hostnames);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBSService/SetSaveConfTime", ReplyAction="http://tempuri.org/IBSService/SetSaveConfTimeResponse")]
-        void SetSaveConfTime(int userid, string hostname, long span);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBSService/SetMonitorTime", ReplyAction="http://tempuri.org/IBSService/SetMonitorTimeResponse")]
-        void SetMonitorTime(int userid, string hostname, long span);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBSService/GetHosts", ReplyAction="http://tempuri.org/IBSService/GetHostsResponse")]
         BScrip.BScripService.Host[] GetHosts(int userid);
         
@@ -381,14 +391,6 @@ namespace BScrip.BScripService {
         
         public void SaveConf(int userid, string[] hostnames) {
             base.Channel.SaveConf(userid, hostnames);
-        }
-        
-        public void SetSaveConfTime(int userid, string hostname, long span) {
-            base.Channel.SetSaveConfTime(userid, hostname, span);
-        }
-        
-        public void SetMonitorTime(int userid, string hostname, long span) {
-            base.Channel.SetMonitorTime(userid, hostname, span);
         }
         
         public BScrip.BScripService.Host[] GetHosts(int userid) {

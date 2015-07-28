@@ -40,9 +40,10 @@
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("微软雅黑", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.Color.Orange;
-            this.label1.Location = new System.Drawing.Point(60, 56);
+            this.label1.Location = new System.Drawing.Point(45, 45);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(263, 52);
+            this.label1.Size = new System.Drawing.Size(210, 42);
             this.label1.TabIndex = 0;
             this.label1.Text = "网络设备维护";
             // 
@@ -53,24 +54,29 @@
             // 
             // namebox
             // 
-            this.namebox.Location = new System.Drawing.Point(281, 168);
+            this.namebox.Location = new System.Drawing.Point(211, 134);
+            this.namebox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.namebox.Name = "namebox";
-            this.namebox.Size = new System.Drawing.Size(231, 25);
+            this.namebox.Size = new System.Drawing.Size(174, 21);
             this.namebox.TabIndex = 1;
+            this.namebox.Text = "zhqing";
             // 
             // pwbox
             // 
-            this.pwbox.Location = new System.Drawing.Point(281, 242);
+            this.pwbox.Location = new System.Drawing.Point(211, 194);
+            this.pwbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pwbox.Name = "pwbox";
             this.pwbox.PasswordChar = '*';
-            this.pwbox.Size = new System.Drawing.Size(231, 25);
+            this.pwbox.Size = new System.Drawing.Size(174, 21);
             this.pwbox.TabIndex = 2;
+            this.pwbox.Text = "111";
             // 
             // login
             // 
-            this.login.Location = new System.Drawing.Point(211, 321);
+            this.login.Location = new System.Drawing.Point(158, 257);
+            this.login.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.login.Name = "login";
-            this.login.Size = new System.Drawing.Size(101, 33);
+            this.login.Size = new System.Drawing.Size(76, 26);
             this.login.TabIndex = 3;
             this.login.Text = "登录";
             this.login.UseVisualStyleBackColor = true;
@@ -78,9 +84,10 @@
             // 
             // close
             // 
-            this.close.Location = new System.Drawing.Point(411, 321);
+            this.close.Location = new System.Drawing.Point(308, 257);
+            this.close.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.close.Name = "close";
-            this.close.Size = new System.Drawing.Size(101, 33);
+            this.close.Size = new System.Drawing.Size(76, 26);
             this.close.TabIndex = 4;
             this.close.Text = "关闭";
             this.close.UseVisualStyleBackColor = true;
@@ -91,9 +98,10 @@
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.ForeColor = System.Drawing.Color.Orange;
-            this.label2.Location = new System.Drawing.Point(208, 171);
+            this.label2.Location = new System.Drawing.Point(156, 137);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 15);
+            this.label2.Size = new System.Drawing.Size(53, 12);
             this.label2.TabIndex = 5;
             this.label2.Text = "登录名：";
             // 
@@ -102,19 +110,20 @@
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.ForeColor = System.Drawing.Color.Orange;
-            this.label3.Location = new System.Drawing.Point(208, 246);
+            this.label3.Location = new System.Drawing.Point(156, 197);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(52, 15);
+            this.label3.Size = new System.Drawing.Size(41, 12);
             this.label3.TabIndex = 6;
             this.label3.Text = "密码：";
             // 
             // WelcomeForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(732, 459);
+            this.ClientSize = new System.Drawing.Size(549, 367);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.close);
@@ -123,7 +132,7 @@
             this.Controls.Add(this.namebox);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "WelcomeForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

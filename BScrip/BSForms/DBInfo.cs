@@ -18,10 +18,20 @@ namespace BScrip.BSForms {
         public DBInfo(Host host) {
             InitializeComponent();
             dbhost = host;
+
             server.Text = dbhost.ipaddress;
             loginname.Text = dbhost.loginname;
             password.Text = dbhost.password;
             database.Text = dbhost.hostname;
+            timespanUpDown.Value = (decimal)(new TimeSpan(dbhost.tspan)).TotalDays;
+
+            if (dbhost.loginmode == 0)
+                this.radioButton1.Checked = true;
+            else
+                this.radioButton2.Checked = true;
+
+            if (dbhost.loginname.Length == 0)
+                this.winlogin.Checked = true;
         }
 
         private void close_Click(object sender, EventArgs e) {
@@ -34,11 +44,21 @@ namespace BScrip.BSForms {
             dbhost = new Host();
             dbhost.userid = StaticFun.loginID;
             dbhost.ipaddress = server.Text;
-            dbhost.loginname = loginname.Text;
-            dbhost.password = password.Text;
-            dbhost.hostname = database.Text;
+
+            if (winlogin.Checked)
+                dbhost.loginname = dbhost.password = "";
+            else {
+                dbhost.loginname = loginname.Text;
+                dbhost.password = password.Text;
+            }
+            
+            dbhost.dbname = radioButton1.Checked ? database.Text : "";
+            dbhost.hostname = dbhost.ipaddress;
             dbhost.type = 2; //数据库
             dbhost.loginmode = radioButton1.Checked ? 0 : 1;//0:sql; 1: oracle
+            dbhost.tspan = (new TimeSpan((int)(timespanUpDown.Value), 0, 0, 0)).Ticks;
+
+
             this.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.Close();
         }

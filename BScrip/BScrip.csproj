@@ -54,8 +54,7 @@
     </StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>27.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NPOI">

@@ -40,7 +40,8 @@ namespace BScrip.BSForms {
             Host host = (Host)(hostlistview.SelectedItems[0].Tag);
             TimeSpan ts = new TimeSpan((int)(hostime.Value), 0, 0);
             host.monitor = ts.Ticks;
-            StaticFun.serverclient.SetMonitorTime(StaticFun.loginID, host.hostname, ts.Ticks);
+            StaticFun.serverclient.UpdateHost(host);
+            //StaticFun.serverclient.SetMonitorTime(StaticFun.loginID, host.hostname, ts.Ticks);
             hostlistview.SelectedItems[0].Tag = host;
             hostlistview.SelectedItems[0].SubItems[2].Text = ts.TotalHours.ToString();
         }

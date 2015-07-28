@@ -26,8 +26,8 @@ namespace BScrip.BSForms {
         }
 
         private void login_Click(object sender, EventArgs e) {
-            //StaticFun.loginID = StaticFun.serverclient.CheckUser(namebox.Text, pwbox.Text);
-            StaticFun.loginID = StaticFun.serverclient.CheckUser("zhqing", "111");
+            StaticFun.loginID = StaticFun.serverclient.CheckUser(namebox.Text, pwbox.Text);
+            //StaticFun.loginID = StaticFun.serverclient.CheckUser("zhqing", "111");
             if (StaticFun.loginID < 0)
                 MessageBox.Show("用户名或密码错误！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             else {

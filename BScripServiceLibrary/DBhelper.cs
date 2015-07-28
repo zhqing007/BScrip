@@ -147,8 +147,7 @@ namespace BScripServiceLibrary {
                                       , new SQLiteParameter("@begin", begin.ToString("yyyy-MM-dd HH:mm:ss"))
                                       , new SQLiteParameter("@end", end.ToString("yyyy-MM-dd HH:mm:ss"))};
             DataTable deconf = ExecuteDataTable(
-                @"select count(deviceconfiguration.[configuration]) as cou 
-                  from devconfdate left join deviceconfiguration on devconfdate.[ipaddress]=deviceconfiguration.[ipaddress]
+                @"select count(devconfdate.[checkdate]) as cou from devconfdate
                   where devconfdate.[ipaddress]=@ip and devconfdate.[checkdate]>=@begin and devconfdate.[checkdate]<@end", p);
             return Int32.Parse(deconf.Rows[0][0].ToString());
         }
@@ -212,6 +211,7 @@ namespace BScripServiceLibrary {
         private long _tspan = 0;
         private long _monitor = 0;
         private int _userid;
+        private string _dbname;
 
         public Host(int userid, string name) {
             hostname = name;
@@ -219,6 +219,12 @@ namespace BScripServiceLibrary {
         }
 
         private Host() {}
+
+        [DataMember]
+        public string dbname {
+            get { return _dbname; }
+            set { _dbname = value; }
+        }
 
         [DataMember]
         public int userid {
@@ -294,6 +300,7 @@ namespace BScripServiceLibrary {
                 h.superpw = row["superpw"] as String;
                 h.tspan = Int64.Parse(row["timespan"].ToString());
                 h.monitor = Int64.Parse(row["mon"].ToString());
+                h.dbname = row["dbname"].ToString();
                 hosts.Add(h);
             }
             return hosts;
@@ -361,11 +368,13 @@ namespace BScripServiceLibrary {
                                       , new SQLiteParameter("@pw", password)
                                       , new SQLiteParameter("@spw", superpw)
                                       , new SQLiteParameter("@type", type)
-                                      , new SQLiteParameter("@tspan", tspan)};
+                                      , new SQLiteParameter("@tspan", tspan)
+                                      , new SQLiteParameter("@mon", monitor)
+                                      , new SQLiteParameter("@db", dbname)};
 
             DBhelper.ExecuteSQL("insert into hosts" +
-                        "(userid, ipaddress, name, loginname, loginmode, password, superpw, type, timespan) " +
-                        "values(@uid, @ip, @hn, @ln, @mode, @pw, @spw, @type, @tspan)", p);
+                        "(userid, ipaddress, name, loginname, loginmode, password, superpw, type, timespan, mon, dbname) " +
+                        "values(@uid, @ip, @hn, @ln, @mode, @pw, @spw, @type, @tspan, @mon, @db)", p);
             return true;
         }
 
@@ -382,11 +391,12 @@ namespace BScripServiceLibrary {
                                       , new SQLiteParameter("@spw", superpw)
                                       , new SQLiteParameter("@type", type)
                                       , new SQLiteParameter("@tspan", tspan)
-                                  , new SQLiteParameter("@mon", monitor)};
+                                      , new SQLiteParameter("@mon", monitor)
+                                      , new SQLiteParameter("@db", dbname)};
 
             DBhelper.ExecuteSQL("update hosts " +
                         "set ipaddress=@ip, loginname=@ln, loginmode=@mode, password=@pw, " +
-                        "superpw=@spw, type=@type, timespan=@tspan, mon=@mon where name=@hn and userid=@uid", p);
+                        "superpw=@spw, type=@type, timespan=@tspan, mon=@mon, dbname=@db where name=@hn and userid=@uid", p);
             return true;
         }
 

@@ -7,16 +7,6 @@ using BScripServiceLibrary.BSDevice;
 namespace BScripServiceLibrary.BSThread {
     class CpuMemThread {
         List<Host_t> mhosts;
-        static object mlockobj = new object();
-
-        public CpuMemThread() {
-            List<Host> hosts = Host.GetCpuMemHosts();
-            mhosts = new List<Host_t>();
-
-            foreach (Host h in hosts) {
-                mhosts.Add(new Host_t(h));
-            }
-        }
 
         private void savemonitordata(Host item) {
             try {
@@ -49,44 +39,47 @@ namespace BScripServiceLibrary.BSThread {
         public void MonitorUp() {
             TimeSpan tenminute = new TimeSpan(0, 10, 0);
             while (true) {
-                lock (mlockobj) {
-                    foreach (Host_t timehost in mhosts) {
-                        if (timehost.IsMonitorTimeUp(tenminute.Ticks)) {
-                            savemonitordata(timehost.GetHost());
-                        }
-                    }
+                BSService.cmmu.WaitOne();
+                List<Host> hosts = Host.GetCpuMemHosts();
+                mhosts = new List<Host_t>();
+
+                foreach (Host h in hosts) {
+                    mhosts.Add(new Host_t(h));
                 }
+                foreach (Host_t timehost in mhosts) 
+                    if (timehost.IsMonitorTimeUp(tenminute.Ticks)) {
+                        savemonitordata(timehost.GetHost());
+                    }
+                BSService.cmmu.ReleaseMutex();
                 System.Threading.Thread.Sleep(tenminute);
             }
         }
 
-        public void SetHost(Host item, long ticks) {
-            lock (mlockobj) {
-                item.monitor = ticks;
-                item.Update();
-                int i;
-                for (i = 0; i < mhosts.Count; ++i) {
-                    if (mhosts[i].GetHost().hostname == item.hostname)
-                        break;
-                }
+        //public void SetHost(Host item, long ticks) {
+        //    BSService.cmmu.WaitOne();
+        //    item.monitor = ticks;
+        //    item.Update();
+        //    int i;
+        //    for (i = 0; i < mhosts.Count; ++i) {
+        //        if (mhosts[i].GetHost().hostname == item.hostname)
+        //            break;
+        //    }
 
-                if (ticks == 0) {
-                    if (i == mhosts.Count)
-                        return;
-                    else
-                        mhosts.RemoveAt(i);
-                }
-                else {
-                    if (i == mhosts.Count)
-                        mhosts.Add(new Host_t(item));
-                    else {
-                        mhosts.RemoveAt(i);
-                        mhosts.Add(new Host_t(item));
-                    }
-                }
-            }
-        }
-
-
+        //    if (ticks == 0) {
+        //        if (i == mhosts.Count)
+        //            return;
+        //        else
+        //            mhosts.RemoveAt(i);
+        //    }
+        //    else {
+        //        if (i == mhosts.Count)
+        //            mhosts.Add(new Host_t(item));
+        //        else {
+        //            mhosts.RemoveAt(i);
+        //            mhosts.Add(new Host_t(item));
+        //        }
+        //    }
+        //    BSService.cmmu.ReleaseMutex();
+        //}
     }
 }

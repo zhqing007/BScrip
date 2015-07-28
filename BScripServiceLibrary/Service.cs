@@ -12,14 +12,16 @@ namespace BScripServiceLibrary {
     // 注意: 使用“重构”菜单上的“重命名”命令，可以同时更改代码和配置文件中的类名“Service1”。
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class BSService : IBSService {
-        BSThread.TimeBackUpThread tbthreadobj;
-        Thread tbthread;
-        BSThread.CpuMemThread cmthreadobj;
-        Thread cmthread;
-        BSThread.DBBackUpThread dbbthreadobj;
-        Thread dbbthread;
+        Thread tbthread, cmthread, dbbthread;
+        public static Mutex tbmu = new Mutex(false);
+        public static Mutex cmmu = new Mutex(false);
+        public static Mutex dbmu = new Mutex(false);
 
-        public BSService() {
+        BSThread.TimeBackUpThread tbthreadobj;
+        BSThread.CpuMemThread cmthreadobj;
+        BSThread.DBBackUpThread dbbthreadobj;
+
+        public BSService(bool begindbbackup, bool beginoracle = false) {
             tbthreadobj = new BSThread.TimeBackUpThread();
             tbthread = new Thread(new ThreadStart(tbthreadobj.BackUp));
             tbthread.Start();
@@ -28,12 +30,21 @@ namespace BScripServiceLibrary {
             cmthread = new Thread(new ThreadStart(cmthreadobj.MonitorUp));
             cmthread.Start();
 
-            //dbbthreadobj = new BSThread.DBBackUpThread();
-            //dbbthread = new Thread(new ThreadStart(dbbthreadobj.BackUp));
-            //dbbthread.Start();
+            if (begindbbackup == false) return;
+            dbbthreadobj = new BSThread.DBBackUpThread(beginoracle);
+            dbbthread = new Thread(new ThreadStart(dbbthreadobj.BackUp));
+            dbbthread.Start();
         }
 
-        
+        public void StopThreads() {
+            tbmu.WaitOne();
+            tbthread.Abort();
+            cmmu.WaitOne();
+            cmthread.Abort();
+            dbmu.WaitOne();
+            if(dbbthread != null)
+                dbbthread.Abort();
+        }
 
         public string GetPath(){
             return System.IO.Directory.GetCurrentDirectory();
@@ -51,22 +62,22 @@ namespace BScripServiceLibrary {
             logThread.Start();
         }
 
-        public void SetSaveConfTime(int userid, string hostname, long span) {
-            Host h = new Host(userid, hostname);
-            h.GetFromName();
-            tbthreadobj.SetHost(h, span);
-        }
+        //public void SetSaveConfTime(int userid, string hostname, long span) {
+        //    Host h = new Host(userid, hostname);
+        //    h.GetFromName();
+        //    tbthreadobj.SetHost(h, span);
+        //}
 
         public Host[] GetHosts(int userid) {
             List<Host> hostlist = Host.GetAllHosts(userid);
             return hostlist.ToArray();
         }
 
-        public void SetMonitorTime(int userid, string hostname, long span) {
-            Host h = new Host(userid, hostname);
-            h.GetFromName();
-            cmthreadobj.SetHost(h, span);
-        }
+        //public void SetMonitorTime(int userid, string hostname, long span) {
+        //    Host h = new Host(userid, hostname);
+        //    h.GetFromName();
+        //    cmthreadobj.SetHost(h, span);
+        //}
 
         public void AddHost(Host item) {
             item.Save();

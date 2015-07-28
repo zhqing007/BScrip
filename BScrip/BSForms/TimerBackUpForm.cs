@@ -19,7 +19,7 @@ namespace BScrip.BSForms {
             timerBackUpL.Columns.Add("主机名", 100, HorizontalAlignment.Left);
             timerBackUpL.Columns.Add("IP地址", 120, HorizontalAlignment.Left);
             timerBackUpL.Columns.Add("登录名", 120, HorizontalAlignment.Left);
-            timerBackUpL.Columns.Add("备份间隔时间(小时)", 120, HorizontalAlignment.Left);
+            timerBackUpL.Columns.Add("备份间隔(天)", 120, HorizontalAlignment.Left);
             timerBackUpL.Columns.Add("登录方式", 80, HorizontalAlignment.Left);
             Host[] buhosts = StaticFun.serverclient.GetBackUpHosts();
             foreach (Host h in buhosts) {
@@ -28,7 +28,7 @@ namespace BScrip.BSForms {
                 listitem.Text = h.hostname;
                 listitem.SubItems.Add(h.ipaddress);
                 listitem.SubItems.Add(h.loginname);
-                listitem.SubItems.Add((new TimeSpan(h.tspan)).TotalHours.ToString());
+                listitem.SubItems.Add((new TimeSpan(h.tspan)).TotalDays.ToString());
                 if (h.loginmode == 0)
                     listitem.SubItems.Add("Telnet");
                 else
@@ -60,19 +60,19 @@ namespace BScrip.BSForms {
                 , MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
 
-            StaticFun.serverclient.SetSaveConfTime(h.userid, h.hostname, h.tspan);
+            StaticFun.serverclient.UpdateHost(h);
             timerBackUpL.SelectedItems[0].Remove();
         }
 
         private void addToBU_Click(object sender, EventArgs e) {
             Host h = namebox.Tag as Host;
-            h.tspan = (new TimeSpan((int)(dayUpDown.Value), (int)(hourUpDown.Value), 0, 0)).Ticks;
+            long ticks = (new TimeSpan((int)(dayUpDown.Value), 0, 0, 0)).Ticks;
             int index = -1;
             foreach (ListViewItem item in timerBackUpL.Items) {
                 Host listh = item.Tag as Host;
                 if (h.ipaddress == listh.ipaddress) {
                     index = item.Index;
-                    if (h.tspan == listh.tspan) {
+                    if (ticks == listh.tspan) {
                         MessageBox.Show("所要备份的主机已添加！", "重复", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
@@ -83,10 +83,11 @@ namespace BScrip.BSForms {
                     }
                 }
             }
+            h.tspan = ticks;
 
-            StaticFun.serverclient.SetSaveConfTime(h.userid, h.hostname, h.tspan);            
+            StaticFun.serverclient.UpdateHost(h);     
             if (index != -1)
-                timerBackUpL.Items[index].SubItems[2].Text = (new TimeSpan(h.tspan)).TotalHours.ToString();
+                timerBackUpL.Items[index].SubItems[3].Text = (new TimeSpan(h.tspan)).TotalDays.ToString();
             else{
                 ListViewItem listitem = new ListViewItem();
                 listitem.Tag = h;
@@ -108,8 +109,7 @@ namespace BScrip.BSForms {
             namebox.Text = item.hostname;
             ipbox.Text = item.ipaddress;
             TimeSpan ts = new TimeSpan(item.tspan);
-            dayUpDown.Value = ts.Days;
-            hourUpDown.Value = ts.Hours;
+            dayUpDown.Value = (decimal)ts.TotalDays;
             this.stopLocal.Enabled = true;
         }
 
