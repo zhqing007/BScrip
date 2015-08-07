@@ -8,11 +8,14 @@ using BScripServiceLibrary.BSDevice;
 
 namespace BScripServiceLibrary {
     public static class DBhelper {
-        private static SQLiteConnection sqlconn;
+        private static SQLiteConnection sqlconn = null;
         private static SQLiteCommand sqlcmd;
+        private static object lockobj = new object();
 
         static DBhelper() {
-            sqlconn = new SQLiteConnection("Data Source=D:\\MyWork\\BScrip\\BScripServiceLibrary\\BScripServer.db;Password=zhqing");
+            if (sqlconn != null) return;
+            sqlconn = new SQLiteConnection("Data Source=D:\\WorkStation\\BScrip\\BScripServiceLibrary\\BScripServer.db;Password=zhqing");
+            sqlconn = new SQLiteConnection("Data Source=BScripServer.db;Password=zhqing");
             sqlconn.Open();
             sqlcmd = sqlconn.CreateCommand();
         }
@@ -167,35 +170,40 @@ namespace BScripServiceLibrary {
         }
 
         public static void ExecuteSQL(string sql) {
-            sqlcmd.CommandText = sql;
-            sqlcmd.ExecuteNonQuery();
+            ExecuteSQL(sql, null);
         }
 
         public static void ExecuteSQL(string sql, SQLiteParameter[] parameters) {
-            sqlcmd.CommandText = sql;
-            if (parameters != null) {
-                sqlcmd.Parameters.AddRange(parameters);
+            lock (lockobj) {
+                sqlcmd.CommandText = sql;
+                if (parameters != null) {
+                    sqlcmd.Parameters.AddRange(parameters);
+                }
+                sqlcmd.ExecuteNonQuery();
             }
-            sqlcmd.ExecuteNonQuery();
         }
 
         public static SQLiteDataReader ExecuteReader(string sql, SQLiteParameter[] parameters) {
-            sqlcmd.CommandText = sql;
-            if (parameters != null) {
-                sqlcmd.Parameters.AddRange(parameters);
+            lock (lockobj) {
+                sqlcmd.CommandText = sql;
+                if (parameters != null) {
+                    sqlcmd.Parameters.AddRange(parameters);
+                }
+                return sqlcmd.ExecuteReader();
             }
-            return sqlcmd.ExecuteReader();
         }
 
         public static DataTable ExecuteDataTable(string sql, SQLiteParameter[] parameters) {
-            sqlcmd.CommandText = sql;
-            if (parameters != null) {
-                sqlcmd.Parameters.AddRange(parameters);
+            lock (lockobj) {
+                sqlcmd.CommandText = sql;
+                if (parameters != null) {
+                    sqlcmd.Parameters.AddRange(parameters);
+                }
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(sqlcmd);
+                DataTable data = new DataTable();
+                adapter.Fill(data);
+                return data;
             }
-            SQLiteDataAdapter adapter = new SQLiteDataAdapter(sqlcmd);
-            DataTable data = new DataTable();
-            adapter.Fill(data);
-            return data;
         }
     }
 
